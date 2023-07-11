@@ -5,10 +5,12 @@ Feature: Criar uma pagina de login
 
 Scenario: Login como artista
     Given que eu estou na pagina de login
-    when eu entro com o usuário "artista01" e senha "teste123"
+    and "artista01" tem permissão de artista
+    when eu entro com o login "artista01" e senha "teste123"
     then eu vejo a pagina de gerenciamento do artista
 
 Scenario: Login como usuario
     Given que eu estou na pagina de login
-    when eu entro com o usuário "usuario01" e senha "teste123"
+    and "usuario01" tem permissão de usuario
+    when eu entro com o login "usuario01" e senha "teste123"
     then eu vejo a pagina principal do app
