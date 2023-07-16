@@ -3,7 +3,7 @@ Feature: Cadastro e manutenção de artistas
       I want to me cadastar no sistema e poder editar meus dados posteriormente
 
 Scenario: Cadastrar artista
-Given que eu sou um artista não presente no sistema
+Given que eu sou um artista de nome "Chico Buarque" não presente no sistema
 When eu preencho meus dados de "nome", "gênero" e "descrição", "login" e "senha" com os valores respectivos
 "Chico Buarque", "MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba"
 And eu submeto as informações
