@@ -1,6 +1,6 @@
 Feature: Cadastro e manutenção de artistas
     As um artista logado no sistema
-    I want to poder editar e gerenciar meus dados presentes no sistema
+    I want to poder editar, gerenciar e excluir meus dados presentes no sistema
 
 Scenario: Atualizar artista como artista logado
 Given que eu sou um artista de "nome" "Moody Blues", de "id" "7" logado no sistema
