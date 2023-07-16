@@ -4,6 +4,10 @@ Feature: Cadastro e manutenção de artistas
 
 Scenario: Cadastrar artista
 Given que eu sou um artista não presente no sistema
-When eu preencho meus dados de "nome", "gênero" e "descrição"
+When eu preencho meus dados de "nome", "gênero" e "descrição", "login" e "senha" com os valores respectivos
+"Chico Buarque", "MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba"
 And eu submeto as informações
-Then o sistema confirma que o artista foi cadastrado com sucesso
+Then o sistema insere em seu banco de dados um artista com os valores de
+"nome", "gênero" e "descrição", "login" e "senha" iguais a "Chico Buarque", 
+"MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba", respectivamente
+And o sistema confirma a inserção para o usuário
