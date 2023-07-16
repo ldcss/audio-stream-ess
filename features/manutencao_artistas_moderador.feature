@@ -6,9 +6,7 @@ Scenario: Atualizar artista como usuário moderador
 Given que eu sou um usuário moderador logado no sistema
 And eu estou na página de "Gerenciamento de Artistas"
 And o sistema tem um artista cadastrado com o nome "Genesis", id "45" descrição "Genesis é uma banda de rock progressivo britânica formada em 1967" e gênero "Rock Progressivo"
-When eu abro a caixa de edição
-When eu clico em "Editar"
-And eu atualizo o nome do artista para "Yes"
+When eu atualizo o nome do artista para "Yes"
 And eu atualizo a descrição do artista para "Yes é uma banda de rock progressivo britânica formada em 1968"
 And eu atualizo o gênero do artista para "Rock Progressivo"
 And eu clico em "Editar"
