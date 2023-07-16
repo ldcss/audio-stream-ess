@@ -16,5 +16,5 @@ Given que eu sou um artista de "nome": "Bob Dylan", de "id": "7" logado no siste
 And eu estou na página de "Gerenciamento de Artistas"
 When eu clico no botão de excluir do artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk"
 Then eu devo ver a mensagem "Artista excluído com sucesso"
-And eu não devo ver o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk" na lista de artistas
+And eu o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk" deve ser removido da lista de artistas
 And eu devo ser desconectado do sistema
