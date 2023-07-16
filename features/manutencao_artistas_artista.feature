@@ -9,3 +9,4 @@ When eu abro a caixa de edição do artista "Moody Blues", de "id": "7", "descri
 And eu atualizo o campo "nome" para "Bob Dylan", o campo "descrição" para "Cantor e compositor americano" e o campo "gênero" para "Folk"
 Then eu devo ver a mensagem "Artista atualizado com sucesso"
 And eu devo ver o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk" na lista de artistas
+And o banco de dados deve ter o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk"
