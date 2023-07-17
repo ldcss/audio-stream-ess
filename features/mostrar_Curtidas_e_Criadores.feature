@@ -21,7 +21,7 @@ When seleciono a opção “curtidas”
 Then é aberta uma pagina “Curtidas”
 And a pagina “Curtidas” está vazia
 
-Cenário 3: Visualizar todos os criadores
+Cenário 3: Visualizar todos os criadores, mais de 1 criador
 
 Given que eu sou um usuário “logado” no sistema
 When acesso a pagina “Playlist 4”
@@ -30,3 +30,7 @@ When seleciono a opção “criadores”
 Then é aberta uma pagina “Criadores”
 And a página “Criadores” mostra os criadores “Marcelo” e “João”
  
+ Cenário 4: Visualizar todos os criadores, 1 criador
+ When acesso a pagina “Playlist 4”
+And a playlist tem um “criador”
+Then eu visualizo o nome do criador "marcelo" 
