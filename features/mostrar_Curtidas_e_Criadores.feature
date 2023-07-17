@@ -29,4 +29,4 @@ And a playlist tem dois “criadores”
 When seleciono a opção “criadores”
 Then é aberta uma pagina “Criadores”
 And a página “Criadores” mostra os criadores “Marcelo” e “João”
- 
+Then
