@@ -1,1 +1,0 @@
-Mostrar o nome dos criadores e curtidas
