@@ -29,10 +29,9 @@ And a playlist tem dois “criadores”
 When seleciono a opção “criadores”
 Then é aberta uma pagina “Criadores”
 And a página “Criadores” mostra os criadores “Marcelo” e “João”
-Then
  
 Cenário 4: Visualizar todos os criadores, 1 criador
 When acesso a pagina “Playlist 4”
 And a playlist tem um “criador”
-Then eu visualizo o nome do criador "marcelo" 
+Then eu visualizo o nome do criador "Marcelo" 
 
