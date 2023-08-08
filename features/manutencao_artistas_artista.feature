@@ -1,0 +1,20 @@
+Feature: Cadastro e manutenção de artistas
+    As um artista logado no sistema
+    I want to poder editar, gerenciar e excluir meus dados presentes no sistema
+
+Scenario: Atualizar artista como artista logado
+Given que eu sou um artista de "nome": "Moody Blues", de "id": "7" logado no sistema
+And eu estou na página de "Gerenciamento de Artistas"
+When eu abro a caixa de edição do artista "Moody Blues", de "id": "7", "descrição": "Banda de rock inglesa formada em 1964" e "gênero": "Rock"
+And eu atualizo o campo "nome" para "Bob Dylan", o campo "descrição" para "Cantor e compositor americano" e o campo "gênero" para "Folk"
+Then eu devo ver a mensagem "Artista atualizado com sucesso"
+And eu devo ver o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk" na lista de artistas
+And o banco de dados deve ter o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk"
+
+Scenario: Excluir artista como artista logado
+Given que eu sou um artista de "nome": "Bob Dylan", de "id": "7" logado no sistema
+And eu estou na página de "Gerenciamento de Artistas"
+When eu clico no botão de excluir do artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk"
+Then eu devo ver a mensagem "Artista excluído com sucesso"
+And eu o artista "Bob Dylan", de "id": "7", "descrição": "Cantor e compositor americano" e "gênero": "Folk" deve ser removido da lista de artistas
+And eu devo ser desconectado do sistema
