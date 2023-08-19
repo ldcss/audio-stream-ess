@@ -3,7 +3,7 @@ import BaseRepository from "./base.repository";
 
 class ArtistRepository extends BaseRepository<ArtistsEntity> {
   constructor() {
-    super("tests");
+    super("artist");
   }
 
   public async getArtists(): Promise<ArtistsEntity[]> {
