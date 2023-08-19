@@ -2,6 +2,8 @@ import { Router, Request, Response } from "express";
 import { Result, SuccessResult } from "../utils/result";
 import ArtistService from "../services/artist.service";
 import ArtistEntity from "../entities/artist.entity";
+import ArtistRepository from "../repositories/artist.repository";
+import ArtistModel from "../models/artist.model";
 
 class ArtistController {
   private prefix: string = "/artist";
@@ -52,13 +54,18 @@ class ArtistController {
   }
 
   private async createArtist(req: Request, res: Response) {
-    const test = await this.artistService.createArtist(
-      new ArtistEntity(req.body)
-    );
+    const artist = new ArtistEntity(req.body);
+
+    const artistRepository = new ArtistRepository();
+
+    const artistEntity = await artistRepository.createArtist(artist);
+
+    const artistModel = new ArtistModel(artistEntity);
+    //const test = await this.artistService.createArtist(artist);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
-      data: test,
+      data: artistModel,
     }).handle(res);
   }
 
