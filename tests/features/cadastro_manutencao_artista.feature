@@ -4,10 +4,7 @@ Feature: Cadastro e manutenção de artistas
 
 Scenario: Cadastrar artista
 Given que eu sou um artista de nome "Chico Buarque" não presente no sistema
-When eu preencho meus dados de "nome", "gênero" e "descrição", "login" e "senha" com os valores respectivos
-"Chico Buarque", "MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba"
-And eu submeto as informações
-Then o sistema insere em seu banco de dados um artista com os valores de
-"nome", "gênero" e "descrição", "login" e "senha" iguais a "Chico Buarque", 
-"MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba", respectivamente
-And o sistema confirma a inserção para o usuário
+When eu preencho meus dados de name, genre, description, login e pass com os valores respectivos "Chico Buarque", "MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba"
+And uma requisição POST for enviada para "/api/artist"
+Then o status da resposta deve ser "200"
+And O JSON da resposta contem um artista com os valores de name, genre, description, login e pass iguais a "Chico Buarque", "MPB", "Cantor, compositor, dramaturgo, escritor e ator brasileiro", "chiquin123", "aba7788aba", respectivamente
