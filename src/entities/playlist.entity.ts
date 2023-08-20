@@ -5,6 +5,7 @@ export default class PlaylistEntity extends BaseEntity {
   genre: string;
   description: string;
   idUser: number;
+  duration?: number;
 
   constructor(data: PlaylistEntity) {
     super(data.id || "");
@@ -12,5 +13,6 @@ export default class PlaylistEntity extends BaseEntity {
     this.genre = data.genre;
     this.description = data.description;
     this.idUser = data.idUser;
+    this.duration = data.duration;
   }
 }
