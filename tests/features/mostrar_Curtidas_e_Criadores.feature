@@ -16,4 +16,4 @@ Scenario: Visualizar todos os criadores
 Given que eu sou um usuário logado no sistema com nome "Lucas"
 When eu faço uma requisição GET "/api/playlist/{id_playlist}/createdBy"
 Then é retornado um JSON com corpo "marcelo"
-
+ 
