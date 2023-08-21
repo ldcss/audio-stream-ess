@@ -8,7 +8,12 @@ When eu faço uma requisição GET "/api/playlist/{id_playlist}/curtidas"
 Then é retornado um JSON com corpo
 """
 [
-    {"id_usuario":1, "name_usuario":"marcelo"},
-    {"id_usuario":2, "name_usuario":"enderson"}
+    {"name":"marcelo"},
+    {"name":"enderson"}
 ]
 """
+Scenario: Visualizar todos os criadores
+Given que eu sou um usuário logado no sistema com nome "Lucas"
+When eu faço uma requisição GET "/api/playlist/{id_playlist}/createdBy"
+Then é retornado um JSON com corpo "marcelo"
+ 
