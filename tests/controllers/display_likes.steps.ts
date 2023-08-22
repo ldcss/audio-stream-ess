@@ -56,7 +56,7 @@ defineFeature(feature, (test)=>{
 
     test('Visualizar todas as curtidas com 1 ou mais curtidas', ({given, when, then, and})=>{
 //              que eu sou um usuário logado no sistema com nome
-        given(/^que eu sou um usuário logado no sistema com nome "(.*)"$/, async(nome)=>{
+        given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async(id)=>{
             //checagem com login
             mockGetPlaylist.mockReturnValue(mockPlaylists)
         })
@@ -115,7 +115,7 @@ defineFeature(feature, (test)=>{
     })
     
     test('Visualizar todos os criadores', ({given, when, then, and})=>{
-        given(/^que eu sou um usuário logado no sistema com nome "(.*)"$/, async(nome)=>{
+        given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async(id)=>{
             //checagem com login
             mockGetPlaylist.mockReturnValue(mockPlaylists)
         })
@@ -172,7 +172,7 @@ defineFeature(feature, (test)=>{
     })
     test('Visualizar playlist sem curtidas', ({given, when, then, and})=>{
       //              que eu sou um usuário logado no sistema com nome
-              given(/^que eu sou um usuário logado no sistema com nome "(.*)"$/, async(nome)=>{
+              given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async(id)=>{
                   //checagem com login
                   mockGetPlaylist.mockReturnValue(mockPlaylists)
               })
@@ -229,5 +229,3 @@ defineFeature(feature, (test)=>{
           })
     
 })
-
-
