@@ -20,7 +20,6 @@ class PlaylistController {
     this.router.get(this.prefix, (req: Request, res: Response) =>
       this.getPlaylists(req, res)
     );
-
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getPlaylist(req, res)
     );
@@ -32,6 +31,12 @@ class PlaylistController {
     );
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.deletePlaylist(req, res)
+    );
+    this.router.post(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
+      this.updatePlaylist(req, res)
+    );
+    this.router.post(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
+      this.updatePlaylist(req, res)
     );
   }
 

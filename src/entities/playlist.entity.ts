@@ -13,15 +13,19 @@ export default class PlaylistEntity extends BaseEntity {
   duration?: number;
   likes?: IUser[];
   createdBy?: string; 
+  qtdMusicas?: number;
+  musicas?: [];
 
   constructor(data: PlaylistEntity) {
     super(data.id || "");
     this.name = data.name;
     this.genre = data.genre;
     this.description = data.description;
+    this.qtdMusicas = data.qtdMusicas;
     this.idUser = data.idUser;
     this.duration = data.duration;
     this.likes = data.likes;
+    this.musicas = data.musicas
     this.createdBy = data.createdBy; 
   }
 }

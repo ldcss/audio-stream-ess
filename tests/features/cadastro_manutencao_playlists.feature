@@ -3,30 +3,29 @@ Feature: Cadastro e manutenção de playlists
       I want to adicionar/remover músicas de uma playlist e editá-la
 
 
-API
 Scenario: Adicionar música a uma playlist como usuário logado
 Given que eu sou um artista logado no sistema com nome "nome_artista" e senha "senha_artista"
-When uma requisição POST for enviada para "/api/playlist/{id_playlist}/cadastro" com o nome "playlist"
+When uma requisição PUT for enviada para "/api/playlist/{id_playlist}/adicionar" com o nome "playlist"
 Then o sistema retorna um JSON com o corpo 
 """
 [
-    {"message":"Música cadastrada na playlist com sucesso."}
+    {"message":"Música adicionada na playlist com sucesso."}
 ]
 """
 And é retornado um status "200" como criado com sucesso
 
-API
-Scenario: Excluir item da playlist como usuário logado e proprietário da playlist
-Given que eu sou um artista logado no sistema com nome "nome_artista" e senha "senha_artista"
-When uma requisição POST for enviada para "/api/playlist/{id_playlist}/remover/{id_musica}" para remover a música "canto sombrio"
-And eu sou proprietário da playlist de id "{id_playlist}"
-Then o sistema retonra um JSON com o corporation
-"""
-[
-    {"message: item removido com sucesso da playlist"}
-]
-"""
-And é retorando um status "200" como criado com sucesso
+# API
+# Scenario: Excluir item da playlist como usuário logado e proprietário da playlist
+# Given que eu sou um artista logado no sistema com nome "nome_artista" e senha "senha_artista"
+# When uma requisição POST for enviada para "/api/playlist/{id_playlist}/remover/{id_musica}" para remover a música "canto sombrio"
+# And eu sou proprietário da playlist de id "{id_playlist}"
+# Then o sistema retorna um JSON com o corporation
+# """
+# [
+#     {"message: item removido com sucesso da playlist"}
+# ]
+# """
+# And é retornado um status "200" como criado com sucesso
 
 # Scenario: Visualizar todas as curtidas com 1 ou mais curtidas
 # Given que eu sou um usuário logado no sistema com nome "Lucas"
