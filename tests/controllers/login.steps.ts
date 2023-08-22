@@ -178,7 +178,7 @@ defineFeature(feature, (test) => {
 
     and(/^o status retornado da requisição é "(.*)"$/, (responseStatusCode) => {
       let statusCode: number = 0;
-      if (mockGetModeradores()) statusCode = 301;
+      if (mockGetModeradores()) statusCode = 401;
       expect(+responseStatusCode).toBe(statusCode)
     })
   })
