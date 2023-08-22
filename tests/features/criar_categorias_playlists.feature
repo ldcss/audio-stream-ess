@@ -40,3 +40,12 @@ Then o sistema retorna um JSON com o corpo
 [{"id": "3", "name": "UK Drill", "genre": "drill", "description": "", "idUser": 0, "duration": 120}]
 """
 And é retornado um status "200" OK
+
+Scenario: Usuário sem playlist
+Given que eu sou um usuário logado no sistema com o id "1" 
+When uma requisição GET for enviada para "/api/playlist/1"
+And o sistema retorna um JSON com o corpo
+"""
+[]
+"""
+Then é retornado um status "200" OK

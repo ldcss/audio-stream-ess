@@ -168,4 +168,31 @@ defineFeature(feature, (test) => {
 			expect(+responseStatusCode).toBe(statusCode)
     });
   })
+
+  test('Usuário sem playlist', ({given, when, then, and}) => {
+    given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async (id)=>{
+      //Checagem com login
+      if(id === '1')
+        mockGetPlaylist.mockReturnValue([])
+    });
+
+    when(/^uma requisição GET for enviada para "(.*)"$/,
+    async (url)=>{
+      if(url){
+        const response = mockGetPlaylist();
+        expect(response).toEqual([])}
+    });
+
+    then("o sistema retorna um JSON com o corpo", (responseTest) => {
+      let playlists = mockGetPlaylist();
+      let response = JSON.parse(responseTest);
+      expect(playlists).toMatchObject(response)
+    });
+
+    and(/^é retornado um status "(.*)" OK$/, (responseStatusCode) => {
+      let statusCode: number = 0;
+      if(mockGetPlaylist()) statusCode = 200;
+			expect(+responseStatusCode).toBe(statusCode)
+    });
+  })
 })
