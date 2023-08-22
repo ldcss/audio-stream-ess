@@ -14,7 +14,7 @@ export default class PlaylistEntity extends BaseEntity {
   likes?: IUser[];
   createdBy?: string; 
   qtdMusicas?: number;
-  musicas?: [];
+  id_musica?: number[];
 
   constructor(data: PlaylistEntity) {
     super(data.id || "");
@@ -25,7 +25,7 @@ export default class PlaylistEntity extends BaseEntity {
     this.idUser = data.idUser;
     this.duration = data.duration;
     this.likes = data.likes;
-    this.musicas = data.musicas
+    this.id_musica = data.id_musica
     this.createdBy = data.createdBy; 
   }
 }

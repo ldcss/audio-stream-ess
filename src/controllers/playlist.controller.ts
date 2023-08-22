@@ -32,10 +32,11 @@ class PlaylistController {
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.deletePlaylist(req, res)
     );
-    this.router.post(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
+    this.router.put(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
+      // console.log(Response)  
       this.updatePlaylist(req, res)
     );
-    this.router.post(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
+    this.router.put(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
       this.updatePlaylist(req, res)
     );
   }
@@ -77,8 +78,8 @@ class PlaylistController {
     const test = await this.playlistService.updatePlaylist(
       req.params.id,
       new PlaylistEntity(req.body)
-    );
-
+      );
+      
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
       data: test,
