@@ -33,7 +33,6 @@ class PlaylistController {
       this.deletePlaylist(req, res)
     );
     this.router.put(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
-      // console.log(Response)  
       this.updatePlaylist(req, res)
     );
     this.router.put(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
