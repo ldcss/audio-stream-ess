@@ -56,49 +56,18 @@ defineFeature(feature, (test)=>{
 
     test('Visualizar todas as curtidas com 1 ou mais curtidas', ({given, when, then, and})=>{
 //              que eu sou um usuário logado no sistema com nome
-        given(/^que eu sou um usuário logado no sistema com nome "(.*)"$/, async(nome)=>{
+        given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async(id)=>{
             //checagem com login
             mockGetPlaylist.mockReturnValue(mockPlaylists)
         })
-        when(/^eu faço uma requisição GET "(.*)"$/,async(endPoint)=>{
+        when(/^eu faço uma requisição GET "(.*)" com o corpo$/,async(endPoint, corpoReq)=>{
      
-            if(endPoint){
-                const response = mockGetPlaylist(); //lpaylists do user com id 0
-                expect(response).toEqual([{
-                    id: "1",
-                    name: "melhores do grime",
-                    genre: "grime",
-                    description: "",
-                    idUser: 0,
-                    likes:[
-                        {name: "lucas"},
-                        {name: "marcelo"},
-                    ],
-                    createdBy: "marcelo",
-                    
-                  }, {
-                    id: "2",
-                    name: "melhores do mpb",
-                    genre: "mpb",
-                    description: "",
-                    idUser: 0,
-                    likes:[
-                        {name: "lucas"},
-                        {name: "enderson"},
-                        {name: "pedro"}
-                    ],
-                    createdBy: "lucas",
-                  }, {
-                    id: "3",
-                    name: "UK Drill",
-                    genre: "drill",
-                    description: "",
-                    idUser: 0,
-                    likes:[],
-                    createdBy: "enderson",
-                  }])}
-        
-        })
+          if(endPoint){
+              const response = mockGetPlaylist(); //playlists do user com id 0
+              let bodyRequested = corpoReq
+              expect(response).toEqual(JSON.parse(bodyRequested))}
+      
+      })
 
         then('é retornado um JSON com corpo',async(body)=>{
      
@@ -115,47 +84,16 @@ defineFeature(feature, (test)=>{
     })
     
     test('Visualizar todos os criadores', ({given, when, then, and})=>{
-        given(/^que eu sou um usuário logado no sistema com nome "(.*)"$/, async(nome)=>{
+        given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async(id)=>{
             //checagem com login
             mockGetPlaylist.mockReturnValue(mockPlaylists)
         })
-        when(/^eu faço uma requisição GET "(.*)"$/,async(endPoint)=>{
+        when(/^eu faço uma requisição GET "(.*)" com o corpo$/,async(endPoint, corpoReq)=>{
      
             if(endPoint){
                 const response = mockGetPlaylist(); //playlists do user com id 0
-                expect(response).toEqual([{
-                    id: "1",
-                    name: "melhores do grime",
-                    genre: "grime",
-                    description: "",
-                    idUser: 0,
-                    likes:[
-                        {name: "lucas"},
-                        {name: "marcelo"},
-                    ],
-                    createdBy: "marcelo",
-                    
-                  }, {
-                    id: "2",
-                    name: "melhores do mpb",
-                    genre: "mpb",
-                    description: "",
-                    idUser: 0,
-                    likes:[
-                        {name: "lucas"},
-                        {name: "enderson"},
-                        {name: "pedro"}
-                    ],
-                    createdBy: "lucas",
-                  }, {
-                    id: "3",
-                    name: "UK Drill",
-                    genre: "drill",
-                    description: "",
-                    idUser: 0,
-                    likes:[],
-                    createdBy: "enderson",
-                  }])}
+                let bodyRequested = corpoReq
+                expect(response).toEqual(JSON.parse(bodyRequested))}
         
         })
 
@@ -172,49 +110,18 @@ defineFeature(feature, (test)=>{
     })
     test('Visualizar playlist sem curtidas', ({given, when, then, and})=>{
       //              que eu sou um usuário logado no sistema com nome
-              given(/^que eu sou um usuário logado no sistema com nome "(.*)"$/, async(nome)=>{
+              given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async(id)=>{
                   //checagem com login
                   mockGetPlaylist.mockReturnValue(mockPlaylists)
               })
-              when(/^eu faço uma requisição GET "(.*)"$/,async(endPoint)=>{
-           
-                  if(endPoint){
-                      const response = mockGetPlaylist(); //lpaylists do user com id 0
-                      expect(response).toEqual([{
-                          id: "1",
-                          name: "melhores do grime",
-                          genre: "grime",
-                          description: "",
-                          idUser: 0,
-                          likes:[
-                              {name: "lucas"},
-                              {name: "marcelo"},
-                          ],
-                          createdBy: "marcelo",
-                          
-                        }, {
-                          id: "2",
-                          name: "melhores do mpb",
-                          genre: "mpb",
-                          description: "",
-                          idUser: 0,
-                          likes:[
-                              {name: "lucas"},
-                              {name: "enderson"},
-                              {name: "pedro"}
-                          ],
-                          createdBy: "lucas",
-                        }, {
-                          id: "3",
-                          name: "UK Drill",
-                          genre: "drill",
-                          description: "",
-                          idUser: 0,
-                          likes:[],
-                          createdBy: "enderson",
-                        }])}
-              
-              })
+              when(/^eu faço uma requisição GET "(.*)" com o corpo$/,async(endPoint, corpoReq)=>{
+     
+                if(endPoint){
+                    const response = mockGetPlaylist(); //playlists do user com id 0
+                    let bodyRequested = corpoReq
+                    expect(response).toEqual(JSON.parse(bodyRequested))}
+            
+            })
       
               then('é retornado um JSON com corpo',async(body)=>{
            
@@ -229,5 +136,3 @@ defineFeature(feature, (test)=>{
           })
     
 })
-
-
