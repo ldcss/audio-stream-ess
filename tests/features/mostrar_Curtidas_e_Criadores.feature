@@ -12,8 +12,21 @@ Then é retornado um JSON com corpo
     {"name":"enderson"}
 ]
 """
+And é retornado um status "200" OK
+
+
 Scenario: Visualizar todos os criadores
 Given que eu sou um usuário logado no sistema com nome "Lucas"
 When eu faço uma requisição GET "/api/playlist/{id_playlist}/createdBy"
 Then é retornado um JSON com corpo "marcelo"
- 
+And é retornado um status "200" OK
+
+
+Scenario: Visualizar playlist sem curtidas
+Given que eu sou um usuário logado no sistema com nome "Lucas"
+When eu faço uma requisição GET "/api/playlist/{id_playlist}/curtidas"
+Then é retornado um JSON com corpo
+"""
+[]
+"""
+And é retornado um status "200" OK
