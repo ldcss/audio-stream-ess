@@ -1,25 +1,36 @@
-Feature: Criar uma pagina de login 
+Feature: Fazer login
     As a client que possui uma conta no sistema
     I want to fazer o login do client com o tipo de conta correta
     So that eu posso controlar as permissões de cada conta
 
-Scenario: Login como usuario
-    Given que eu estou na pagina de login
-    and "usuario01" está cadastrado 
-    and "usuario01" tem permissão de usuario
-    when eu tento entrar com o login "usuario01" e senha "teste123"
-    then eu vejo a página principal do app
+Scenario: login como artista
+    Given que o sistema está em funcionamento
+    And "artista01" está cadastrado
+    And a senha cadastrada é "teste123"
+    When eu faço uma requisição POST para a url "/api/auth/login" com JSON
+    """
+    {"login": "artista01", "pass": "teste123"}
+    """
+    Then o sistema autoriza o login como "artista01"
+    And o status retornado da requisição é "201"
 
-Scenario: Login usuario não cadastrado
-    Given que eu estou na pagina de login
-    and "usuario02" não está está cadastrado
-    when eu tento entrar com o login "usuario02" e senha "teste123"
-    then eu vejo uma mensagem de usuário não existente
-    and volto para página de login
+Scenario: login como moderador
+    Given que o sistema está em funcionamento
+    And "moderador01" está cadastrado 
+    And a senha cadastrada é "teste123"
+    When eu faço uma requisição POST para a url "/api/auth/login" com JSON
+    """
+    {"login": "moderador01", "pass": "teste123"}
+    """
+    Then o sistema autoriza o login como "moderador01"
+    And o status retornado da requisição é "201"
 
-Scenario: Login com senha errada
-    Given que eu estou na pagina de login
-    and "usuario01" está está cadastrado
-    when eu tento entrar com o login "usuario01" e senha "123teste"
-    then eu vejo uma mensagem de senha incorreta
-    and volto para página de login
+Scenario: login com credenciais incorretas
+    Given que o sistema está em funcionamento
+    And e vamos tentar o login como "moderador02" "123teste"
+    When eu faço uma requisição POST para a url "/api/auth/login" com JSON
+    """
+    {"login": "moderador02", "pass": "123teste"}
+    """
+    Then o sistema nega o login como "moderador02"
+    And o status retornado da requisição é "401"
