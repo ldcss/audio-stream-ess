@@ -1,4 +1,4 @@
-import BaseModel from "./base.model";
+import BaseModel from './base.model';
 
 export default class ArtistModel extends BaseModel {
   name: string;
@@ -8,7 +8,7 @@ export default class ArtistModel extends BaseModel {
   pass: string;
 
   constructor(data: ArtistModel) {
-    super(data.id || "");
+    super(data.id || '');
     this.name = data.name;
     this.genre = data.genre;
     this.description = data.description;

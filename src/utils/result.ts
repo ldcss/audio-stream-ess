@@ -5,15 +5,7 @@ export abstract class Result {
   msgCode: any;
   code: number;
 
-  constructor({
-    msg,
-    msgCode,
-    code,
-  }: {
-    msg: string;
-    msgCode: any;
-    code: number;
-  }) {
+  constructor({ msg, msgCode, code }: { msg: string; msgCode: any; code: number }) {
     this.msg = msg;
     this.msgCode = msgCode;
     this.code = code;
@@ -48,15 +40,7 @@ export class SuccessResult extends Result {
 }
 
 export class FailureResult extends Result {
-  constructor({
-    msg,
-    msgCode,
-    code,
-  }: {
-    msg: string;
-    msgCode?: any;
-    code?: number;
-  }) {
+  constructor({ msg, msgCode, code }: { msg: string; msgCode?: any; code?: number }) {
     super({ msg, msgCode: msgCode || 'failure', code: code || 500 });
   }
 

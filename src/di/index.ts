@@ -10,8 +10,5 @@ di.registerRepository(TestRepository, new TestRepository());
 di.registerRepository(OtherRepository, new OtherRepository());
 di.registerService(
   TestService,
-  new TestService(
-    di.getRepository(TestRepository),
-    di.getRepository(OtherRepository)
-  )
+  new TestService(di.getRepository(TestRepository), di.getRepository(OtherRepository)),
 );

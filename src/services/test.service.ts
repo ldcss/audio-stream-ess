@@ -12,10 +12,7 @@ class TestService {
   private testRepository: TestRepository;
   private otherRepository: OtherRepository;
 
-  constructor(
-    testRepository: TestRepository,
-    otherRepository: OtherRepository
-  ) {
+  constructor(testRepository: TestRepository, otherRepository: OtherRepository) {
     this.testRepository = testRepository;
     this.otherRepository = otherRepository;
   }
@@ -23,7 +20,7 @@ class TestService {
   public async getTests(): Promise<TestModel[]> {
     const testsEntity = await this.testRepository.getTests();
 
-    const testsModel = testsEntity.map((test) => new TestModel(test));
+    const testsModel = testsEntity.map(test => new TestModel(test));
 
     return testsModel;
   }
@@ -31,7 +28,7 @@ class TestService {
   public async getOtherTests(): Promise<TestModel[]> {
     const testsEntity = await this.otherRepository.getTests();
 
-    const testsModel = testsEntity.map((test) => new TestModel(test));
+    const testsModel = testsEntity.map(test => new TestModel(test));
 
     return testsModel;
   }

@@ -1,16 +1,14 @@
-import { loadFeature, defineFeature } from "jest-cucumber";
-import supertest from "supertest";
-import app from "../../src/app";
-import { di } from "../../src/di";
-import ArtistRepository from "../../src/repositories/artist.repository";
+import { loadFeature, defineFeature } from 'jest-cucumber';
+import supertest from 'supertest';
+import app from '../../src/app';
+import { di } from '../../src/di';
+import ArtistRepository from '../../src/repositories/artist.repository';
 
-const feature = loadFeature(
-  "tests/features/cadastro_manutencao_artista.feature"
-);
+const feature = loadFeature('tests/features/cadastro_manutencao_artista.feature');
 
 const request = supertest(app);
 
-defineFeature(feature, (test) => {
+defineFeature(feature, test => {
   let reqMock: {
     name: string;
     genre: string;
@@ -25,11 +23,8 @@ defineFeature(feature, (test) => {
     mockArtistRepository = di.getRepository<ArtistRepository>(ArtistRepository);
   });
 
-  test("Cadastrar artista", ({ given, when, and, then }) => {
-    given(
-      /^que eu sou um artista de nome "(.*)" não presente no sistema$/,
-      (arg0) => {}
-    );
+  test('Cadastrar artista', ({ given, when, and, then }) => {
+    given(/^que eu sou um artista de nome "(.*)" não presente no sistema$/, arg0 => {});
 
     when(
       /^eu preencho meus dados de name, genre, description, login e pass com os valores respectivos "(.*)", "(.*)", "(.*)", "(.*)", "(.*)"$/,
@@ -41,14 +36,14 @@ defineFeature(feature, (test) => {
           login: arg8,
           pass: arg9,
         };
-      }
+      },
     );
 
-    and(/^uma requisição POST for enviada para "(.*)"$/, async (url) => {
+    and(/^uma requisição POST for enviada para "(.*)"$/, async url => {
       response = await request.post(url).send(reqMock);
     });
 
-    then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
+    then(/^o status da resposta deve ser "(.*)"$/, statusCode => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
@@ -62,9 +57,9 @@ defineFeature(feature, (test) => {
             description: arg7,
             login: arg8,
             pass: arg9,
-          })
+          }),
         );
-      }
+      },
     );
   });
 });

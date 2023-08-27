@@ -1,9 +1,8 @@
-import BaseEntity from "./base.entity";
+import BaseEntity from './base.entity';
 
 type IUser = {
-  name : string
-}
-
+  name: string;
+};
 
 export default class PlaylistEntity extends BaseEntity {
   name: string;
@@ -12,12 +11,12 @@ export default class PlaylistEntity extends BaseEntity {
   idUser: number;
   duration?: number;
   likes?: IUser[];
-  createdBy?: string; 
+  createdBy?: string;
   qtdMusicas?: number;
   id_musica?: number[];
 
   constructor(data: PlaylistEntity) {
-    super(data.id || "");
+    super(data.id || '');
     this.name = data.name;
     this.genre = data.genre;
     this.description = data.description;
@@ -25,7 +24,7 @@ export default class PlaylistEntity extends BaseEntity {
     this.idUser = data.idUser;
     this.duration = data.duration;
     this.likes = data.likes;
-    this.id_musica = data.id_musica
-    this.createdBy = data.createdBy; 
+    this.id_musica = data.id_musica;
+    this.createdBy = data.createdBy;
   }
 }
