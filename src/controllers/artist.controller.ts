@@ -1,12 +1,12 @@
-import { Router, Request, Response } from "express";
-import { Result, SuccessResult } from "../utils/result";
-import ArtistService from "../services/artist.service";
-import ArtistEntity from "../entities/artist.entity";
-import ArtistRepository from "../repositories/artist.repository";
-import ArtistModel from "../models/artist.model";
+import { Router, Request, Response } from 'express';
+import { Result, SuccessResult } from '../utils/result';
+import ArtistService from '../services/artist.service';
+import ArtistEntity from '../entities/artist.entity';
+import ArtistRepository from '../repositories/artist.repository';
+import ArtistModel from '../models/artist.model';
 
 class ArtistController {
-  private prefix: string = "/artist";
+  private prefix: string = '/artist';
   public router: Router;
   private artistService: ArtistService;
 
@@ -17,21 +17,17 @@ class ArtistController {
   }
 
   private initRoutes() {
-    this.router.get(this.prefix, (req: Request, res: Response) =>
-      this.getArtists(req, res)
-    );
+    this.router.get(this.prefix, (req: Request, res: Response) => this.getArtists(req, res));
 
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.getArtist(req, res)
+      this.getArtist(req, res),
     );
-    this.router.post(this.prefix, (req: Request, res: Response) =>
-      this.createArtist(req, res)
-    );
+    this.router.post(this.prefix, (req: Request, res: Response) => this.createArtist(req, res));
     this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.updateArtist(req, res)
+      this.updateArtist(req, res),
     );
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.deleteArtist(req, res)
+      this.deleteArtist(req, res),
     );
   }
 
@@ -70,10 +66,7 @@ class ArtistController {
   }
 
   private async updateArtist(req: Request, res: Response) {
-    const test = await this.artistService.updateArtist(
-      req.params.id,
-      new ArtistEntity(req.body)
-    );
+    const test = await this.artistService.updateArtist(req.params.id, new ArtistEntity(req.body));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),

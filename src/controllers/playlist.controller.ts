@@ -17,26 +17,22 @@ class PlaylistController {
   }
 
   private initRoutes() {
-    this.router.get(this.prefix, (req: Request, res: Response) =>
-      this.getPlaylists(req, res)
-    );
+    this.router.get(this.prefix, (req: Request, res: Response) => this.getPlaylists(req, res));
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.getPlaylist(req, res)
+      this.getPlaylist(req, res),
     );
-    this.router.post(this.prefix, (req: Request, res: Response) =>
-      this.createPlaylist(req, res)
-    );
+    this.router.post(this.prefix, (req: Request, res: Response) => this.createPlaylist(req, res));
     this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.updatePlaylist(req, res)
+      this.updatePlaylist(req, res),
     );
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.deletePlaylist(req, res)
+      this.deletePlaylist(req, res),
     );
     this.router.put(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
-      this.updatePlaylist(req, res)
+      this.updatePlaylist(req, res),
     );
     this.router.put(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
-      this.updatePlaylist(req, res)
+      this.updatePlaylist(req, res),
     );
   }
 
@@ -76,9 +72,9 @@ class PlaylistController {
   private async updatePlaylist(req: Request, res: Response) {
     const test = await this.playlistService.updatePlaylist(
       req.params.id,
-      new PlaylistEntity(req.body)
-      );
-      
+      new PlaylistEntity(req.body),
+    );
+
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
       data: test,

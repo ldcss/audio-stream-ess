@@ -4,7 +4,7 @@ const logger = pino(
   {
     level: process.env.ENV === 'PROD' ? 'info' : 'debug',
   },
-  process.stdout
+  process.stdout,
 );
 
 export default logger;

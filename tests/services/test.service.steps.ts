@@ -7,95 +7,90 @@ import TestModel from '../../src/models/test.model';
 
 const feature = loadFeature('tests/features/tests-service.feature');
 
-defineFeature(feature, (test) => {
-    // mocking the repository
-    let mockTestRepository: TestRepository;
-    let mockOtherRepository: OtherRepository;
-    let service: TestService;
+defineFeature(feature, test => {
+  // mocking the repository
+  let mockTestRepository: TestRepository;
+  let mockOtherRepository: OtherRepository;
+  let service: TestService;
 
-    let tests: TestEntity[];
-    let testReturned: TestEntity;
-    let idToCall: string;
-        
-    let mockTestEntity: TestEntity;
-    let mockTestModel: TestModel;
+  let tests: TestEntity[];
+  let testReturned: TestEntity;
+  let idToCall: string;
 
-    beforeEach(() => {
-        mockTestRepository = {
-            getTests: jest.fn(),
-            getTest: jest.fn(),
-            createTest: jest.fn(),
-            updateTest: jest.fn(),
-            deleteTest: jest.fn(),
-        } as any;
+  let mockTestEntity: TestEntity;
+  let mockTestModel: TestModel;
 
-        mockOtherRepository = {
-            getTests: jest.fn(),
-        } as any;
+  beforeEach(() => {
+    mockTestRepository = {
+      getTests: jest.fn(),
+      getTest: jest.fn(),
+      createTest: jest.fn(),
+      updateTest: jest.fn(),
+      deleteTest: jest.fn(),
+    } as any;
 
-        service = new TestService(mockTestRepository, mockOtherRepository);
-    });
+    mockOtherRepository = {
+      getTests: jest.fn(),
+    } as any;
 
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
+    service = new TestService(mockTestRepository, mockOtherRepository);
+  });
 
-    test('Return all tests', ({ given, when, then }) => {
-        given(
-            /^o método getTests do TestService retorna um array com o test de nome "(.*)" e id "(.*)"$/, 
-            async (testName, testId) => {
-                mockTestEntity = new TestEntity({
-                    id: testId,
-                    name: testName,
-                });
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
-                jest.spyOn(mockTestRepository, 'getTests')
-                    .mockResolvedValue([mockTestEntity]);
+  test('Return all tests', ({ given, when, then }) => {
+    given(
+      /^o método getTests do TestService retorna um array com o test de nome "(.*)" e id "(.*)"$/,
+      async (testName, testId) => {
+        mockTestEntity = new TestEntity({
+          id: testId,
+          name: testName,
         });
 
-        when("o método getTests do TestService for chamado", async () => {
-            tests = await service.getTests();
-        }
-        );
+        jest.spyOn(mockTestRepository, 'getTests').mockResolvedValue([mockTestEntity]);
+      },
+    );
 
-        then(/^o array retornado deve conter o test de nome "(.*)" e id "(.*)"$/, (testName, testId) => {
-            
-            mockTestModel = new TestModel(
-                new TestEntity({ id: testId, name: testName })
-            );
-
-            expect(tests).toEqual([mockTestModel]);
-        });
+    when('o método getTests do TestService for chamado', async () => {
+      tests = await service.getTests();
     });
 
-    test('Return test by id', ({ given, when, then }) => {
-        given(
-            /^o método getTest chamado com "(.*)" do TestService retorna um test de nome "(.*)" e id "(.*)"$/, 
-            async (id, testName, testId) => {
-                idToCall = id;
+    then(
+      /^o array retornado deve conter o test de nome "(.*)" e id "(.*)"$/,
+      (testName, testId) => {
+        mockTestModel = new TestModel(new TestEntity({ id: testId, name: testName }));
 
-                mockTestEntity = new TestEntity({
-                    id: testId,
-                    name: testName,
-                });
+        expect(tests).toEqual([mockTestModel]);
+      },
+    );
+  });
 
-                jest.spyOn(mockTestRepository, 'getTest')
-                    .mockResolvedValue(mockTestEntity);
+  test('Return test by id', ({ given, when, then }) => {
+    given(
+      /^o método getTest chamado com "(.*)" do TestService retorna um test de nome "(.*)" e id "(.*)"$/,
+      async (id, testName, testId) => {
+        idToCall = id;
+
+        mockTestEntity = new TestEntity({
+          id: testId,
+          name: testName,
         });
 
-        when(
-            /^o método getTest do TestService for chamado com o id "(.*)"$/, 
-            async (testId) => {
-            testReturned = await service.getTest(testId);
-        }
-        );
+        jest.spyOn(mockTestRepository, 'getTest').mockResolvedValue(mockTestEntity);
+      },
+    );
 
-        then(/^o test retornado deve ter o nome "(.*)" e id "(.*)"$/, (testName, testId) => {
-            
-            const testEntity = new TestEntity({ id: testId, name: testName });
-
-            expect(testReturned).toEqual(testEntity);
-            expect(mockTestRepository.getTest).toBeCalledWith(idToCall);
-        });
+    when(/^o método getTest do TestService for chamado com o id "(.*)"$/, async testId => {
+      testReturned = await service.getTest(testId);
     });
+
+    then(/^o test retornado deve ter o nome "(.*)" e id "(.*)"$/, (testName, testId) => {
+      const testEntity = new TestEntity({ id: testId, name: testName });
+
+      expect(testReturned).toEqual(testEntity);
+      expect(mockTestRepository.getTest).toBeCalledWith(idToCall);
+    });
+  });
 });

@@ -7,7 +7,7 @@ import TestRepository from '../../src/repositories/test.repository';
 const feature = loadFeature('tests/features/tests.feature');
 const request = supertest(app);
 
-defineFeature(feature, (test) => {
+defineFeature(feature, test => {
   // mocking the repository
   let mockTestRepository: TestRepository;
   let response: supertest.Response;
@@ -31,20 +31,19 @@ defineFeature(feature, (test) => {
         response = await request.post(url).send({
           name: testName,
         });
-      }
+      },
     );
 
-    then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
+    then(/^o status da resposta deve ser "(.*)"$/, statusCode => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
-    and(/^o JSON da resposta deve conter o nome "(.*)"$/, (testName) => {
-        expect(response.body.data).toEqual(
-          expect.objectContaining({
-            name: testName,
-          })
-        );
-      }
-    );
+    and(/^o JSON da resposta deve conter o nome "(.*)"$/, testName => {
+      expect(response.body.data).toEqual(
+        expect.objectContaining({
+          name: testName,
+        }),
+      );
+    });
   });
 });

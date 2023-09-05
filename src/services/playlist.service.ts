@@ -1,10 +1,10 @@
-import PlaylistEntity from "../entities/playlist.entity";
-import PlaylistModel from "../models/playlist.model";
-import PlaylistRepository from "../repositories/playlist.repository";
-import { HttpNotFoundError } from "../utils/errors/http.error";
+import PlaylistEntity from '../entities/playlist.entity';
+import PlaylistModel from '../models/playlist.model';
+import PlaylistRepository from '../repositories/playlist.repository';
+import { HttpNotFoundError } from '../utils/errors/http.error';
 
 class PlaylistServiceMessageCode {
-  public static readonly playlist_not_found = "playlist_not_found";
+  public static readonly playlist_not_found = 'playlist_not_found';
 }
 
 class PlaylistService {
@@ -17,7 +17,7 @@ class PlaylistService {
   public async getPlaylists(): Promise<PlaylistModel[]> {
     const playlistsEntity = await this.playlistRepository.getPlaylists();
 
-    const playlistsModel = playlistsEntity.map((test) => new PlaylistModel(test));
+    const playlistsModel = playlistsEntity.map(test => new PlaylistModel(test));
 
     return playlistsModel;
   }
@@ -27,7 +27,7 @@ class PlaylistService {
 
     if (!playlistEntity) {
       throw new HttpNotFoundError({
-        msg: "Playlist not found",
+        msg: 'Playlist not found',
         msgCode: PlaylistServiceMessageCode.playlist_not_found,
       });
     }
@@ -44,17 +44,14 @@ class PlaylistService {
     return playlistModel;
   }
 
-  public async updatePlaylist(
-    id: string,
-    data: PlaylistEntity
-  ): Promise<PlaylistModel> {
+  public async updatePlaylist(id: string, data: PlaylistEntity): Promise<PlaylistModel> {
     const playlistEntity = await this.playlistRepository.updatePlaylist(id, data);
 
     if (!playlistEntity) {
-        throw new HttpNotFoundError({
-            msg: "Playlist not found",
-            msgCode: PlaylistServiceMessageCode.playlist_not_found,
-          });
+      throw new HttpNotFoundError({
+        msg: 'Playlist not found',
+        msgCode: PlaylistServiceMessageCode.playlist_not_found,
+      });
     }
 
     const playlistModel = new PlaylistModel(playlistEntity);

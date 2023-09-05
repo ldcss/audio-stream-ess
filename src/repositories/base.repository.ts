@@ -30,10 +30,7 @@ export default class BaseRepository<T extends BaseEntity> {
     }
   }
 
-  public async update(
-    filter: FilterFunction<T>,
-    data: Partial<T>
-  ): Promise<T | null> {
+  public async update(filter: FilterFunction<T>, data: Partial<T>): Promise<T | null> {
     try {
       if (!this.db.data[this.prefix]) {
         return null;
@@ -66,9 +63,7 @@ export default class BaseRepository<T extends BaseEntity> {
       if (!this.db.data[this.prefix]) {
         return [];
       }
-      return filter
-        ? this.db.data[this.prefix].filter(filter)
-        : this.db.data[this.prefix];
+      return filter ? this.db.data[this.prefix].filter(filter) : this.db.data[this.prefix];
     } catch (e) {
       throw new HttpInternalServerError();
     }

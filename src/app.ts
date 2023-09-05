@@ -13,18 +13,13 @@ app.use(express.json());
 app.use(
   cors({
     origin: '*',
-  })
+  }),
 );
 
 setupRoutes(app);
 
 app.use(
-  (
-    error: HttpError,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+  (error: HttpError, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (error.status >= 500) {
       logger.error(error.toString());
     }
@@ -34,7 +29,7 @@ app.use(
       msgCode: error.msgCode,
       code: error.status,
     }).handle(res);
-  }
+  },
 );
 
 // e.g. Seed database with initial data;

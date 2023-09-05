@@ -1,4 +1,4 @@
-import BaseEntity from "./base.entity";
+import BaseEntity from './base.entity';
 
 export default class ArtistEntity extends BaseEntity {
   name: string;
@@ -8,7 +8,7 @@ export default class ArtistEntity extends BaseEntity {
   pass: string;
 
   constructor(data: ArtistEntity) {
-    super(data.id || "");
+    super(data.id || '');
     this.name = data.name;
     this.genre = data.genre;
     this.description = data.description;

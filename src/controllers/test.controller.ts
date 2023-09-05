@@ -15,25 +15,19 @@ class TestController {
   }
 
   private initRoutes() {
-    this.router.get(this.prefix, (req: Request, res: Response) =>
-      this.getTests(req, res)
-    );
+    this.router.get(this.prefix, (req: Request, res: Response) => this.getTests(req, res));
 
     this.router.get(`${this.prefix}/others`, (req: Request, res: Response) =>
-      this.getOthersTests(req, res)
+      this.getOthersTests(req, res),
     );
 
-    this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.getTest(req, res)
-    );
-    this.router.post(this.prefix, (req: Request, res: Response) =>
-      this.createTest(req, res)
-    );
+    this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) => this.getTest(req, res));
+    this.router.post(this.prefix, (req: Request, res: Response) => this.createTest(req, res));
     this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.updateTest(req, res)
+      this.updateTest(req, res),
     );
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.deleteTest(req, res)
+      this.deleteTest(req, res),
     );
   }
 
@@ -74,10 +68,7 @@ class TestController {
   }
 
   private async updateTest(req: Request, res: Response) {
-    const test = await this.testService.updateTest(
-      req.params.id,
-      new TestEntity(req.body)
-    );
+    const test = await this.testService.updateTest(req.params.id, new TestEntity(req.body));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),

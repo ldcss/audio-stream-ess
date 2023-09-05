@@ -16,7 +16,7 @@ class AlbumController {
 
   private initRoutes() {
     this.router.post(`${this.prefix}/:id`, (req: Request, res: Response) =>
-      this.createTest(req, res)
+      this.createTest(req, res),
     );
   }
 
@@ -57,10 +57,7 @@ class AlbumController {
   }
 
   private async updateTest(req: Request, res: Response) {
-    const test = await this.testService.updateTest(
-      req.params.id,
-      new TestEntity(req.body)
-    );
+    const test = await this.testService.updateTest(req.params.id, new TestEntity(req.body));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
