@@ -11,51 +11,64 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
+  id             Int        @id @default(autoincrement())
+  name           String
+  email          String     @unique
   ownedPlaylists Playlist[] @relation("OwnedPlaylists")
   likedPlaylists Likes[]
-  albuns Album[]
+  albuns         Album[]
 }
 
 model Playlist {
-  id Int @id @default(autoincrement())
-  name String
-  genre String
+  id          Int               @id @default(autoincrement())
+  name        String
+  genre       String
   description String
-  owner User  @relation("OwnedPlaylists", fields: [ownerId], references: [id])
-  ownerId Int
-  likes Likes[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  owner       User              @relation("OwnedPlaylists", fields: [ownerId], references: [id])
+  ownerId     Int
+  likes       Likes[]
+  music       MusicToPlaylist[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
 model Likes {
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    Int
-  createdAt  DateTime   @default(now())
-  playlist  Playlist  @relation(fields: [playlistId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     Int
+  createdAt  DateTime @default(now())
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
   playlistId Int
+
   @@id([userId, playlistId])
 }
 
 model Music {
-  id Int @id @default(autoincrement())
-  name String
+  id          Int               @id @default(autoincrement())
+  name        String
   description String
-  album Album @relation(fields: [albumId], references: [id])
-  albumId Int
-  createdAt  DateTime   @default(now())
+  album       Album             @relation(fields: [albumId], references: [id])
+  albumId     Int
+  playlists   MusicToPlaylist[]
+  createdAt   DateTime          @default(now())
+}
+
+model MusicToPlaylist {
+  music      Music    @relation(fields: [musicId], references: [id])
+  musicId    Int
+  createdAt  DateTime @default(now())
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  playlistId Int
+
+  @@id([musicId, playlistId])
 }
 
 model Album {
-  id Int @id @default(autoincrement())
-  name String
+  id          Int      @id @default(autoincrement())
+  name        String
   description String
-  createdAt  DateTime   @default(now())
-  artist User @relation(fields: [artistId], references: [id])
-  artistId Int
-  released Boolean
-  music Music[]
+  createdAt   DateTime @default(now())
+  artist      User     @relation(fields: [artistId], references: [id])
+  artistId    Int
+  released    Boolean
+  music       Music[]
 }
