@@ -1,6 +1,13 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Rodar manualmente a query abaixo após rodar as migrations
+// para salvar o campo duração com o tipo Time ao invés de Datetime (não suportado pelo prisma)
+// RODAR A QUERY APENAS DEPOIS DE TER RODADO TODAS AS MIGRATIONS!!
+
+// ALTER TABLE "Music" DROP COLUMN "duration",
+// ADD COLUMN     "duration" TIME NOT NULL;
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -46,6 +53,7 @@ model Music {
   id          Int               @id @default(autoincrement())
   name        String
   description String
+  duration DateTime
   album       Album             @relation(fields: [albumId], references: [id])
   albumId     Int
   playlists   MusicToPlaylist[]
