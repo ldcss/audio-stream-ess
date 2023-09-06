@@ -53,7 +53,7 @@ model Music {
   id          Int               @id @default(autoincrement())
   name        String
   description String
-  duration DateTime
+  duration DateTime @db.Time()
   album       Album             @relation(fields: [albumId], references: [id])
   albumId     Int
   playlists   MusicToPlaylist[]
