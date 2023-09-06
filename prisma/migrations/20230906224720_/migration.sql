@@ -34,10 +34,20 @@ CREATE TABLE "Music" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "duration" TIME NOT NULL,
     "albumId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Music_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "MusicToPlaylist" (
+    "musicId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "playlistId" INTEGER NOT NULL,
+
+    CONSTRAINT "MusicToPlaylist_pkey" PRIMARY KEY ("musicId","playlistId")
 );
 
 -- CreateTable
@@ -66,6 +76,12 @@ ALTER TABLE "Likes" ADD CONSTRAINT "Likes_playlistId_fkey" FOREIGN KEY ("playlis
 
 -- AddForeignKey
 ALTER TABLE "Music" ADD CONSTRAINT "Music_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MusicToPlaylist" ADD CONSTRAINT "MusicToPlaylist_musicId_fkey" FOREIGN KEY ("musicId") REFERENCES "Music"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MusicToPlaylist" ADD CONSTRAINT "MusicToPlaylist_playlistId_fkey" FOREIGN KEY ("playlistId") REFERENCES "Playlist"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Album" ADD CONSTRAINT "Album_artistId_fkey" FOREIGN KEY ("artistId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
