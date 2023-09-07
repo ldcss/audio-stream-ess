@@ -13,20 +13,17 @@ class PlaylistService {
     return await this.playlistRepository.getPlaylists();
   }
 
-  // public async getPlaylist(id: string): Promise<PlaylistModel> {
-  //   const playlistEntity = await this.playlistRepository.getPlaylist(id);
+  public async getPlaylist(id: number): Promise<Playlist | null> {
+    const playlist = await this.playlistRepository.getPlaylist(id);
 
-  //   if (!playlistEntity) {
-  //     throw new HttpNotFoundError({
-  //       msg: 'Playlist not found',
-  //       msgCode: PlaylistServiceMessageCode.playlist_not_found,
-  //     });
-  //   }
+    if (!playlist) {
+      throw new HttpNotFoundError({
+        msg: 'Playlist not found',
+      });
+    }
 
-  //   const playlistModel = new PlaylistModel(playlistEntity);
-
-  //   return playlistModel;
-  // }
+    return playlist;
+  }
 
   // public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
   //   const playlistEntity = await this.playlistRepository.createPlaylist(data);

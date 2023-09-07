@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { Result, SuccessResult } from '../utils/result';
+import { FailureResult, Result, SuccessResult } from '../utils/result';
 import PlaylistService from '../services/playlist.service';
 
 class PlaylistController {
@@ -15,9 +15,9 @@ class PlaylistController {
 
   private initRoutes() {
     this.router.get(this.prefix, (req: Request, res: Response) => this.getPlaylists(req, res));
-    // this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
-    //   this.getPlaylist(req, res),
-    // );
+    this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
+      this.getPlaylist(req, res),
+    );
     // this.router.post(this.prefix,
     // (req: Request, res: Response) => this.createPlaylist(req, res));
     // this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
@@ -43,14 +43,21 @@ class PlaylistController {
     }).handle(res);
   }
 
-  // private async getPlaylist(req: Request, res: Response) {
-  //   const test = await this.playlistService.getPlaylist(req.params.id);
-
-  //   return new SuccessResult({
-  //     msg: Result.transformRequestOnMsg(req),
-  //     data: test,
-  //   }).handle(res);
-  // }
+  private async getPlaylist(req: Request, res: Response) {
+    try {
+      const playlist = await this.playlistService.getPlaylist(+req.params.id);
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: playlist,
+      }).handle(res);
+    } catch {
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        code: 404,
+        msgCode: 'failure',
+      }).handle(res);
+    }
+  }
 
   // private async createPlaylist(req: Request, res: Response) {
   //   const playlist = new PlaylistEntity(req.body);
