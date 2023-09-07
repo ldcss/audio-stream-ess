@@ -19,5 +19,4 @@ export default (app: Express) => {
     new ArtistController(router, di.getService(ArtistService)).router,
     new PlaylistController(router, di.getService(PlaylistService)).router,
   );
-  app.use('api/playlist', new PlaylistController(router, di.getService(PlaylistService)).router);
 };
