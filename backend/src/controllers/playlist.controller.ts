@@ -1,10 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { Result, SuccessResult } from '../utils/result';
 import PlaylistService from '../services/playlist.service';
-import PlaylistRepository from '../repositories/playlist.repository';
 
 class PlaylistController {
-  private prefix = '/playlist';
+  public prefix = '/playlist';
   public router: Router;
   private playlistService: PlaylistService;
 

@@ -1,6 +1,4 @@
 import { Playlist } from '@prisma/client';
-import PlaylistEntity from '../entities/playlist.entity';
-import PlaylistModel from '../models/playlist.model';
 import PlaylistRepository from '../repositories/playlist.repository';
 import { HttpNotFoundError } from '../utils/errors/http.error';
 
