@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-import PlaylistEntity from '../entities/playlist.entity';
+import { PrismaClient, Playlist } from '@prisma/client';
 
 class PlaylistRepository {
   private prefix = 'playlist';
@@ -9,19 +8,19 @@ class PlaylistRepository {
     this.db = new PrismaClient();
   }
 
-  public async getPlaylists(): Promise<PlaylistEntity[]> {
+  public async getPlaylists(): Promise<Playlist[]> {
     return await this.db.playlist.findMany();
   }
 
-  public async getPlaylist(id: number): Promise<PlaylistEntity | null> {
+  public async getPlaylist(id: number): Promise<Playlist | null> {
     return await this.db.playlist.findUnique({ where: { id: id } });
   }
 
-  public async createPlaylist(data: PlaylistEntity): Promise<PlaylistEntity> {
+  public async createPlaylist(data: Playlist): Promise<Playlist> {
     return await this.db.playlist.create({ data });
   }
 
-  public async updatePlaylist(id: number, data: PlaylistEntity): Promise<PlaylistEntity | null> {
+  public async updatePlaylist(id: number, data: Playlist): Promise<Playlist | null> {
     return await this.db.playlist.update({ where: { id: id }, data });
   }
 
@@ -37,24 +36,36 @@ class PlaylistRepository {
       include: { user: true },
     });
 
-    const usersWhoLiked = likes.map((like: { user: { id: number; name: string } }) => ({
-      id: like.user?.id,
-      name: like.user?.name,
-    }));
+    const usersWhoLiked = likes
+      .map((like: { user: { id: number; name: string; email?: string } | null }) => {
+        if (like.user) {
+          return {
+            id: like.user.id,
+            name: like.user.name,
+          };
+        } else {
+          return undefined;
+        }
+      })
+      .filter(Boolean as unknown as (value: any) => value is { id: number; name: string });
 
     return {
       count: likes.length,
-      users: usersWhoLiked,
+      users: usersWhoLiked as Array<{ id: number; name: string }>,
     };
   }
+
   public async removeLikeFromPlaylist(playlistId: number, userId: number): Promise<void> {
     await this.db.likes.delete({
       where: {
-        playlistId: playlistId,
-        userId: userId,
+        userId_playlistId: {
+          userId: userId,
+          playlistId: playlistId,
+        },
       },
     });
   }
+
   public async addLikeToPlaylist(playlistId: number, userId: number): Promise<void> {
     await this.db.likes.create({
       data: {
