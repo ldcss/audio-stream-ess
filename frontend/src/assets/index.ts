@@ -6,5 +6,16 @@ import JoyDivision from './JoyDivision.png';
 import KingCrimson from './KingCrimson.png';
 import Mastodon from './Mastodon.png';
 import Olivia from './Olivia.png';
+import HarrysHouse from './HarrysHouse.jpg';
 
-export { Notes, DaftPunk, DavidBowie, GreenDay, JoyDivision, KingCrimson, Mastodon, Olivia };
+export {
+  Notes,
+  DaftPunk,
+  DavidBowie,
+  GreenDay,
+  JoyDivision,
+  KingCrimson,
+  Mastodon,
+  Olivia,
+  HarrysHouse,
+};
