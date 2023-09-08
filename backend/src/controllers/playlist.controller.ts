@@ -18,6 +18,12 @@ class PlaylistController {
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getPlaylist(req, res),
     );
+    this.router.get(`/user/:idUser${this.prefix}`, (req: Request, res: Response) =>
+      Object.keys(req.query).length
+        ? this.getPlaylistsByFilter(req, res)
+        : this.getPlaylistsByUser(req, res),
+    );
+
     // this.router.post(this.prefix,
     // (req: Request, res: Response) => this.createPlaylist(req, res));
     // this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
@@ -32,6 +38,28 @@ class PlaylistController {
     // this.router.put(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
     //   this.updatePlaylist(req, res),
     // );
+  }
+
+  private async getPlaylistsByUser(req: Request, res: Response) {
+    const playlists = await this.playlistService.getPlaylists(+req.params.idUser);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: playlists,
+    }).handle(res);
+  }
+
+  private async getPlaylistsByFilter(req: Request, res: Response) {
+    // console.log('req.query', req.query);
+    const playlists = await this.playlistService.getPlaylistsByFilter(
+      +req.params.idUser,
+      req.query,
+    );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: playlists,
+    }).handle(res);
   }
 
   private async getPlaylists(req: Request, res: Response) {
