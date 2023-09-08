@@ -78,13 +78,69 @@ export const Wrapper = styled.div`
 `;
 
 export const ImageHolder = styled.div`
-  height: 100vh;
+  position: relative;
+  top: 0 !important;
+  left: 0 !important;
+  height: 90vh;
   width: 65%;
 
   .notes {
-    height: 100%;
+    top: 0 !important;
+    left: 0 !important;
     width: 100%;
     object-fit: cover;
     opacity: 0.25;
+  }
+
+  .artistPic {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+    object-fit: cover;
+  }
+
+  .artist1 {
+    width: 8rem;
+    height: 8rem;
+    margin: 9rem 0 0 0 !important;
+  }
+
+  .artist2 {
+    width: 12rem;
+    height: 3rem;
+    margin: 3rem 0 0 4rem !important;
+  }
+
+  .artist3 {
+    width: 8rem;
+    height: 8rem;
+    margin: 21rem 0 0 4rem !important;
+  }
+
+  .artist4 {
+    width: 4rem;
+    height: 10rem;
+    margin: 10rem 0 0 16rem !important;
+  }
+
+  .artist5 {
+    width: 12rem;
+    height: 4rem;
+    margin: 32rem 0 0 8rem !important;
+  }
+
+  .artist6 {
+    width: 8rem;
+    height: 4rem;
+    margin: 25rem 0 0 22rem !important;
+  }
+
+  .artist7 {
+    width: 14rem;
+    height: 20rem;
+    margin: 2rem 0 0 26rem !important;
   }
 `;
