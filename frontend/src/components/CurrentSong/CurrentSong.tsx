@@ -1,7 +1,7 @@
 import { Wrapper } from './styles';
 
 const CurrentSong = () => {
-  return <Wrapper className='testando'>JASHDAHSKDJASHDKAHS</Wrapper>;
+  return <Wrapper></Wrapper>;
 };
 
 export default CurrentSong;
