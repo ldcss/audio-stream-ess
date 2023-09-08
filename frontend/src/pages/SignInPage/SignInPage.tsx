@@ -1,5 +1,14 @@
 import { ImageHolder, Wrapper } from './styles';
-import { Notes } from '../../assets';
+import {
+  Notes,
+  DaftPunk,
+  DavidBowie,
+  GreenDay,
+  JoyDivision,
+  KingCrimson,
+  Mastodon,
+  Olivia,
+} from '../../assets';
 
 const SignInPage = () => {
   const handleSubmit = (e: any) => {
@@ -12,34 +21,13 @@ const SignInPage = () => {
       <div className='divisor'>
         <ImageHolder>
           <img src={Notes} alt='' className='notes' />
-          <img
-            className='artistPic artist1'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
-          <img
-            className='artistPic artist2'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
-          <img
-            className='artistPic artist3'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
-          <img
-            className='artistPic artist4'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
-          <img
-            className='artistPic artist5'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
-          <img
-            className='artistPic artist6'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
-          <img
-            className='artistPic artist7'
-            src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg/800px-Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg'
-          />
+          <img className='artistPic artist1' src={DaftPunk} />
+          <img className='artistPic artist2' src={Mastodon} />
+          <img className='artistPic artist3' src={DavidBowie} />
+          <img className='artistPic artist4' src={GreenDay} />
+          <img className='artistPic artist5' src={KingCrimson} />
+          <img className='artistPic artist6' src={JoyDivision} />
+          <img className='artistPic artist7' src={Olivia} />
         </ImageHolder>
         <div className='formHolder'>
           <h2 className='title'>Compartilhe a sua música com o mundo</h2>
