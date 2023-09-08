@@ -30,7 +30,7 @@ class PlaylistController {
     // this.router.put(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
     //   this.updatePlaylist(req, res),
     // );
-    // this.router.put(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
+    // this.router.put(`${this.prefix}/:id/remover/:id`, (req: Request, res: Response) =>
     //   this.updatePlaylist(req, res),
     // );
   }
