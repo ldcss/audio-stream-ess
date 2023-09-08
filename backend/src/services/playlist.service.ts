@@ -2,6 +2,11 @@ import { Playlist } from '@prisma/client';
 import PlaylistRepository from '../repositories/playlist.repository';
 import { HttpNotFoundError } from '../utils/errors/http.error';
 
+export interface QueryParams {
+  genre?: string;
+  duration?: string;
+}
+
 class PlaylistService {
   private playlistRepository: PlaylistRepository;
 
@@ -9,8 +14,8 @@ class PlaylistService {
     this.playlistRepository = playlistRepository;
   }
 
-  public async getPlaylists(): Promise<Playlist[]> {
-    return await this.playlistRepository.getPlaylists();
+  public async getPlaylists(idUser?: number): Promise<Playlist[]> {
+    return await this.playlistRepository.getPlaylists(idUser);
   }
 
   public async getPlaylist(id: number): Promise<Playlist | null> {
@@ -23,6 +28,11 @@ class PlaylistService {
     }
 
     return playlist;
+  }
+
+  public async getPlaylistsByFilter(idUser: number, queryParams: QueryParams) {
+    // console.log('queryParams service', queryParams);
+    return await this.playlistRepository.getPlaylistsByFilter(idUser, queryParams);
   }
 
   // public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
