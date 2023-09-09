@@ -1,16 +1,6 @@
-import BaseModel from './base.model';
+import { Music, Playlist } from '@prisma/client';
 
-export default class PlaylistModel extends BaseModel {
-  name: string;
-  genre: string;
-  description: string;
-  idUser: number;
-
-  constructor(data: PlaylistModel) {
-    super(data.id || '');
-    this.name = data.name;
-    this.genre = data.genre;
-    this.description = data.description;
-    this.idUser = data.idUser;
-  }
+export default interface PlaylistModel extends Playlist {
+  musics?: Music[];
+  duration?: string;
 }

@@ -1,6 +1,7 @@
 import { Playlist } from '@prisma/client';
 import PlaylistRepository from '../repositories/playlist.repository';
 import { HttpNotFoundError } from '../utils/errors/http.error';
+import PlaylistModel from '../models/playlist.model';
 
 export interface QueryParams {
   genre?: string;
@@ -14,8 +15,21 @@ class PlaylistService {
     this.playlistRepository = playlistRepository;
   }
 
-  public async getPlaylists(idUser?: number): Promise<Playlist[]> {
-    return await this.playlistRepository.getPlaylists(idUser);
+  public playlistDuration(totalTime: number) {
+    const min = Math.floor((totalTime / 1000 / 60) << 0);
+    const seg = Math.floor((totalTime / 1000) % 60);
+    const hr = Math.floor((totalTime / (1000 * 60 * 60)) % 24);
+    return `${hr}:${min}:${seg}`;
+  }
+
+  public async getPlaylists(idUser?: number): Promise<PlaylistModel[]> {
+    const playlistEntity = await this.playlistRepository.getPlaylists(idUser);
+    const playlistModel = playlistEntity.map(async playlist => {
+      const playlistMusics = await this.playlistRepository.getPlaylistMusics(playlist.id);
+      const duration = 0;
+      return playlistMusics;
+    });
+    return playlistEntity;
   }
 
   public async getPlaylist(id: number): Promise<Playlist | null> {
