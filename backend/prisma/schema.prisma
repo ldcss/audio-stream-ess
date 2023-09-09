@@ -24,6 +24,7 @@ model User {
   ownedPlaylists Playlist[] @relation("OwnedPlaylists")
   likedPlaylists Likes[]
   albuns         Album[]
+  type           Int
 }
 
 model Playlist {
