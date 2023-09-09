@@ -50,7 +50,6 @@ class PlaylistController {
   }
 
   private async getPlaylistsByFilter(req: Request, res: Response) {
-    // console.log('req.query', req.query);
     const playlists = await this.playlistService.getPlaylistsByFilter(
       +req.params.idUser,
       req.query,
