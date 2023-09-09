@@ -1,4 +1,4 @@
-import { PrismaClient, Playlist, Prisma, Music } from '@prisma/client';
+import { PrismaClient, Playlist, Music } from '@prisma/client';
 import { QueryParams } from '../services/playlist.service';
 import PlaylistModel from '../models/playlist.model';
 
@@ -17,37 +17,44 @@ class PlaylistRepository {
     return playlists;
   }
 
-  public async getPlaylistsByFilter(idUser: number, queryParams: QueryParams): Promise<Playlist[]> {
-    const playlists = await this.db.playlist.findMany({
+  public async getPlaylistsByFilter(
+    idUser: number,
+    queryParams: QueryParams,
+  ): Promise<PlaylistModel[]> {
+    const playlistsEntity = await this.db.playlist.findMany({
       where: { ownerId: idUser, genre: queryParams.genre },
+      select: { id: true },
     });
-    // console.log('playlist get', await this.getPlaylistMusics(playlists[1].id));
-    return playlists;
+    const playlistIds = playlistsEntity.map(playlist => {
+      return playlist.id;
+    });
+    const playlistsModel = await this.getPlaylistWithMusics(playlistIds);
+    if (queryParams.duration) {
+      return playlistsModel.filter(playlist => playlist.duration <= +queryParams.duration!);
+    }
+    return playlistsModel;
   }
 
   public async getPlaylist(id: number): Promise<Playlist | null> {
     return await this.db.playlist.findUnique({ where: { id: id } });
   }
 
-  public async getPlaylistMusics(playlistId?: number): Promise<PlaylistModel[]> {
-    // return await this.db.$queryRaw<Music[]>(
-    //   eslint-disable-next-line max-len
-    //   Prisma.sql`SELECT * FROM "Music" mu INNER JOIN "MusicToPlaylist" mp ON mu.id = mp."musicId" WHERE mp."playlistId" = ${playlistId};`,
-    // );
+  //na tela das playlists
+  public async getPlaylistWithMusics(playlistIds: number[]): Promise<PlaylistModel[]> {
     const playlist = await this.db.playlist.findMany({
       include: { music: { include: { music: true } } },
-      where: { ...(playlistId !== undefined ? { id: playlistId } : {}) },
+      where: { ...(playlistIds.length ? { id: { in: playlistIds } } : {}) },
     });
     const playlistWithMusic = playlist.map(playlist => {
       const musics: Music[] = [];
+      let totalDuration = 0;
       playlist.music.forEach(music => {
-        // console.log(`playlist.music[${i}].music`, music.music);
         musics.push(music.music);
+        totalDuration += music.music.duration.getTime();
       });
-      return { ...playlist, music: musics };
+      return { ...playlist, music: musics, duration: totalDuration };
     });
     return playlistWithMusic;
-
     // const tempoTotal = musics[0].duration.getTime();
     // const min = Math.floor((tempoTotal / 1000 / 60) << 0);
     // const seg = Math.floor((tempoTotal / 1000) % 60);
