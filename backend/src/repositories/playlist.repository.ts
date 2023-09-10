@@ -1,4 +1,4 @@
-import { PrismaClient, Playlist, Music } from '@prisma/client/edge';
+import { PrismaClient, Playlist, Music } from '@prisma/client';
 import { QueryParams } from '../services/playlist.service';
 import PlaylistModel from '../models/playlist.model';
 
