@@ -6,11 +6,7 @@
   },
   "description": "",
   "scripts": {
-<<<<<<< HEAD:package.json
     "start": "env-cmd -f .env.local nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
-=======
-    "start": "env-cmd -f .env.dev nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
->>>>>>> ba7dd12f39ab8f660b45c0865bd2b74518ca4b55:backend/package.json
     "build": "tsc -p .",
     "prod": "node dist/src/index.js",
     "test": "env-cmd -f .env.test jest --verbose --coverage  --config ./jest.config.js --detectOpenHandles",
