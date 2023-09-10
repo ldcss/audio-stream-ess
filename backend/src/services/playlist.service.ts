@@ -25,6 +25,9 @@ class PlaylistService {
     const playlistsOfUser = await this.playlistRepository.getPlaylists(idUser);
     return playlistsOfUser;
   }
+  public async createPlaylist(data: Playlist): Promise<Playlist> {
+    return await this.playlistRepository.createPlaylist(data);
+  }
 
   public async getPlaylist(id: number): Promise<Playlist | null> {
     const playlist = await this.playlistRepository.getPlaylist(id);
@@ -37,36 +40,45 @@ class PlaylistService {
 
     return playlist;
   }
+  public async updatePlaylist(id: number, data: Playlist): Promise<Playlist> {
+    const updatedPlaylist = await this.playlistRepository.updatePlaylist(id, data);
+
+    if (!updatedPlaylist) {
+      throw new HttpNotFoundError({
+        msg: 'Playlist not found',
+      });
+    }
+
+    return updatedPlaylist;
+  }
+  public async deletePlaylist(id: number): Promise<void> {
+    const playlist = await this.playlistRepository.getPlaylist(id);
+  
+      if (!playlist) {
+        throw new HttpNotFoundError({
+          msg: 'Playlist not found',
+        });
+      }
+  
+    await this.playlistRepository.deletePlaylist(id);
+    }
 
   public async getPlaylistsByFilter(idUser: number, queryParams: QueryParams) {
     return await this.playlistRepository.getPlaylistsByFilter(idUser, queryParams);
   }
+  public async getPlaylistLikesDetails(playlistId: number) {
+    return this.playlistRepository.getPlaylistLikesDetails(playlistId);
+  }
+  
+  public async addLikeToPlaylist(playlistId: number, userId: number) {
+    return this.playlistRepository.addLikeToPlaylist(playlistId, userId);
+  }
+  
+  public async removeLikeFromPlaylist(playlistId: number, userId: number) {
+    return this.playlistRepository.removeLikeFromPlaylist(playlistId, userId);
+  }
+  
 
-  // public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
-  //   const playlistEntity = await this.playlistRepository.createPlaylist(data);
-  //   const playlistModel = new PlaylistModel(playlistEntity);
-
-  //   return playlistModel;
-  // }
-
-  // public async updatePlaylist(id: string, data: PlaylistEntity): Promise<PlaylistModel> {
-  //   const playlistEntity = await this.playlistRepository.updatePlaylist(id, data);
-
-  //   if (!playlistEntity) {
-  //     throw new HttpNotFoundError({
-  //       msg: 'Playlist not found',
-  //       msgCode: PlaylistServiceMessageCode.playlist_not_found,
-  //     });
-  //   }
-
-  //   const playlistModel = new PlaylistModel(playlistEntity);
-
-  //   return playlistModel;
-  // }
-
-  // public async deletePlaylist(id: string): Promise<void> {
-  //   await this.playlistRepository.deletePlaylist(id);
-  // }
 }
 
 export default PlaylistService;
