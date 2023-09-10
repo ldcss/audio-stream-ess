@@ -12,4 +12,9 @@ export class PlaylistService {
     const response = await api.get(`/user/${idUser}/playlist`, {params: {id: idUser, genre: genre, duration: duration}, validateStatus: (status => [200].includes(status))})
     return response;
   }
+  static async addLikeToPlaylist(playlistId: number, userId: number): Promise<AxiosResponse<void>> {
+    const response = await api.post(`/playlist/${playlistId}/likes/${userId}`, {validateStatus: (status: number) => [200, 201].includes(status)});
+    return response;
+  }
+
 }
