@@ -7,7 +7,7 @@ const Routing = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/signup' element={<SignInPage />} />
-        <Route path='/test' element={<BrowseArtists />} />
+        <Route path='/artists' element={<BrowseArtists />} />
       </Routes>
       <CurrentSong />
     </BrowserRouter>
