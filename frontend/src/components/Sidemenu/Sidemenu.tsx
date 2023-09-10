@@ -1,10 +1,42 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Playlist } from "../../types/playlistTypes";
 import { useEffect, useState } from "react";
 import { PlaylistService } from "../../services/PlaylistService";
+import homeIcon from '../../assets/home.svg'
+import radioIcon from '../../assets/radio.svg'
+import libraryIcon from '../../assets/library.svg'
+import AlbumTest from '../../assets/AlbumTest.svg'
+import { useParams } from "react-router-dom";
+
+interface SidemenuLinks {
+  iconUrl?: string;
+  title: string;
+  link: string;
+}
 
 function Sidemenu() {
+  const {idUser, idPlaylist} = useParams();
+  console.log('userId', idUser);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const sidemenuLinks: SidemenuLinks[]= [{
+    iconUrl: homeIcon,
+    title: 'Home',
+    link: '/user/:id',
+  },
+  {
+    iconUrl: radioIcon,
+    title: 'Explorar',
+    link: '/explore',
+  },
+  {
+    iconUrl: libraryIcon,
+    title: 'Biblioteca',
+    link: '/library',
+  },]
+  playlists.map(playlist => {
+    sidemenuLinks.push({iconUrl: AlbumTest, title: playlist.name, link: `/user/1/playlist/${playlist.id}`})
+    return playlist;
+  })
   useEffect(() => {
     async function getAllPlaylists(id: number){
       PlaylistService.getPlaylistsFromUser(id).then(response => {
@@ -12,11 +44,28 @@ function Sidemenu() {
         console.log('deu certo!', response);
       }).catch(err => console.log('err', err));
     }
-    getAllPlaylists(1);
+    getAllPlaylists(+idUser!);
   }, [])
+  useEffect(() => {
+    console.log('playlists', playlists);
+  }, [playlists])
 
-  return(<Box style={{width: '15%', backgroundColor: '#1F2232'}}>
-      {playlists.map(playlist => <span>{playlist.name}</span>)}
+  return(<Box sx={{padding: '15px !important', width: '15%', backgroundColor: '#1F2232',}}>
+      {sidemenuLinks.map(element => {
+        if(element.title === 'Biblioteca') {
+          return (<>
+          <Box sx={{borderTop: '4px solid #bbb', borderRadius: '5px'}} />
+          <Box sx={{display: 'flex', flexDirection: 'row', columnGap: '25px', rowGap: '200px', padding: '10px !important'}}> 
+            <img src={element.iconUrl} alt={`${element.title}`}/> 
+            <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
+          </Box>
+          </>)
+        }
+        return (<Box sx={{display: 'flex', flexDirection: 'row', columnGap: '25px', rowGap: '200px', padding: '10px !important'}}> 
+        <img src={element.iconUrl} alt={`${element.title}`}/> 
+        <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
+        </Box>)
+      })}
 </Box>)
 }
 
