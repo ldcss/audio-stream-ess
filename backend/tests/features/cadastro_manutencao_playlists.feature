@@ -6,7 +6,7 @@ Feature: Cadastro e manutenção de playlists
     Scenario: Adicionar música a uma playlist como usuário logado
         Given que eu sou um usuário logado no sistema com o id "1"
         And o sistema tem uma playlist com o id "1", duracao "25", músicas "[1,2,3]" e quantidade de músicas "3"
-        When eu atualizo a duração para "28"
+        When uma requisição PUT for enviada para "/api/playlist/{id_playlist}/adidionar", eu atualizo a duração para "28"
         And eu atualizo a lista de músicas para para "[1,2,3,4]"
         And eu atualizo a quantidade de músicas para "4"
         Then o sistema retorna um JSON com o corpo

@@ -72,8 +72,8 @@ defineFeature(feature, test => {
       },
     );
 
-    when(/^eu atualizo a duração para "(.*)"$/, arg0 => {
-      mockPlaylists.duration = arg0;
+    when(/^uma requisição PUT for enviada para "(.*)", eu atualizo a duração para "(.*)"$/, (arg0,arg1) => {
+      mockPlaylists.duration = arg1;
     });
 
     and(/^eu atualizo a lista de músicas para para "(.*)"$/, arg0 => {
