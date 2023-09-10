@@ -24,14 +24,6 @@ class PlaylistController {
         : this.getPlaylistsByUser(req, res),
     );
 
-    this.router.post(`${this.prefix}/:id/musica/:idMusica`, (req: Request, res: Response) =>
-      this.addMusicToPlaylist(req, res),
-    );
-
-    this.router.delete(`${this.prefix}/:id/musica/:idMusica`, (req: Request, res: Response) =>
-      this.deleteMusicFromPlaylist(req, res),
-    );
-
     // this.router.post(this.prefix,
     // (req: Request, res: Response) => this.createPlaylist(req, res));
     // this.router.put(`${this.prefix}/:id`, (req: Request, res: Response) =>
@@ -40,7 +32,10 @@ class PlaylistController {
     // this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) =>
     //   this.deletePlaylist(req, res),
     // );
-    // this.router.put(`${this.prefix}/:id/remover/:id`, (req: Request, res: Response) =>
+    // this.router.put(`${this.prefix}/:id/adicionar`, (req: Request, res: Response) =>
+    //   this.updatePlaylist(req, res),
+    // );
+    // this.router.put(`${this.prefix}/:id/remover/:string`, (req: Request, res: Response) =>
     //   this.updatePlaylist(req, res),
     // );
   }
@@ -91,53 +86,6 @@ class PlaylistController {
     }
   }
 
-  private async addMusicToPlaylist(req: Request, res: Response) {
-    try {
-      const playlist = await this.playlistService.addMusicToPlaylist(
-        +req.params.id,
-        +req.params.idMusica
-        // req.body
-      );
-      return new SuccessResult({
-        msg: 'pegou',
-        data: playlist,
-      }).handle(res);
-    } catch (error) {
-      let errorMessage = 'Failed to update the playlist.';
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      return new FailureResult({
-        msg: errorMessage,
-        code: 500,
-        msgCode: 'failure',
-      }).handle(res);
-    }
-  }
-
-  private async deleteMusicFromPlaylist(req: Request, res: Response) {
-    try {
-      const playlist = await this.playlistService.deleteMusicFromPlaylist(
-        +req.params.id,
-        +req.params.idMusica
-      );
-      return new SuccessResult({
-        msg: 'pegou',
-        data: playlist,
-      }).handle(res);
-    } catch (error) {
-      let errorMessage = 'Failed to delete the playlist.';
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      return new FailureResult({
-        msg: errorMessage,
-        code: 500,
-        msgCode: 'failure',
-      }).handle(res);
-    }
-  }
-
   // private async createPlaylist(req: Request, res: Response) {
   //   const playlist = new PlaylistEntity(req.body);
 
@@ -145,33 +93,11 @@ class PlaylistController {
 
   //   const playlistEntity = await playlistRepository.createPlaylist(playlist);
 
-  //   const playlistModel = new PlaylistModel(playlistEntity);
 
-  //   return new SuccessResult({
-  //     msg: Result.transformRequestOnMsg(req),
-  //     data: playlistModel,
-  //   }).handle(res);
-  // }
 
-  // private async updatePlaylist(req: Request, res: Response) {
-  //   const test = await this.playlistService.updatePlaylist(
-  //     req.params.id,
-  //     new PlaylistEntity(req.body),
-  //   );
 
-  //   return new SuccessResult({
-  //     msg: Result.transformRequestOnMsg(req),
-  //     data: test,
-  //   }).handle(res);
-  // }
 
-  // private async deletePlaylist(req: Request, res: Response) {
-  //   await this.playlistService.deletePlaylist(req.params.id);
 
-  //   return new SuccessResult({
-  //     msg: Result.transformRequestOnMsg(req),
-  //   }).handle(res);
-  // }
 }
 
 export default PlaylistController;
