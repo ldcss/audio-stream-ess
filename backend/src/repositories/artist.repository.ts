@@ -10,15 +10,26 @@ class ArtistRepository extends BaseRepository<ArtistsEntity> {
     this.db2 = new PrismaClient();
   }
 
-  public async getArtists(): Promise<any[]> {
+  public async getArtists(): Promise<User[]> {
     const artists = await this.db2.user.findMany({
       where: { type: 1 },
     });
     return artists;
   }
 
-  public async getArtist(id: string): Promise<ArtistsEntity | null> {
-    return await this.findOne(item => item.id === id);
+  public async getArtist(id: string): Promise<User | null> {
+    const artist: User | null = await this.db2.user.findUnique({
+      where: {
+        id: Number(id),
+        type: 1,
+      },
+    });
+
+    if (!artist) {
+      throw new Error('Not found');
+    }
+
+    return artist;
   }
 
   public async createArtist(data: ArtistsEntity): Promise<ArtistsEntity> {
