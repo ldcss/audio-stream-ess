@@ -4,12 +4,54 @@ const prisma = new PrismaClient();
 async function main() {
   const users = await prisma.user.createMany({
     data: [
-      { name: 'Lucas', email: 'ldcs@cin.ufpe.br' },
-      { name: 'Marcelo', email: 'mbof@cin.ufpe.br' },
-      { name: 'Enderson', email: 'eqg@cin.ufpe.br' },
-      { name: 'Pedro Fernandes', email: 'pfbc@cin.ufpe.br' },
-      { name: 'Joao Pedro', email: 'jpam@cin.ufpe.br' },
-      { name: 'Pedro Rodrigues', email: 'prcg@cin.ufpe.br' },
+      {
+        name: 'Lucas',
+        email: 'ldcs@cin.ufpe.br',
+        password: '12345678',
+        genre: '',
+        description: '',
+        type: 2,
+      },
+      {
+        name: 'Marcelo',
+        email: 'mbof@cin.ufpe.br',
+        password: '12345678',
+        genre: '',
+        description: '',
+        type: 2,
+      },
+      {
+        name: 'Enderson',
+        email: 'eqg@cin.ufpe.br',
+        password: '12345678',
+        genre: '',
+        description: '',
+        type: 2,
+      },
+      {
+        name: 'Pedro Fernandes',
+        email: 'pfbc@cin.ufpe.br',
+        password: '12345678',
+        genre: '',
+        description: '',
+        type: 2,
+      },
+      {
+        name: 'Joao Pedro',
+        email: 'jpam@cin.ufpe.br',
+        password: '12345678',
+        genre: '',
+        description: '',
+        type: 2,
+      },
+      {
+        name: 'Pedro Rodrigues',
+        email: 'prcg@cin.ufpe.br',
+        password: '12345678',
+        genre: '',
+        description: '',
+        type: 2,
+      },
     ],
   });
   const album = await prisma.album.create({
