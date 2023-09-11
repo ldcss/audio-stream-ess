@@ -7,29 +7,33 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchBar from 'material-ui-search-bar';
-import React, { useState } from 'react';
-
-function createData(name: string, desc: string, albuns: number, songs: number) {
-  return { name, desc, albuns, songs };
-}
-
-const artistRows = [
-  createData('Nome do artista 1', 'Descrição do artista 1', 6.0, 24),
-  createData('Nome do artista 2', 'Descrição do artista 2', 9.0, 37),
-  createData('Nome do artista 3', 'Descrição do artista 3', 16.0, 24),
-  createData('Nome do artista 4', 'Descrição do artista 4', 3.7, 67),
-  createData('Nome do artista 5', 'Descrição do artista 5', 16.0, 49),
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const BrowseArtists = () => {
   const [searched, setSearched] = useState<string>('');
-  const [rows, setRows] = useState<any[]>(artistRows);
+  const [rows, setRows] = useState<any[]>([]);
+  const [showRows, setShowRows] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5001/api/artist');
+        setRows(response.data.data);
+        setShowRows(response.data.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const requestSearch = (searchedVal: string) => {
-    const filteredartistRows = artistRows.filter(row => {
+    const filteredartistRows = rows.filter(row => {
       return row.name.toLowerCase().includes(searchedVal.toLowerCase());
     });
-    setRows(filteredartistRows);
+    setShowRows(filteredartistRows);
   };
 
   const cancelSearch = () => {
@@ -62,7 +66,7 @@ const BrowseArtists = () => {
               'row-th': { borderRadius: '50%', padding: '2rem !important' },
             }}
           >
-            {rows.map(row => (
+            {showRows.map(row => (
               <TableRow
                 className='row-th bodyRow'
                 key={row.name}
@@ -75,7 +79,7 @@ const BrowseArtists = () => {
                 <TableCell component='th' scope='row'>
                   {row.name}
                 </TableCell>
-                <TableCell className='cell'>{row.desc}</TableCell>
+                <TableCell className='cell'>{row.description}</TableCell>
                 <TableCell className='cell'>{row.albuns}</TableCell>
                 <TableCell className='cell'>{row.songs}</TableCell>
               </TableRow>
