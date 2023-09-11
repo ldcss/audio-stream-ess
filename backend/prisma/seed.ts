@@ -54,13 +54,21 @@ async function main() {
       },
     ],
   });
-  const album = await prisma.album.create({
-    data: {
-      artistId: 1,
-      name: 'Lucas Daniel EP',
-      description: 'Álbum feito com coração pelo aluno Lucas Daniel',
-      released: true,
-    },
+  const album = await prisma.album.createMany({
+    data: [
+      {
+        artistId: 1,
+        name: 'Lucas Daniel EP',
+        description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+        released: true,
+      },
+      {
+        artistId: 2,
+        name: 'Um artista não compreendido',
+        description: 'Album criado para todo ser inclusive aquele que habita no seu cocxis',
+        released: false,
+      }
+    ],
   });
   const musics = await prisma.music.createMany({
     data: [

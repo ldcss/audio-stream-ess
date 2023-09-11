@@ -42,6 +42,13 @@ class PlaylistService {
     return await this.playlistRepository.getPlaylistsByFilter(idUser, queryParams);
   }
 
+  public async addMusicToPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+    return await this.playlistRepository.addMusicToPlaylist(idPlaylist, idMusica);
+  }
+
+  public async deleteMusicFromPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+    return await this.playlistRepository.deleteMusicFromPlaylist(idPlaylist, idMusica);
+  }
   // public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
   //   const playlistEntity = await this.playlistRepository.createPlaylist(data);
   //   const playlistModel = new PlaylistModel(playlistEntity);
@@ -49,19 +56,17 @@ class PlaylistService {
   //   return playlistModel;
   // }
 
-  // public async updatePlaylist(id: string, data: PlaylistEntity): Promise<PlaylistModel> {
-  //   const playlistEntity = await this.playlistRepository.updatePlaylist(id, data);
+  // public async addMusictoPlaylist(id: string, data: Playlist) {
+  //   const playlist = await this.playlistRepository.updatePlaylist(+id, data);
 
-  //   if (!playlistEntity) {
+  //   if (!playlist) {
   //     throw new HttpNotFoundError({
   //       msg: 'Playlist not found',
-  //       msgCode: PlaylistServiceMessageCode.playlist_not_found,
+  //       msgCode: '404 NOT FOUND',
   //     });
   //   }
 
-  //   const playlistModel = new PlaylistModel(playlistEntity);
-
-  //   return playlistModel;
+  //   return playlist;
   // }
 
   // public async deletePlaylist(id: string): Promise<void> {
