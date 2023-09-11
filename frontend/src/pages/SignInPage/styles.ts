@@ -48,7 +48,7 @@ export const Wrapper = styled.div`
           padding: 0.5rem 0.5rem !important;
           box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 2px 0px inset;
           font-size: 1rem;
-          margin-bottom: 2rem !important;
+          margin-bottom: 1.25rem !important;
         }
 
         #desc {
@@ -59,8 +59,9 @@ export const Wrapper = styled.div`
           padding: 0.5rem 0.5rem !important;
           box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 2px 0px inset;
           font-size: 1rem;
+          color: #37294f;
           margin-bottom: 2rem !important;
-          height: 6rem;
+          height: 4rem;
           resize: none;
         }
 
