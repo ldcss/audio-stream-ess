@@ -33,9 +33,7 @@ class ArtistController {
   }
 
   private async getArtists(req: Request, res: Response) {
-    //const artists = await this.artistService.getEveryArtist();
-    const artistRepository = new ArtistRepository();
-    const artists = await artistRepository.getArtists();
+    const artists = await this.artistService.getEveryArtist();
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
