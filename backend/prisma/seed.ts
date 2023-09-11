@@ -52,6 +52,31 @@ async function main() {
         description: '',
         type: 2,
       },
+      {
+        name: 'David Bowie',
+        email: 'bowie@gmail.com',
+        password: '12345678',
+        genre: 'Rock',
+        description: 'Camaleão do rock',
+        type: 1,
+      },
+      {
+        name: 'Ana Frango Elétrico',
+        email: 'electric@gmail.com',
+        password: '12345678',
+        genre: 'MPB',
+        description:
+          'Uma personalidade brasileira que atua como artista de canto, composição e poesia',
+        type: 1,
+      },
+      {
+        name: 'Dream Theater',
+        email: 'dt@gmail.com',
+        password: '12345678',
+        genre: 'Prog Metal',
+        description: 'Dream Theater é uma banda de metal progressivo oriunda dos EUA',
+        type: 1,
+      },
     ],
   });
   const album = await prisma.album.createMany({
@@ -67,7 +92,7 @@ async function main() {
         name: 'Um artista não compreendido',
         description: 'Album criado para todo ser inclusive aquele que habita no seu cocxis',
         released: false,
-      }
+      },
     ],
   });
   const musics = await prisma.music.createMany({

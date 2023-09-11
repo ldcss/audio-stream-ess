@@ -4,9 +4,10 @@ import ArtistService from '../services/artist.service';
 import ArtistEntity from '../entities/artist.entity';
 import ArtistRepository from '../repositories/artist.repository';
 import ArtistModel from '../models/artist.model';
+import { User } from '@prisma/client';
 
 class ArtistController {
-  private prefix: string = '/artist';
+  private prefix = '/artist';
   public router: Router;
   private artistService: ArtistService;
 
@@ -32,11 +33,13 @@ class ArtistController {
   }
 
   private async getArtists(req: Request, res: Response) {
-    const tests = await this.artistService.getArtists();
+    //const artists = await this.artistService.getEveryArtist();
+    const artistRepository = new ArtistRepository();
+    const artists = await artistRepository.getArtists();
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
-      data: tests,
+      data: artists,
     }).handle(res);
   }
 
@@ -56,7 +59,8 @@ class ArtistController {
 
     const artistEntity = await artistRepository.createArtist(artist);
 
-    const artistModel = new ArtistModel(artistEntity);
+    //const artistModel = new ArtistModel(artistEntity);
+    const artistModel = new ArtistModel({} as User);
     //const test = await this.artistService.createArtist(artist);
 
     return new SuccessResult({

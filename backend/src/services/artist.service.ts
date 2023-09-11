@@ -2,6 +2,7 @@ import ArtistEntity from '../entities/artist.entity';
 import ArtistModel from '../models/artist.model';
 import ArtistRepository from '../repositories/artist.repository';
 import { HttpNotFoundError } from '../utils/errors/http.error';
+import { User } from '@prisma/client';
 
 class ArtistServiceMessageCode {
   public static readonly artist_not_found = 'artist_not_found';
@@ -14,12 +15,12 @@ class ArtistService {
     this.artistRepository = artistRepository;
   }
 
-  public async getArtists(): Promise<ArtistModel[]> {
+  public async getEveryArtist(): Promise<any[]> {
     const artistsEntity = await this.artistRepository.getArtists();
 
-    const artistsModel = artistsEntity.map(test => new ArtistModel(test));
+    //const artistsModel = artistsEntity.map(artist => new ArtistModel(artist));
 
-    return artistsModel;
+    return artistsEntity;
   }
 
   public async getArtist(id: string): Promise<ArtistModel> {
@@ -32,14 +33,17 @@ class ArtistService {
       });
     }
 
-    const artistModel = new ArtistModel(artistEntity);
+    //const artistModel = new ArtistModel(artistEntity);
+    const artistModel = new ArtistModel({} as User);
 
     return artistModel;
   }
 
   public async createArtist(data: ArtistEntity): Promise<ArtistModel> {
     const artistEntity = await this.artistRepository.createArtist(data);
-    const artistModel = new ArtistModel(artistEntity);
+
+    //const artistModel = new ArtistModel(artistEntity);
+    const artistModel = new ArtistModel({} as User);
 
     return artistModel;
   }
@@ -54,7 +58,8 @@ class ArtistService {
       });
     }
 
-    const artistModel = new ArtistModel(ArtistEntity);
+    //const artistModel = new ArtistModel(artistEntity);
+    const artistModel = new ArtistModel({} as User);
 
     return artistModel;
   }
