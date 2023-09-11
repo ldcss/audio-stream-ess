@@ -84,6 +84,13 @@ class PlaylistService {
 
   
 
+  public async addMusicToPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+    return await this.playlistRepository.addMusicToPlaylist(idPlaylist, idMusica);
+  }
+
+  public async deleteMusicFromPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+    return await this.playlistRepository.deleteMusicFromPlaylist(idPlaylist, idMusica);
+  }
 }
 
 export default PlaylistService;

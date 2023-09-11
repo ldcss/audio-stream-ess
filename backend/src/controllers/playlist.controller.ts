@@ -23,6 +23,7 @@ class PlaylistController {
         ? this.getPlaylistsByFilter(req, res)
         : this.getPlaylistsByUser(req, res),
     );
+
     this.router.get(`${this.prefix}/:id/likes`, (req: Request, res: Response) => 
     this.getPlaylistLikesDetails(req, res)
     );
@@ -37,9 +38,12 @@ class PlaylistController {
     this.router.delete(`${this.prefix}/:id`, (req: Request, res: Response) => this.deletePlaylist(req, res));
     this.router.get(`${this.prefix}/likes`, (req: Request, res: Response) => this.getLikesForAllPlaylists(req, res));
 
+    this.router.post(`${this.prefix}/:id/musica/:idMusica`, (req: Request, res: Response) =>
+      this.addMusicToPlaylist(req, res),
+    );
 
-
-
+    this.router.delete(`${this.prefix}/:id/musica/:idMusica`, (req: Request, res: Response) =>
+      this.deleteMusicFromPlaylist(req, res))
   }
 
   private async getPlaylistsByUser(req: Request, res: Response) {
@@ -221,10 +225,52 @@ private async getLikesForAllPlaylists(req: Request, res: Response) {
   }
 }
 
+private async addMusicToPlaylist(req: Request, res: Response) {
+  try {
+    const playlist = await this.playlistService.addMusicToPlaylist(
+      +req.params.id,
+      +req.params.idMusica
+      // req.body
+    );
+    return new SuccessResult({
+      msg: 'pegou',
+      data: playlist,
+    }).handle(res);
+  } catch (error) {
+    let errorMessage = 'Failed to update the playlist.';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return new FailureResult({
+      msg: errorMessage,
+      code: 500,
+      msgCode: 'failure',
+    }).handle(res);
+  }
+}
 
-
-
-
+private async deleteMusicFromPlaylist(req: Request, res: Response) {
+  try {
+    const playlist = await this.playlistService.deleteMusicFromPlaylist(
+      +req.params.id,
+      +req.params.idMusica
+    );
+    return new SuccessResult({
+      msg: 'pegou',
+      data: playlist,
+    }).handle(res);
+  } catch (error) {
+    let errorMessage = 'Failed to delete the playlist.';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return new FailureResult({
+      msg: errorMessage,
+      code: 500,
+      msgCode: 'failure',
+    }).handle(res);
+  }
+}
 
 }
 

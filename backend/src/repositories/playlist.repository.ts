@@ -120,6 +120,41 @@ class PlaylistRepository {
       },
     });
   }
+
+  public async addMusicToPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+    const result = await this.db.musicToPlaylist.create({
+      data:{
+        musicId: idMusica,
+        playlistId: idPlaylist,
+        createdAt: new Date()
+      }
+    });
+   
+    if(!result){
+      throw new Error("resultado vazio")
+    }
+    const res = this.db.playlist.findUnique({where: { id:idPlaylist }});
+    if(!res){
+      throw new Error("playlist invalida")
+    }
+
+    return res;
+  }
+
+  public async deleteMusicFromPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+    const result = await this.db.musicToPlaylist.deleteMany({
+      where:{
+        playlistId: idPlaylist,
+        musicId: idMusica
+      }
+    });
+   
+    if(!result){
+      throw new Error("Música não encontrada na playlist.")
+    }
+
+    return null;
+  }
 }
 
 export default PlaylistRepository;
