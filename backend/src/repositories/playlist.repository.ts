@@ -95,6 +95,11 @@ class PlaylistRepository {
       users: usersWhoLiked as Array<{ id: number; name: string }>,
     };
   }
+  
+  public async getLikes(): Promise<any> {
+    return this.db.likes.findMany();
+  }
+
 
   public async removeLikeFromPlaylist(playlistId: number, userId: number): Promise<void> {
     await this.db.likes.delete({

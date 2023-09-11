@@ -77,6 +77,11 @@ class PlaylistService {
   public async removeLikeFromPlaylist(playlistId: number, userId: number) {
     return this.playlistRepository.removeLikeFromPlaylist(playlistId, userId);
   }
+ 
+  public async getPlaylistLikes(): Promise<any> {
+    return this.playlistRepository.getLikes();
+  }
+
   
 
 }
