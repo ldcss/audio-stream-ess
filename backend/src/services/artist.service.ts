@@ -19,7 +19,7 @@ class ArtistService {
     return artistsEntity;
   }
 
-  public async getArtist(id: string): Promise<User> {
+  public async getArtist(id: number): Promise<User> {
     const artist = await this.artistRepository.getArtist(id);
 
     if (!artist) {
@@ -41,7 +41,7 @@ class ArtistService {
     return artistModel;
   }
 
-  public async updateArtist(id: string, data: ArtistEntity): Promise<ArtistModel> {
+  public async updateArtist(id: number, data: ArtistEntity): Promise<ArtistModel> {
     const ArtistEntity = await this.artistRepository.updateArtist(id, data);
 
     if (!ArtistEntity) {
@@ -57,7 +57,7 @@ class ArtistService {
     return artistModel;
   }
 
-  public async deleteArtist(id: string): Promise<void> {
+  public async deleteArtist(id: number): Promise<void> {
     await this.artistRepository.deleteArtist(id);
   }
 }

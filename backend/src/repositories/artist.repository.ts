@@ -1,26 +1,24 @@
 import ArtistsEntity from '../entities/artist.entity';
-import BaseRepository from './base.repository';
 import { User, PrismaClient } from '@prisma/client';
 
-class ArtistRepository extends BaseRepository<ArtistsEntity> {
-  private db2: PrismaClient;
+class ArtistRepository {
+  private db: PrismaClient;
 
   constructor() {
-    super('artist');
-    this.db2 = new PrismaClient();
+    this.db = new PrismaClient();
   }
 
   public async getArtists(): Promise<User[]> {
-    const artists = await this.db2.user.findMany({
+    const artists = await this.db.user.findMany({
       where: { type: 1 },
     });
     return artists;
   }
 
-  public async getArtist(id: string): Promise<User | null> {
-    const artist: User | null = await this.db2.user.findUnique({
+  public async getArtist(id: number): Promise<User | null> {
+    const artist: User | null = await this.db.user.findUnique({
       where: {
-        id: Number(id),
+        id: id,
         type: 1,
       },
     });
@@ -31,17 +29,20 @@ class ArtistRepository extends BaseRepository<ArtistsEntity> {
 
     return artist;
   }
-
-  public async createArtist(data: ArtistsEntity): Promise<ArtistsEntity> {
-    return await this.add(data);
+  public async createArtist(data: ArtistsEntity) {
+    const artist: any = { ...data };
+    return this.db.user.create({ data: { ...artist } });
   }
 
-  public async updateArtist(id: string, data: ArtistsEntity): Promise<ArtistsEntity | null> {
-    return await this.update(item => item.id === id, data);
+  public async updateArtist(id: number, data: ArtistsEntity): Promise<ArtistsEntity | null> {
+    return await this.db.user.update({
+      where: { id: id },
+      data: data,
+    });
   }
 
-  public async deleteArtist(id: string): Promise<void> {
-    await this.delete(item => item.id !== id);
+  public async deleteArtist(id: number): Promise<void> {
+    await this.db.user.delete({ where: { id: id } });
   }
 }
 

@@ -42,7 +42,7 @@ class ArtistController {
   }
 
   private async getArtist(req: Request, res: Response) {
-    const test = await this.artistService.getArtist(req.params.id);
+    const test = await this.artistService.getArtist(parseInt(req.params.id));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -57,9 +57,7 @@ class ArtistController {
 
     const artistEntity = await artistRepository.createArtist(artist);
 
-    //const artistModel = new ArtistModel(artistEntity);
-    const artistModel = new ArtistModel({} as User);
-    //const test = await this.artistService.createArtist(artist);
+    const artistModel = new ArtistModel(artistEntity);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -68,7 +66,10 @@ class ArtistController {
   }
 
   private async updateArtist(req: Request, res: Response) {
-    const test = await this.artistService.updateArtist(req.params.id, new ArtistEntity(req.body));
+    const test = await this.artistService.updateArtist(
+      parseInt(req.params.id),
+      new ArtistEntity(req.body),
+    );
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -77,7 +78,7 @@ class ArtistController {
   }
 
   private async deleteArtist(req: Request, res: Response) {
-    await this.artistService.deleteArtist(req.params.id);
+    await this.artistService.deleteArtist(parseInt(req.params.id));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
