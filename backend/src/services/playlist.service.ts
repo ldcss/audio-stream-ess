@@ -91,29 +91,6 @@ class PlaylistService {
   public async deleteMusicFromPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
     return await this.playlistRepository.deleteMusicFromPlaylist(idPlaylist, idMusica);
   }
-  // public async createPlaylist(data: PlaylistEntity): Promise<PlaylistModel> {
-  //   const playlistEntity = await this.playlistRepository.createPlaylist(data);
-  //   const playlistModel = new PlaylistModel(playlistEntity);
-
-  //   return playlistModel;
-  // }
-
-  // public async addMusictoPlaylist(id: string, data: Playlist) {
-  //   const playlist = await this.playlistRepository.updatePlaylist(+id, data);
-
-  //   if (!playlist) {
-  //     throw new HttpNotFoundError({
-  //       msg: 'Playlist not found',
-  //       msgCode: '404 NOT FOUND',
-  //     });
-  //   }
-
-  //   return playlist;
-  // }
-
-  // public async deletePlaylist(id: string): Promise<void> {
-  //   await this.playlistRepository.deletePlaylist(id);
-  // }
 }
 
 export default PlaylistService;
