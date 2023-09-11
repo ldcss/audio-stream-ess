@@ -95,7 +95,7 @@ class PlaylistRepository {
       users: usersWhoLiked as Array<{ id: number; name: string }>,
     };
   }
-
+  
   public async getLikes(): Promise<any> {
     return this.db.likes.findMany();
   }
@@ -120,7 +120,6 @@ class PlaylistRepository {
       },
     });
   }
-}
 }
 
 export default PlaylistRepository;

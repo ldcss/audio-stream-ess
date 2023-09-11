@@ -14,3 +14,9 @@ export interface PlaylistDto extends Playlist {
   musics: Music[];
   duration: number;
 }
+
+export type PlaylistLikesDetail = {
+  count: number;
+  users: Array<{ id: number; name: string }>;
+};
+

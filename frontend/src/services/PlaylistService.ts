@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import api from './api';
-import { Playlist, PlaylistDto } from '../types/playlistTypes';
+import { Playlist, PlaylistDto, PlaylistLikesDetail } from '../types/playlistTypes';
 
 export class PlaylistService {
   static async getPlaylistsFromUser(id: number): Promise<AxiosResponse<Playlist[]>> {
@@ -16,5 +16,19 @@ export class PlaylistService {
     const response = await api.post(`/playlist/${playlistId}/likes/${userId}`, {validateStatus: (status: number) => [200, 201].includes(status)});
     return response;
   }
+  static async removeLikeFromPlaylist(playlistId: number, userId: number): Promise<AxiosResponse<void>> {
+    const response = await api.delete(`/playlist/${playlistId}/likes/${userId}`, {
+        validateStatus: (status: number) => [200, 201, 204].includes(status)
+    });
+    return response;
+}
+  static async getPlaylistLikesDetails(playlistId: number): Promise<AxiosResponse<PlaylistLikesDetail>> {
+    const response = await api.get(`/playlist/${playlistId}/likes`, {
+        validateStatus: (status: number) => [200].includes(status)
+    });
+    return response;
+  }
+
+
 
 }
