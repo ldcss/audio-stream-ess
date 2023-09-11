@@ -4,10 +4,6 @@ import ArtistRepository from '../repositories/artist.repository';
 import { HttpNotFoundError } from '../utils/errors/http.error';
 import { User } from '@prisma/client';
 
-class ArtistServiceMessageCode {
-  public static readonly artist_not_found = 'artist_not_found';
-}
-
 class ArtistService {
   private artistRepository: ArtistRepository;
 
@@ -23,20 +19,17 @@ class ArtistService {
     return artistsEntity;
   }
 
-  public async getArtist(id: string): Promise<ArtistModel> {
-    const artistEntity = await this.artistRepository.getArtist(id);
+  public async getArtist(id: string): Promise<User> {
+    const artist = await this.artistRepository.getArtist(id);
 
-    if (!artistEntity) {
+    if (!artist) {
       throw new HttpNotFoundError({
         msg: 'Artist not found',
-        msgCode: ArtistServiceMessageCode.artist_not_found,
+        msgCode: 'artist_not_found',
       });
     }
 
-    //const artistModel = new ArtistModel(artistEntity);
-    const artistModel = new ArtistModel({} as User);
-
-    return artistModel;
+    return artist;
   }
 
   public async createArtist(data: ArtistEntity): Promise<ArtistModel> {
@@ -54,7 +47,7 @@ class ArtistService {
     if (!ArtistEntity) {
       throw new HttpNotFoundError({
         msg: 'Artist not found',
-        msgCode: ArtistServiceMessageCode.artist_not_found,
+        msgCode: 'artist_not_found',
       });
     }
 
