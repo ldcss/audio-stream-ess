@@ -10,7 +10,32 @@ class PlaylistRepository {
     this.db = new PrismaClient();
   }
 
-  public async getPlaylists(idUser?: number): Promise<Playlist[]> {
+  public async getPlaylists(queryParams: QueryParams): Promise<PlaylistModel[]> {
+    const playlistsModel = await this.getPlaylistWithMusics([]);
+    if (queryParams.genre && queryParams.duration) {
+      const filteredPlaylists = playlistsModel.filter(playlist => {
+        if (queryParams.genre === playlist.genre && +queryParams.duration! >= playlist.duration) {
+          return true;
+        }
+      });
+      return filteredPlaylists;
+    }
+    if (queryParams.genre) {
+      const filteredPlaylists = playlistsModel.filter(
+        playlist => queryParams.genre === playlist.genre,
+      );
+      return filteredPlaylists;
+    }
+    if (queryParams.duration) {
+      const filteredPlaylists = playlistsModel.filter(
+        playlist => +queryParams.duration! >= playlist.duration,
+      );
+      return filteredPlaylists;
+    }
+    return playlistsModel;
+  }
+
+  public async getAllPlaylists(idUser?: number): Promise<Playlist[]> {
     const playlists = await this.db.playlist.findMany({
       where: { ...(idUser !== undefined ? { ownerId: idUser } : {}) },
     });

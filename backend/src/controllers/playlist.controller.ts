@@ -54,7 +54,7 @@ class PlaylistController {
   }
 
   private async getPlaylistsByUser(req: Request, res: Response) {
-    const playlists = await this.playlistService.getPlaylists(+req.params.idUser);
+    const playlists = await this.playlistService.getAllPlaylists(+req.params.idUser);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -75,12 +75,21 @@ class PlaylistController {
   }
 
   private async getPlaylists(req: Request, res: Response) {
-    const playlists = await this.playlistService.getPlaylists();
+    try {
+      const playlists = await this.playlistService.getPlaylists(req.query);
+      console.log('playlists', playlists);
 
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: playlists,
-    }).handle(res);
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: playlists,
+      }).handle(res);
+    } catch {
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        code: 404,
+        msgCode: 'failure',
+      }).handle(res);
+    }
   }
 
   private async getPlaylist(req: Request, res: Response) {

@@ -12,6 +12,10 @@ export class PlaylistService {
     const response = await api.get(`/user/${idUser}/playlist`, {params: {id: idUser, genre: genre, duration: duration}, validateStatus: (status => [200].includes(status))})
     return response.data;
   }
+  static async getAllPlaylistsWithMusics(genre?: string, duration?: number): Promise<AxiosResponse<PlaylistDto[]>> {
+    const response = await api.get(`/playlist`, {params: {genre: genre, duration: duration}, validateStatus: (status => [200].includes(status))})
+    return response.data;
+  }
   static async getPlaylistFromUser(idUser: number, idPlaylist: number): Promise<AxiosResponse<PlaylistDto>> {
     const response = await api.get(`/user/${idUser}/playlist/${idPlaylist}`, {validateStatus: (status => [200].includes(status))});
     return response.data;

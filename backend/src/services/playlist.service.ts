@@ -22,10 +22,16 @@ class PlaylistService {
     return `${hr}:${min}:${seg}`;
   }
 
-  public async getPlaylists(idUser?: number): Promise<Playlist[]> {
-    const playlistsOfUser = await this.playlistRepository.getPlaylists(idUser);
-    return playlistsOfUser;
+  public async getPlaylists(queryParams: QueryParams): Promise<PlaylistModel[]> {
+    const playlists = await this.playlistRepository.getPlaylists(queryParams);
+    return playlists;
   }
+
+  public async getAllPlaylists(idUser?: number): Promise<Playlist[]> {
+    const playlists = await this.playlistRepository.getAllPlaylists(idUser);
+    return playlists;
+  }
+
   public async createPlaylist(data: Playlist): Promise<Playlist> {
     return await this.playlistRepository.createPlaylist(data);
   }
