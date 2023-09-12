@@ -76,7 +76,7 @@ function Playlist() {
       getPlaylist(+idUser, +idPlaylist);
   }, []);
 
-  return (<div style={{width:'100vw', height:'100%', overflowX:'auto'}}>
+  return (<div style={{width:'99.2vw', height:'100%'}}>
 
     <Box style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
       <Sidemenu />
