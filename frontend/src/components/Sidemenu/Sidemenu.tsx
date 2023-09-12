@@ -44,7 +44,8 @@ function Sidemenu() {
         console.log('deu certo!', response);
       }).catch(err => console.log('err', err));
     }
-    getAllPlaylists(+idUser!);
+    if(idUser)
+      getAllPlaylists(+idUser);
   }, [])
   useEffect(() => {
     console.log('playlists', playlists);

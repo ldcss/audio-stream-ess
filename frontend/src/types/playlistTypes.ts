@@ -1,4 +1,5 @@
 import { Music } from "./musicTypes"
+import { User } from "./userTypes"
 
 export interface Playlist{
   id: number
@@ -13,6 +14,7 @@ export interface Playlist{
 export interface PlaylistDto extends Playlist {
   musics: Music[];
   duration: number;
+  owner?: User;
 }
 
 export type PlaylistLikesDetail = {

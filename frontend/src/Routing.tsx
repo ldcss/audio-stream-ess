@@ -12,7 +12,6 @@ const Routing = () => {
         <Route path='/artists' element={<BrowseArtists />} />
         <Route path='/user/:idUser/playlist' element={<Playlists />} /> {/*playlists do usuario*/}
         <Route path='/user/:idUser/playlist/:idPlaylist' element={<Playlist />} />{' '}
-        {/*playlist x do usuario*/}
       </Routes>
       <CurrentSong />
     </BrowserRouter>
