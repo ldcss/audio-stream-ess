@@ -84,10 +84,12 @@ export const EditPopup = styled.div`
   position: fixed;
   top: 25% !important;
   left: 39.5% !important;
+
   z-index: 1000 !important;
   margin: auto !important;
   width: 20rem;
   height: 23rem;
+
   background: #b5a8ca;
   border-radius: 1rem;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
@@ -178,6 +180,62 @@ export const EditPopup = styled.div`
         font-family: 'Helvetica';
         font-size: 1rem !important;
       }
+    }
+  }
+`;
+
+export const DeletePopup = styled.div`
+  position: fixed;
+  top: 40% !important;
+  left: 39.5% !important;
+
+  z-index: 1000 !important;
+  width: 20rem;
+  height: 8rem;
+
+  margin: auto !important;
+  padding: 1rem !important;
+
+  background: #b5a8ca;
+  border-radius: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+
+  display: flex;
+  flex-direction: column;
+
+  p {
+    font-weight: 600;
+    color: #3c3c3c;
+    width: 80%;
+    align-self: center;
+    margin: auto !important;
+    margin-top: 0.5rem !important;
+  }
+
+  .buttons {
+    margin: auto !important;
+    margin-top: 1rem !important;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+
+    button {
+      width: 5rem;
+      box-shadow: none;
+      font-weight: 600;
+      color: #6743a5;
+      background: white;
+      border: 1.5px solid #6743a5;
+      padding: 0.4rem 0.3rem !important;
+      height: 2rem !important;
+      text-align: center;
+      font-family: 'Helvetica';
+      font-size: 1rem !important;
+    }
+
+    .delete {
+      color: white;
+      background: #6743a5;
     }
   }
 `;

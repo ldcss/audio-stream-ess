@@ -1,4 +1,4 @@
-import { Wrapper, EditPopup } from './styles';
+import { Wrapper, EditPopup, DeletePopup } from './styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -28,6 +28,7 @@ const BrowseArtists = () => {
   const [rows, setRows] = useState<any[]>([]);
   const [showRows, setShowRows] = useState<any[]>([]);
   const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const [reload, setReload] = useState(true);
   const [currentArtist, setCurrentArtist] = useState<Artist>({
     genre: '',
@@ -73,6 +74,22 @@ const BrowseArtists = () => {
     setShowEdit(true);
   };
 
+  const deleteArtist = (index: number) => {
+    setCurrentArtist(rows[index]);
+    setShowDelete(true);
+  };
+
+  const handleDeletion = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:5001/api/artist/${currentArtist.id}`);
+      console.log('API Response:', response.data);
+      setShowDelete(false);
+      setReload(!reload);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const user = {
@@ -114,6 +131,17 @@ const BrowseArtists = () => {
             </div>
           </form>
         </EditPopup>
+      )}
+      {showDelete && (
+        <DeletePopup>
+          <p>Você tem certeza que deseja excluir o artista {currentArtist.name}?</p>
+          <div className='buttons'>
+            <button onClick={() => handleDeletion()} className='delete'>
+              Excluir
+            </button>
+            <button onClick={() => setShowDelete(false)}>Cancelar</button>
+          </div>
+        </DeletePopup>
       )}
       <Wrapper>
         <h3>Gerenciamento de artistas</h3>
@@ -166,7 +194,7 @@ const BrowseArtists = () => {
                     </div>
                   </TableCell>
                   <TableCell className='cell'>
-                    <div onClick={() => console.log('deleting')}>
+                    <div onClick={() => deleteArtist(index)}>
                       <Delete
                         className='settings'
                         sx={{ display: 'block !important', zIndex: 100 }}
