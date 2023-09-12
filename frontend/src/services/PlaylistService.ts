@@ -10,7 +10,11 @@ export class PlaylistService {
   }
   static async getPlaylistsWithMusicsFromUser(idUser: number, genre?: string, duration?: number): Promise<AxiosResponse<PlaylistDto[]>> {
     const response = await api.get(`/user/${idUser}/playlist`, {params: {id: idUser, genre: genre, duration: duration}, validateStatus: (status => [200].includes(status))})
-    return response;
+    return response.data;
+  }
+  static async getPlaylistFromUser(idUser: number, idPlaylist: number): Promise<AxiosResponse<PlaylistDto>> {
+    const response = await api.get(`/user/${idUser}/playlist/${idPlaylist}`, {validateStatus: (status => [200].includes(status))});
+    return response.data;
   }
   static async addLikeToPlaylist(playlistId: number, userId: number): Promise<AxiosResponse<void>> {
     const response = await api.post(`/playlist/${playlistId}/likes/${userId}`, {validateStatus: (status: number) => [200, 201].includes(status)});
