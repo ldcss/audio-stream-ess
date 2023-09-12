@@ -9,9 +9,9 @@ const Routing = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/signup' element={<SignInPage />} />
-        <Route path='/test' element={<BrowseArtists />} />
-        <Route path='/playlist' element={<Playlists />} /> {/*playlists do usuario*/}
-        <Route path='/user/:idUser/playlist/:idPlaylist' element={<Playlist />} /> {/*playlist x do usuario*/}
+        <Route path='/artists' element={<BrowseArtists />} />
+        <Route path='/user/:idUser/playlist' element={<Playlists />} /> {/*playlists do usuario*/}
+        <Route path='/user/:idUser/playlist/:idPlaylist' element={<Playlist />} />{' '}
       </Routes>
       <CurrentSong />
     </BrowserRouter>

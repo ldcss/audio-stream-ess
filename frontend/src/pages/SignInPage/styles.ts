@@ -22,6 +22,18 @@ export const Wrapper = styled.div`
         margin: auto !important;
         color: #37294f;
         margin-bottom: 2rem !important;
+
+        @media (max-width: 1400px) {
+          margin-top: 0.25rem !important;
+          font-size: 1.25rem !important;
+          width: 60%;
+        }
+
+        @media (max-width: 900px) {
+          margin-top: 1rem !important;
+          font-size: 1rem !important;
+          width: 80%;
+        }
       }
 
       form {
@@ -48,7 +60,7 @@ export const Wrapper = styled.div`
           padding: 0.5rem 0.5rem !important;
           box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 2px 0px inset;
           font-size: 1rem;
-          margin-bottom: 2rem !important;
+          margin-bottom: 1.25rem !important;
         }
 
         #desc {
@@ -59,8 +71,9 @@ export const Wrapper = styled.div`
           padding: 0.5rem 0.5rem !important;
           box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 2px 0px inset;
           font-size: 1rem;
+          color: #37294f;
           margin-bottom: 2rem !important;
-          height: 6rem;
+          height: 4rem;
           resize: none;
         }
 
@@ -83,6 +96,10 @@ export const ImageHolder = styled.div`
   left: 0 !important;
   height: 90vh;
   width: 65%;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 
   .notes {
     top: 0 !important;

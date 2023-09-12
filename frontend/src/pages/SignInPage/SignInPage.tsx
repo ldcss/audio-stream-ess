@@ -9,11 +9,26 @@ import {
   Mastodon,
   Olivia,
 } from '../../assets';
+import axios from 'axios';
 
 const SignInPage = () => {
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log('e is', e);
+    const user = {
+      email: e.target.email.value,
+      password: e.target.password.value,
+      name: e.target.nome.value,
+      genre: e.target.genero.value,
+      description: e.target.desc.value,
+      type: 1,
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5001/api/artist', user);
+      console.log('API Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -32,6 +47,10 @@ const SignInPage = () => {
         <div className='formHolder'>
           <h2 className='title'>Compartilhe a sua música com o mundo</h2>
           <form onSubmit={handleSubmit}>
+            <label>Email</label>
+            <input type='email' name='email' id='email' />
+            <label>Senha</label>
+            <input type='password' name='password' id='password' />
             <label>Nome</label>
             <input type='text' name='nome' id='nome' />
             <label>Gênero</label>

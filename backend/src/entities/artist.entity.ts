@@ -1,18 +1,21 @@
 import BaseEntity from './base.entity';
 
-export default class ArtistEntity extends BaseEntity {
+export default class ArtistEntity {
   name: string;
   genre: string;
   description: string;
-  login: string;
-  pass: string;
+  email: string;
+  password: string;
+  type: number;
+  id: number;
 
   constructor(data: ArtistEntity) {
-    super(data.id || '');
+    this.id = data.id;
     this.name = data.name;
     this.genre = data.genre;
     this.description = data.description;
-    this.login = data.login;
-    this.pass = data.pass;
+    this.email = data.email;
+    this.password = data.password;
+    this.type = 1;
   }
 }
