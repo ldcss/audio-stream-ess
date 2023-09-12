@@ -17,7 +17,7 @@ interface Artist {
   name: string;
   genre?: string;
   email: string;
-  pass: string;
+  password: string;
   description?: string;
   albums?: number;
   songs?: number;
@@ -28,11 +28,12 @@ const BrowseArtists = () => {
   const [rows, setRows] = useState<any[]>([]);
   const [showRows, setShowRows] = useState<any[]>([]);
   const [showEdit, setShowEdit] = useState(false);
+  const [reload, setReload] = useState(true);
   const [currentArtist, setCurrentArtist] = useState<Artist>({
     genre: '',
     name: '',
     email: '',
-    pass: '',
+    password: '',
     id: -1,
   });
 
@@ -48,7 +49,7 @@ const BrowseArtists = () => {
     };
 
     fetchData();
-  }, []);
+  }, [reload]);
 
   const requestSearch = (searchedVal: string) => {
     const filteredartistRows = rows.filter(row => {
@@ -68,18 +69,39 @@ const BrowseArtists = () => {
   };
 
   const editArtist = (index: number) => {
-    console.log('index is', index);
-    console.log('rows index is', rows[index]);
     setCurrentArtist(rows[index]);
-    console.log(currentArtist);
     setShowEdit(true);
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const user = {
+      email: currentArtist.email,
+      password: currentArtist.password,
+      name: e.target.nome.value,
+      genre: e.target.genero.value,
+      description: e.target.desc.value,
+      type: 1,
+    };
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5001/api/artist/${currentArtist.id}`,
+        user,
+      );
+      console.log('API Response:', response.data);
+      setShowEdit(false);
+      setReload(!reload);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <>
       {showEdit && (
         <EditPopup>
-          <form onSubmit={() => console.log('editando')}>
+          <form onSubmit={handleSubmit}>
             <label>Nome</label>
             <input type='text' name='nome' id='nome' defaultValue={currentArtist.name} />
             <label>Gênero</label>
