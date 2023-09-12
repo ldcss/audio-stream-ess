@@ -163,13 +163,15 @@ export const EditPopup = styled.div`
         height: 2rem !important;
         font-family: 'Helvetica';
         font-size: 1rem !important;
+        border: 1.5px solid #6743a5;
       }
       button {
         width: 5rem;
         box-shadow: none;
         font-weight: 600;
-        color: white;
-        background: #6743a5;
+        color: #6743a5;
+        background: white;
+        border: 1.5px solid #6743a5;
         padding: 0.4rem 0.3rem !important;
         height: 2rem !important;
         text-align: center;
