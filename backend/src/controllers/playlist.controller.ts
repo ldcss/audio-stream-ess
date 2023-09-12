@@ -91,7 +91,6 @@ class PlaylistController {
       }).handle(res);
     }
   }
-
   private async deletePlaylist(req: Request, res: Response) {
     try {
         await this.playlistService.deletePlaylist(+req.params.id);
