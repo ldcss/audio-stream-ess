@@ -7,6 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchBar from 'material-ui-search-bar';
+import Settings from '@mui/icons-material/Settings';
+import Delete from '@mui/icons-material/Delete';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -41,6 +43,11 @@ const BrowseArtists = () => {
     requestSearch(searched);
   };
 
+  const formatDescription = (text: string): string => {
+    if (text.length <= 50) return text;
+    return text.substring(0, 49) + '...';
+  };
+
   return (
     <Wrapper>
       <h3>Gerenciamento de artistas</h3>
@@ -58,6 +65,8 @@ const BrowseArtists = () => {
               <TableCell className='cell'>Descrição do artista</TableCell>
               <TableCell className='cell'>Álbuns</TableCell>
               <TableCell className='cell'>Músicas</TableCell>
+              <TableCell className='cell'></TableCell>
+              <TableCell className='cell'></TableCell>
             </TableRow>
           </TableHead>
           <TableBody
@@ -79,9 +88,18 @@ const BrowseArtists = () => {
                 <TableCell component='th' scope='row'>
                   {row.name}
                 </TableCell>
-                <TableCell className='cell'>{row.description}</TableCell>
-                <TableCell className='cell'>{row.albuns}</TableCell>
-                <TableCell className='cell'>{row.songs}</TableCell>
+                <TableCell className='cell'>{formatDescription(row.description)}</TableCell>
+                <TableCell className='cell'>{row.albuns ?? 5}</TableCell>
+                <TableCell className='cell'>{row.songs ?? 47} </TableCell>
+                <TableCell className='cell'>
+                  <Settings
+                    className='settings'
+                    sx={{ display: 'block !important', zIndex: 100 }}
+                  />{' '}
+                </TableCell>
+                <TableCell className='cell'>
+                  <Delete className='settings' sx={{ display: 'block !important', zIndex: 100 }} />{' '}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

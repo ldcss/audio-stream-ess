@@ -71,5 +71,11 @@ export const Wrapper = styled.div`
         }
       }
     }
+
+    .settings {
+      font-size: 1.25rem;
+      margin-left: 0.25rem;
+      color: #37294f;
+    }
   }
 `;
