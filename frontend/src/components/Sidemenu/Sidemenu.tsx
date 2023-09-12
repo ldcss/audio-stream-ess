@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 interface SidemenuLinks {
   iconUrl?: string;
   title: string;
-  link: string;
+  href: string;
 }
 
 function Sidemenu() {
@@ -21,20 +21,20 @@ function Sidemenu() {
   const sidemenuLinks: SidemenuLinks[]= [{
     iconUrl: homeIcon,
     title: 'Home',
-    link: '/user/:id',
+    href: '/user/:id',
   },
   {
     iconUrl: radioIcon,
     title: 'Explorar',
-    link: '/explore',
+    href: '/explore',
   },
   {
     iconUrl: libraryIcon,
     title: 'Biblioteca',
-    link: '/library',
+    href: '/library',
   },]
   playlists.map(playlist => {
-    sidemenuLinks.push({iconUrl: AlbumTest, title: playlist.name, link: `/user/1/playlist/${playlist.id}`})
+    sidemenuLinks.push({iconUrl: AlbumTest, title: playlist.name, href: `/user/1/playlist/${playlist.id}`})
     return playlist;
   })
   useEffect(() => {
