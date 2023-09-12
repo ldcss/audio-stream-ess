@@ -55,14 +55,7 @@ class PlaylistRepository {
       return { ...playlist, music: musics, duration: totalDuration };
     });
     return playlistWithMusic;
-    // const tempoTotal = musics[0].duration.getTime();
-    // const min = Math.floor((tempoTotal / 1000 / 60) << 0);
-    // const seg = Math.floor((tempoTotal / 1000) % 60);
-    // const hr = Math.floor((tempoTotal / (1000 * 60 * 60)) % 24);
-    // console.log(musics[0].duration.getTime());
-    // console.log(musics[1].duration.getTime());
-    // console.log(musics[0].duration.getTime() + musics[1].duration.getTime());
-    // console.log(`hr: ${hr}, min: ${min}, seg: ${seg}`);
+    
   }
 
   public async createPlaylist(data: Playlist): Promise<Playlist> {
@@ -76,8 +69,57 @@ class PlaylistRepository {
   public async deletePlaylist(id: number): Promise<void> {
     await this.db.playlist.delete({ where: { id: id } });
   }
+  public async getPlaylistLikesDetails(
+    playlistId: number,
+  ): Promise<{ count: number; users: Array<{ id: number; name: string }> }> {
+    const likes = await this.db.likes.findMany({
+      where: { playlistId: playlistId },
+      include: { user: true },
+    });
+
+    const usersWhoLiked = likes
+      .map((like: { user: { id: number; name: string; email?: string } | null }) => {
+        if (like.user) {
+          return {
+            id: like.user.id,
+            name: like.user.name,
+          };
+        } else {
+          return undefined;
+        }
+      })
+      .filter(Boolean as unknown as (value: any) => value is { id: number; name: string });
+
+    return {
+      count: likes.length,
+      users: usersWhoLiked as Array<{ id: number; name: string }>,
+    };
+  }
+  
+  public async getLikes(): Promise<any> {
+    return this.db.likes.findMany();
+  }
 
 
+  public async removeLikeFromPlaylist(playlistId: number, userId: number): Promise<void> {
+    await this.db.likes.delete({
+      where: {
+        userId_playlistId: {
+          userId: userId,
+          playlistId: playlistId,
+        },
+      },
+    });
+  }
+
+  public async addLikeToPlaylist(playlistId: number, userId: number): Promise<void> {
+    await this.db.likes.create({
+      data: {
+        playlistId: playlistId,
+        userId: userId,
+      },
+    });
+  }
 
   public async addMusicToPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
     const result = await this.db.musicToPlaylist.create({
