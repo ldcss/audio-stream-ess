@@ -14,6 +14,7 @@ interface SidemenuLinks {
   href: string;
 }
 
+
 function Sidemenu() {
   const {idUser, idPlaylist} = useParams();
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
@@ -54,13 +55,23 @@ function Sidemenu() {
       {sidemenuLinks.map(element => {
         if(element.title === 'Biblioteca') {
           return (<>
-          <Box sx={{borderTop: '4px solid #bbb', borderRadius: '5px'}} />
+          <Box sx={{borderTop: '1px solid #bbb', borderRadius: '5px',paddingTop:'5px'}} />
           <Box sx={{display: 'flex', flexDirection: 'row', columnGap: '25px', rowGap: '200px', padding: '10px !important'}}> 
-            <img src={element.iconUrl} alt={`${element.title}`}/> 
+            <img src={element.iconUrl} alt={`${element.title}` }/> 
             <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
           </Box>
           </>)
         }
+        if(element.title === 'Explorar') {
+          return (<>
+          <Box sx={{borderTop: 'none', borderRadius: '5px',paddingBottom:'0px'}} />
+          <Box sx={{display: 'flex', flexDirection: 'row', columnGap: '25px', rowGap: '200px', padding: '10px !important',paddingBottom:'15px !important'}}> 
+            <img src={element.iconUrl} alt={`${element.title}` }/> 
+            <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
+          </Box>
+          </>)
+        }
+
         return (<Box sx={{display: 'flex', flexDirection: 'row', columnGap: '25px', rowGap: '200px', padding: '10px !important'}}> 
         <img src={element.iconUrl} alt={`${element.title}`}/> 
         <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
