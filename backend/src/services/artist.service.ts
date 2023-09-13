@@ -2,10 +2,7 @@ import ArtistEntity from '../entities/artist.entity';
 import ArtistModel from '../models/artist.model';
 import ArtistRepository from '../repositories/artist.repository';
 import { HttpNotFoundError } from '../utils/errors/http.error';
-
-class ArtistServiceMessageCode {
-  public static readonly artist_not_found = 'artist_not_found';
-}
+import { User } from '@prisma/client';
 
 class ArtistService {
   private artistRepository: ArtistRepository;
@@ -14,52 +11,53 @@ class ArtistService {
     this.artistRepository = artistRepository;
   }
 
-  public async getArtists(): Promise<ArtistModel[]> {
+  public async getEveryArtist(): Promise<any[]> {
     const artistsEntity = await this.artistRepository.getArtists();
 
-    const artistsModel = artistsEntity.map(test => new ArtistModel(test));
+    //const artistsModel = artistsEntity.map(artist => new ArtistModel(artist));
 
-    return artistsModel;
+    return artistsEntity;
   }
 
-  public async getArtist(id: string): Promise<ArtistModel> {
-    const artistEntity = await this.artistRepository.getArtist(id);
+  public async getArtist(id: number): Promise<User> {
+    const artist = await this.artistRepository.getArtist(id);
 
-    if (!artistEntity) {
+    if (!artist) {
       throw new HttpNotFoundError({
         msg: 'Artist not found',
-        msgCode: ArtistServiceMessageCode.artist_not_found,
+        msgCode: 'artist_not_found',
       });
     }
 
-    const artistModel = new ArtistModel(artistEntity);
-
-    return artistModel;
+    return artist;
   }
 
   public async createArtist(data: ArtistEntity): Promise<ArtistModel> {
     const artistEntity = await this.artistRepository.createArtist(data);
-    const artistModel = new ArtistModel(artistEntity);
+
+    //const artistModel = new ArtistModel(artistEntity);
+    const artistModel = new ArtistModel({} as User);
 
     return artistModel;
   }
 
-  public async updateArtist(id: string, data: ArtistEntity): Promise<ArtistModel> {
+  public async updateArtist(id: number, data: ArtistEntity): Promise<ArtistModel> {
     const ArtistEntity = await this.artistRepository.updateArtist(id, data);
 
     if (!ArtistEntity) {
       throw new HttpNotFoundError({
         msg: 'Artist not found',
-        msgCode: ArtistServiceMessageCode.artist_not_found,
+        msgCode: 'artist_not_found',
       });
     }
 
-    const artistModel = new ArtistModel(ArtistEntity);
+    //const artistModel = new ArtistModel(artistEntity);
+    const artistModel = new ArtistModel({} as User);
 
     return artistModel;
   }
 
-  public async deleteArtist(id: string): Promise<void> {
+  public async deleteArtist(id: number): Promise<void> {
     await this.artistRepository.deleteArtist(id);
   }
 }

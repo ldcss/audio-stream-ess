@@ -10,7 +10,32 @@ class PlaylistRepository {
     this.db = new PrismaClient();
   }
 
-  public async getPlaylists(idUser?: number): Promise<Playlist[]> {
+  public async getPlaylists(queryParams: QueryParams): Promise<PlaylistModel[]> {
+    const playlistsModel = await this.getPlaylistWithMusics([]);
+    if (queryParams.genre && queryParams.duration) {
+      const filteredPlaylists = playlistsModel.filter(playlist => {
+        if (queryParams.genre === playlist.genre && +queryParams.duration! >= playlist.duration) {
+          return true;
+        }
+      });
+      return filteredPlaylists;
+    }
+    if (queryParams.genre) {
+      const filteredPlaylists = playlistsModel.filter(
+        playlist => queryParams.genre === playlist.genre,
+      );
+      return filteredPlaylists;
+    }
+    if (queryParams.duration) {
+      const filteredPlaylists = playlistsModel.filter(
+        playlist => +queryParams.duration! >= playlist.duration,
+      );
+      return filteredPlaylists;
+    }
+    return playlistsModel;
+  }
+
+  public async getAllPlaylists(idUser?: number): Promise<Playlist[]> {
     const playlists = await this.db.playlist.findMany({
       where: { ...(idUser !== undefined ? { ownerId: idUser } : {}) },
     });
@@ -35,8 +60,41 @@ class PlaylistRepository {
     return playlistsModel;
   }
 
-  public async getPlaylist(id: number): Promise<Playlist | null> {
-    return await this.db.playlist.findUnique({ where: { id: id } });
+  public async getPlaylist(idPlaylist: number, idUser: number): Promise<PlaylistModel | null> {
+    const playlist = await this.db.playlist.findUnique({
+      where: { id: idPlaylist, AND: { ownerId: idUser } },
+      include: { music: { include: { music: true } }, owner: true },
+    });
+    if (!playlist) return null;
+    const playlistModel: PlaylistModel = {
+      id: playlist.id,
+      createdAt: playlist.createdAt,
+      description: playlist.description,
+      duration: 0,
+      genre: playlist.genre,
+      name: playlist.name,
+      ownerId: playlist.ownerId,
+      updatedAt: playlist.updatedAt,
+      musics: [],
+      owner: playlist.owner,
+    };
+    const musics: Music[] = [];
+    playlist.music.forEach(music => {
+      musics.push(music.music);
+      playlistModel.duration += music.music.duration.getTime();
+    });
+    return playlistModel;
+  }
+
+  public async getPlaylistById(id: number): Promise<Playlist | null> {
+    const playlist = await this.db.playlist.findUnique({
+      where: { id: id },
+    });
+
+    if (!playlist) {
+      return null;
+    }
+    return playlist;
   }
 
   //na tela das playlists
@@ -55,7 +113,6 @@ class PlaylistRepository {
       return { ...playlist, music: musics, duration: totalDuration };
     });
     return playlistWithMusic;
-    
   }
 
   public async createPlaylist(data: Playlist): Promise<Playlist> {
@@ -95,11 +152,10 @@ class PlaylistRepository {
       users: usersWhoLiked as Array<{ id: number; name: string }>,
     };
   }
-  
+
   public async getLikes(): Promise<any> {
     return this.db.likes.findMany();
   }
-
 
   public async removeLikeFromPlaylist(playlistId: number, userId: number): Promise<void> {
     await this.db.likes.delete({
@@ -123,34 +179,37 @@ class PlaylistRepository {
 
   public async addMusicToPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
     const result = await this.db.musicToPlaylist.create({
-      data:{
+      data: {
         musicId: idMusica,
         playlistId: idPlaylist,
-        createdAt: new Date()
-      }
+        createdAt: new Date(),
+      },
     });
-   
-    if(!result){
-      throw new Error("resultado vazio")
+
+    if (!result) {
+      throw new Error('resultado vazio');
     }
-    const res = this.db.playlist.findUnique({where: { id:idPlaylist }});
-    if(!res){
-      throw new Error("playlist invalida")
+    const res = this.db.playlist.findUnique({ where: { id: idPlaylist } });
+    if (!res) {
+      throw new Error('playlist invalida');
     }
 
     return res;
   }
 
-  public async deleteMusicFromPlaylist(idPlaylist: number, idMusica: number): Promise<Playlist | null> {
+  public async deleteMusicFromPlaylist(
+    idPlaylist: number,
+    idMusica: number,
+  ): Promise<Playlist | null> {
     const result = await this.db.musicToPlaylist.deleteMany({
-      where:{
+      where: {
         playlistId: idPlaylist,
-        musicId: idMusica
-      }
+        musicId: idMusica,
+      },
     });
-   
-    if(!result){
-      throw new Error("Música não encontrada na playlist.")
+
+    if (!result) {
+      throw new Error('Música não encontrada na playlist.');
     }
 
     return null;

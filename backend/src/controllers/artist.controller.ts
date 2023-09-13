@@ -4,9 +4,10 @@ import ArtistService from '../services/artist.service';
 import ArtistEntity from '../entities/artist.entity';
 import ArtistRepository from '../repositories/artist.repository';
 import ArtistModel from '../models/artist.model';
+import { User } from '@prisma/client';
 
 class ArtistController {
-  private prefix: string = '/artist';
+  private prefix = '/artist';
   public router: Router;
   private artistService: ArtistService;
 
@@ -32,16 +33,16 @@ class ArtistController {
   }
 
   private async getArtists(req: Request, res: Response) {
-    const tests = await this.artistService.getArtists();
+    const artists = await this.artistService.getEveryArtist();
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
-      data: tests,
+      data: artists,
     }).handle(res);
   }
 
   private async getArtist(req: Request, res: Response) {
-    const test = await this.artistService.getArtist(req.params.id);
+    const test = await this.artistService.getArtist(parseInt(req.params.id));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -57,7 +58,6 @@ class ArtistController {
     const artistEntity = await artistRepository.createArtist(artist);
 
     const artistModel = new ArtistModel(artistEntity);
-    //const test = await this.artistService.createArtist(artist);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -66,7 +66,10 @@ class ArtistController {
   }
 
   private async updateArtist(req: Request, res: Response) {
-    const test = await this.artistService.updateArtist(req.params.id, new ArtistEntity(req.body));
+    const test = await this.artistService.updateArtist(
+      parseInt(req.params.id),
+      new ArtistEntity(req.body),
+    );
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -75,7 +78,7 @@ class ArtistController {
   }
 
   private async deleteArtist(req: Request, res: Response) {
-    await this.artistService.deleteArtist(req.params.id);
+    await this.artistService.deleteArtist(parseInt(req.params.id));
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
