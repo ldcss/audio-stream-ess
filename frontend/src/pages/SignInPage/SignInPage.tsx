@@ -1,4 +1,4 @@
-import { ImageHolder, Wrapper } from './styles';
+import { ImageHolder, Wrapper, ConclusionPopup } from './styles';
 import {
   Notes,
   DaftPunk,
@@ -10,8 +10,12 @@ import {
   Olivia,
 } from '../../assets';
 import axios from 'axios';
+import { useState } from 'react';
 
 const SignInPage = () => {
+  const [showCompletion, setShowCompletion] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const user = {
@@ -26,42 +30,54 @@ const SignInPage = () => {
     try {
       const response = await axios.post('http://localhost:5001/api/artist', user);
       console.log('API Response:', response.data);
+      setSuccess(true);
+      setShowCompletion(true);
     } catch (error) {
       console.error('Error:', error);
+      setSuccess(false);
+      setShowCompletion(true);
     }
   };
 
   return (
-    <Wrapper>
-      <div className='divisor'>
-        <ImageHolder>
-          <img src={Notes} alt='' className='notes' />
-          <img className='artistPic artist1' src={DaftPunk} />
-          <img className='artistPic artist2' src={Mastodon} />
-          <img className='artistPic artist3' src={DavidBowie} />
-          <img className='artistPic artist4' src={GreenDay} />
-          <img className='artistPic artist5' src={KingCrimson} />
-          <img className='artistPic artist6' src={JoyDivision} />
-          <img className='artistPic artist7' src={Olivia} />
-        </ImageHolder>
-        <div className='formHolder'>
-          <h2 className='title'>Compartilhe a sua música com o mundo</h2>
-          <form onSubmit={handleSubmit}>
-            <label>Email</label>
-            <input type='email' name='email' id='email' />
-            <label>Senha</label>
-            <input type='password' name='password' id='password' />
-            <label>Nome</label>
-            <input type='text' name='nome' id='nome' />
-            <label>Gênero</label>
-            <input type='text' name='genero' id='genero' />
-            <label>Descrição</label>
-            <textarea name='desc' id='desc' />
-            <input type='submit' value='Cadastrar Artista' className='submit' />
-          </form>
+    <>
+      {showCompletion && (
+        <ConclusionPopup>
+          <p>{success ? 'Sucesso! Artista criado!' : 'Erro! Tente novamente'}</p>
+          <button onClick={() => setShowCompletion(false)}>Concluído</button>
+        </ConclusionPopup>
+      )}
+      <Wrapper>
+        <div className='divisor'>
+          <ImageHolder>
+            <img src={Notes} alt='' className='notes' />
+            <img className='artistPic artist1' src={DaftPunk} />
+            <img className='artistPic artist2' src={Mastodon} />
+            <img className='artistPic artist3' src={DavidBowie} />
+            <img className='artistPic artist4' src={GreenDay} />
+            <img className='artistPic artist5' src={KingCrimson} />
+            <img className='artistPic artist6' src={JoyDivision} />
+            <img className='artistPic artist7' src={Olivia} />
+          </ImageHolder>
+          <div className='formHolder'>
+            <h2 className='title'>Compartilhe a sua música com o mundo</h2>
+            <form onSubmit={handleSubmit}>
+              <label>Email</label>
+              <input type='email' name='email' id='email' />
+              <label>Senha</label>
+              <input type='password' name='password' id='password' />
+              <label>Nome</label>
+              <input type='text' name='nome' id='nome' />
+              <label>Gênero</label>
+              <input type='text' name='genero' id='genero' />
+              <label>Descrição</label>
+              <textarea name='desc' id='desc' />
+              <input type='submit' value='Cadastrar Artista' className='submit' />
+            </form>
+          </div>
         </div>
-      </div>
-    </Wrapper>
+      </Wrapper>
+    </>
   );
 };
 
