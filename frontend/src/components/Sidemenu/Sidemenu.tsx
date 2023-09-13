@@ -16,7 +16,6 @@ interface SidemenuLinks {
 
 function Sidemenu() {
   const {idUser, idPlaylist} = useParams();
-  console.log('userId', idUser);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const sidemenuLinks: SidemenuLinks[]= [{
     iconUrl: homeIcon,

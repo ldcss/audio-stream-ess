@@ -1,5 +1,4 @@
-import { Box, CircularProgress, Container, Table, Modal, Typography, Button } from "@mui/material";
-import Navbar from "../../components/Navbar/Navbar";
+import { Box, CircularProgress, Table, Modal, Typography, Button, Popover } from "@mui/material";
 import Sidemenu from "../../components/Sidemenu/Sidemenu";
 import { ContainerPlaylist, ImgDiv } from "./styles";
 import { useParams } from "react-router-dom";
@@ -19,7 +18,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import AddCircle from "@mui/icons-material/AddCircle";
 import addCircle from "../../assets/addCircle.svg"
 import api from '../../services/api';
 
@@ -65,11 +63,13 @@ const rows = [
 
 function Playlist() {
   const { idUser, idPlaylist } = useParams();
-  console.log(idUser, idPlaylist);
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+
+  const open = Boolean(anchorEl);
 
   const handleModal = () => {
     if (!openModal) {
@@ -128,8 +128,7 @@ function Playlist() {
       getPlaylist(+idUser, +idPlaylist);
   }, []);
 
-  return (<div style={{width:'99.2vw', height:'100%'}}>
-
+  return (<div style={{width:'100vw', height:'100%'}}>
     <Box style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
       <Sidemenu />
       <ContainerPlaylist>
@@ -166,7 +165,23 @@ function Playlist() {
               <img src={timeIcon} alt='time' />
               <p>Minutos</p>
               </Box>
-              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
+              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': {cursor: 'pointer'}}} 
+                onClick={(event) => {
+                  navigator.clipboard.writeText(window.location.href);
+                  setAnchorEl(event.currentTarget);
+                  setTimeout(() => setAnchorEl(null), 2000);
+                  }}>
+                  <Popover
+                    open={open}
+                    onClose={() => setAnchorEl(null)}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                    }}
+                  >
+                    <Typography sx={{ p: 2 }}>Link copiado para clipboard!</Typography>
+                  </Popover>
               <img src={shareIcon} alt='share' />
               <p>Compartilhe</p>
               </Box>
