@@ -11,6 +11,7 @@ import likeIcon from "../../assets/likeIcon.svg"
 import deslikeIcon from "../../assets/deslikeIcon.svg"
 import musicIcon from "../../assets/musicIcon.svg"
 import shareIcon from "../../assets/shareIcon.svg"
+import xIcon from "../../assets/x.svg"
 import timeIcon from "../../assets/timeIcon.svg"
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -224,24 +225,59 @@ function Playlist() {
         </Box>) : (<CircularProgress sx={{ margin: 'auto' }} />)}
       </ContainerPlaylist>
     </Box>
-    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-            Curtidas
-        </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {likedUsers.length === 0 ? "Ninguém curtiu essa playlist ainda." : 
-                <>
-                    <strong>Usuários que curtiram:</strong>
-                    <ul>
-                        {likedUsers.map(user => <li key={user.id}>{user.name}</li>)}
-                    </ul>
-                </>
-            }
-          </Typography>
-        <Button onClick={handleModal} sx={{ mt: 3 }}>Fechar</Button>
-      </Box>
-    </Modal>
+    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{
+      border: '2px solid #BC9EC1'
+    }}>
+    <Box 
+    sx={{ 
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        width: '600px',
+        bgcolor: '#BC9EC1', 
+        border: '2px solid #BC9EC1', 
+        boxShadow: 24,
+        borderRadius: 5, 
+        p: 4,
+        overflow: 'auto'
+    }}
+    >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+                Curtidas
+            </Typography>
+            <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleModal} />
+        </Box>
+        
+        {likedUsers.length === 0 ? 
+            <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
+                Ninguém curtiu essa playlist ainda.
+            </Typography> : 
+            <Table sx={{backgroundColor: '#1F2232', borderRadius: '8px', mt: 2}}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell sx={{ color: 'white' }}>#</TableCell>
+                        <TableCell sx={{color: 'white',}}>Nome</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {likedUsers.map((user, index) => (
+                        <TableRow key={user.id}>
+                            <TableCell sx={{ width: '40px', color: 'white', borderBottom:'none' }}>
+                                {index + 1}
+                            </TableCell>
+                            <TableCell sx={{ color: 'white', borderBottom:'none' }}>
+                                {user.name}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody >
+            </Table>
+        }
+    </Box>
+</Modal>
+
   </div>
   )
 }
