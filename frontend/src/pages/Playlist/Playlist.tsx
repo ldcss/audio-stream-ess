@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container, Table } from "@mui/material";
+import { Box, CircularProgress, Container, Table, Modal, Typography, Button } from "@mui/material";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidemenu from "../../components/Sidemenu/Sidemenu";
 import { ContainerPlaylist, ImgDiv } from "./styles";
@@ -9,6 +9,7 @@ import { PlaylistDto } from "../../types/playlistTypes";
 import creatorIcon from "../../assets/creatorIcon.svg"
 import dateIcon from "../../assets/dateIcon.svg"
 import likeIcon from "../../assets/likeIcon.svg"
+import deslikeIcon from "../../assets/deslikeIcon.svg"
 import musicIcon from "../../assets/musicIcon.svg"
 import shareIcon from "../../assets/shareIcon.svg"
 import timeIcon from "../../assets/timeIcon.svg"
@@ -20,6 +21,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import AddCircle from "@mui/icons-material/AddCircle";
 import addCircle from "../../assets/addCircle.svg"
+import api from '../../services/api';
 
 
 function createData(
@@ -65,11 +67,64 @@ function Playlist() {
   const { idUser, idPlaylist } = useParams();
   console.log(idUser, idPlaylist);
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
+<<<<<<< HEAD
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
+=======
+  const [openModal, setOpenModal] = useState(false);
+  const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
+  const [userHasLiked, setUserHasLiked] = useState(false);
+
+  const handleModal = () => {
+    if (!openModal) {
+      
+      fetchLikedUsers();
+    }
+    setOpenModal(!openModal);
+  };
+  
+  const fetchLikedUsers = async () => {
+    
+    if (!idPlaylist || !idUser) {
+      console.error("Playlist or User ID is missing.");
+      return;
+  }
+    try {
+        const response = await api.get(`playlist/${idPlaylist}/likes`);
+        console.log("API Response PEGA PF:", response.data.data.users);
+        const likedUsers = response.data.data.users;
+        const currentUserHasLiked = likedUsers.some((user: { id: number; }) => user.id === +idUser);
+        setLikedUsers(likedUsers);
+        setUserHasLiked(currentUserHasLiked);
+
+    } catch (error) {
+        console.error("Erro ao buscar usuários que curtiram a playlist:", error);
+    }
+  }
+  const addLike = async (idPlaylist: any, idUser: any) => {
+    try {
+      await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
+      setUserHasLiked(true);
+      console.log(`Like adicionado à playlist ${idPlaylist} pelo usuário ${idUser}`);
+    } catch (error) {
+      console.error("Erro ao adicionar like à playlist:", error);
+    }
+  }
+  const removeLike = async (idPlaylist: any, idUser: any) => {
+    try {
+      await api.delete(`playlist/${idPlaylist}/likes/${idUser}`);
+      setUserHasLiked(false);
+      console.log(`Like removido da playlist ${idPlaylist} pelo usuário ${idUser}`);
+    } catch (error) {
+      console.error("Erro ao remover like da playlist:", error);
+    }
+}
+
+>>>>>>> d6ffcc3a87ea550c607afbcab605e99278bfa1ec
   useEffect(() => {
     async function getPlaylist(id: number, idPlaylist: number) {
       PlaylistService.getPlaylistFromUser(id, idPlaylist).then((response) => {        
         setPlaylist(response.data);
+        fetchLikedUsers();
         console.log('deu certo!');
       }).catch((e) => console.log('erro: ' + e));
     }
@@ -113,8 +168,13 @@ function Playlist() {
             { <Box sx={{ display: 'flex', flexDirection: 'row', width: '95%', justifyContent: 'flex-start', paddingLeft: '100px',
           paddingBottom: '20px' }}>
               <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-                <img src={likeIcon} alt='like' />
-                <p>Curtidas</p>
+                <img 
+                src={userHasLiked ? likeIcon : deslikeIcon}
+                onClick={() => userHasLiked ? removeLike(idPlaylist, idUser) : addLike(idPlaylist, idUser)}  
+                alt='like'
+                style={{cursor: 'pointer'}} 
+                />
+                <p onClick={handleModal} style={{cursor: 'pointer'}}>Curtidas</p>
               </Box>
               <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
               <img src={musicIcon} alt='music' />
@@ -167,6 +227,24 @@ function Playlist() {
         </Box>) : (<CircularProgress sx={{ margin: 'auto' }} />)}
       </ContainerPlaylist>
     </Box>
+    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+            Curtidas
+        </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {likedUsers.length === 0 ? "Ninguém curtiu essa playlist ainda." : 
+                <>
+                    <strong>Usuários que curtiram:</strong>
+                    <ul>
+                        {likedUsers.map(user => <li key={user.id}>{user.name}</li>)}
+                    </ul>
+                </>
+            }
+          </Typography>
+        <Button onClick={handleModal} sx={{ mt: 3 }}>Fechar</Button>
+      </Box>
+    </Modal>
   </div>
   )
 }
