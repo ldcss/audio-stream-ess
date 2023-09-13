@@ -1,13 +1,24 @@
 import { loadFeature, defineFeature } from 'jest-cucumber';
-import PlaylistEntity from '../../src/entities/playlist.entity';
 import PlaylistRepository from '../../src/repositories/playlist.repository';
+import PlaylistModel from '../../src/models/playlist.model';
+import { Music } from '@prisma/client';
 
 const feature = loadFeature('tests/features/criar_categorias_playlists.feature');
 
 jest.mock('../../src/repositories/playlist.repository');
 
+interface PlaylistTestModel {
+  id: number;
+  name: string;
+  genre: string;
+  description: string;
+  ownerId: number;
+  musics?: Music[];
+  duration: number;
+}
+
 defineFeature(feature, test => {
-  let mockPlaylists: PlaylistEntity[];
+  let mockPlaylists: PlaylistTestModel[];
 
   const mockGetPlaylist = jest.fn();
   mockGetPlaylist.mockResolvedValue(true);
@@ -16,28 +27,28 @@ defineFeature(feature, test => {
   beforeEach(async () => {
     mockPlaylists = [
       {
-        id: '1',
+        id: 1,
         name: 'melhores do grime',
         genre: 'grime',
         description: '',
-        idUser: 0,
-        duration: 25,
+        ownerId: 0,
+        duration: 1800000,
       },
       {
-        id: '2',
+        id: 2,
         name: 'melhores do mpb',
         genre: 'mpb',
         description: '',
-        idUser: 0,
-        duration: 50,
+        ownerId: 0,
+        duration: 3600000,
       },
       {
-        id: '3',
+        id: 3,
         name: 'UK Drill',
         genre: 'drill',
         description: '',
-        idUser: 0,
-        duration: 120,
+        ownerId: 0,
+        duration: 7200000,
       },
     ];
   });
@@ -53,40 +64,40 @@ defineFeature(feature, test => {
         const response = mockGetPlaylist(); //playlists do user com id 0
         expect(response).toEqual([
           {
-            id: '1',
+            id: 1,
             name: 'melhores do grime',
             genre: 'grime',
             description: '',
-            idUser: 0,
-            duration: 25,
+            ownerId: 0,
+            duration: 1800000,
           },
           {
-            id: '2',
+            id: 2,
             name: 'melhores do mpb',
             genre: 'mpb',
             description: '',
-            idUser: 0,
-            duration: 50,
+            ownerId: 0,
+            duration: 3600000,
           },
           {
-            id: '3',
+            id: 3,
             name: 'UK Drill',
             genre: 'drill',
             description: '',
-            idUser: 0,
-            duration: 120,
+            ownerId: 0,
+            duration: 7200000,
           },
         ]);
       }
     });
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
-      let response = JSON.parse(responseTest);
+      const response = JSON.parse(responseTest);
       expect(mockGetPlaylist()).toMatchObject(response);
     });
 
     and(/^é retornado um status "(.*)" OK$/, responseStatusCode => {
-      let statusCode: number = 0;
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });
@@ -105,13 +116,13 @@ defineFeature(feature, test => {
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
       let playlists = mockGetPlaylist();
-      playlists = playlists.filter((playlist: PlaylistEntity) => playlist.genre === 'mpb');
-      let response = JSON.parse(responseTest);
+      playlists = playlists.filter((playlist: PlaylistModel) => playlist.genre === 'mpb');
+      const response = JSON.parse(responseTest);
       expect(playlists).toMatchObject(response);
     });
 
     and(/^é retornado um status "(.*)" OK$/, responseStatusCode => {
-      let statusCode: number = 0;
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });
@@ -126,18 +137,18 @@ defineFeature(feature, test => {
     when(/^uma requisição GET for enviada para "(.*)"$/, async url => {
       const filter = url.split('?')[1].split('=');
       expect(filter[0]).toBe('duration');
-      expect(filter[1]).toBe('30');
+      expect(filter[1]).toBe('1800000');
     });
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
       let playlists = mockGetPlaylist();
-      playlists = playlists.filter((playlist: PlaylistEntity) => playlist.duration! < 30);
-      let response = JSON.parse(responseTest);
+      playlists = playlists.filter((playlist: PlaylistTestModel) => playlist.duration! <= 1800000);
+      const response = JSON.parse(responseTest);
       expect(playlists).toMatchObject(response);
     });
 
     and(/^é retornado um status "(.*)" OK$/, responseStatusCode => {
-      let statusCode: number = 0;
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });
@@ -154,29 +165,30 @@ defineFeature(feature, test => {
       const genreFilter = filter[1].split('='); //genre=drill
       const durationFilter = parseInt(filter[2].split('=')[1], 10); //duration=120
       expect(genreFilter[1]).toBe('drill');
-      expect(durationFilter).toBe(120);
+      expect(durationFilter).toBe(7200000);
     });
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
       let playlists = mockGetPlaylist();
       playlists = playlists.filter(
-        (playlist: PlaylistEntity) => playlist.duration! <= 120 && playlist.genre === 'drill',
+        (playlist: PlaylistTestModel) =>
+          playlist.duration! <= 7200000 && playlist.genre === 'drill',
       );
-      let response = JSON.parse(responseTest);
+      const response = JSON.parse(responseTest);
       expect(playlists).toMatchObject(response);
     });
 
     and(/^é retornado um status "(.*)" OK$/, responseStatusCode => {
-      let statusCode: number = 0;
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });
   });
 
-  test('Usuário sem playlist', ({ given, when, then, and }) => {
+  test('Usuários sem playlist', ({ given, when, then, and }) => {
     given(/^que eu sou um usuário logado no sistema com o id "(.*)"$/, async id => {
       //Checagem com login
-      if (id === '1') mockGetPlaylist.mockReturnValue([]);
+      if (id === '0') mockGetPlaylist.mockReturnValue([]);
     });
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async url => {
@@ -187,13 +199,13 @@ defineFeature(feature, test => {
     });
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
-      let playlists = mockGetPlaylist();
-      let response = JSON.parse(responseTest);
+      const playlists = mockGetPlaylist();
+      const response = JSON.parse(responseTest);
       expect(playlists).toMatchObject(response);
     });
 
     and(/^é retornado um status "(.*)" OK$/, responseStatusCode => {
-      let statusCode: number = 0;
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });
