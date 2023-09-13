@@ -1,5 +1,4 @@
-import { Box, CircularProgress, Container, Table, Modal, Typography, Button } from "@mui/material";
-import Navbar from "../../components/Navbar/Navbar";
+import { Box, CircularProgress, Table, Modal, Typography, Button, Popover } from "@mui/material";
 import Sidemenu from "../../components/Sidemenu/Sidemenu";
 import { ContainerPlaylist, ImgDiv } from "./styles";
 import { useParams } from "react-router-dom";
@@ -12,6 +11,7 @@ import likeIcon from "../../assets/likeIcon.svg"
 import deslikeIcon from "../../assets/deslikeIcon.svg"
 import musicIcon from "../../assets/musicIcon.svg"
 import shareIcon from "../../assets/shareIcon.svg"
+import xIcon from "../../assets/x.svg"
 import timeIcon from "../../assets/timeIcon.svg"
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -19,7 +19,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import AddCircle from "@mui/icons-material/AddCircle";
 import addCircle from "../../assets/addCircle.svg"
 import api from '../../services/api';
 import React from "react";
@@ -48,12 +47,13 @@ const rows = [
 
 function Playlist() {
   const { idUser, idPlaylist } = useParams();
-  console.log(idUser, idPlaylist);
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+
 
   const handleModal = () => {
     if (!openModal) {
@@ -174,9 +174,25 @@ function Playlist() {
                 <img src={timeIcon} alt='time' />
                 <p>Minutos</p>
               </Box>
-              <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-                <img src={shareIcon} alt='share' />
-                <p>Compartilhe</p>
+              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': {cursor: 'pointer'}}} 
+                onClick={(event) => {
+                  navigator.clipboard.writeText(window.location.href);
+                  setAnchorEl(event.currentTarget);
+                  setTimeout(() => setAnchorEl(null), 2000);
+                  }}>
+                  <Popover
+                    open={open}
+                    onClose={() => setAnchorEl(null)}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                    }}
+                  >
+                    <Typography sx={{ p: 2 }}>Link copiado para clipboard!</Typography>
+                  </Popover>
+              <img src={shareIcon} alt='share' />
+              <p>Compartilhe</p>
               </Box>
               <Box flex={1} sx={{ backgroundColor: '#FDE8E9', borderRadius: '35px', border: '0.5px solid pink' }}></Box>
             </Box>}
@@ -217,82 +233,59 @@ function Playlist() {
         </Box>) : (<CircularProgress sx={{ margin: 'auto' }} />)}
       </ContainerPlaylist>
     </Box>
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="child-modal-title"
-      aria-describedby="child-modal-description"
+    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{
+      border: '2px solid #BC9EC1'
+    }}>
+    <Box 
+    sx={{ 
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        width: '600px',
+        bgcolor: '#BC9EC1', 
+        border: '2px solid #BC9EC1', 
+        boxShadow: 24,
+        borderRadius: 5, 
+        p: 4,
+        overflow: 'auto'
+    }}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          height: '500px',
-          bgcolor: '#BC9EC1',
-          border: 'none',
-          boxShadow: 24,
-          borderRadius: 5,
-          p: 4,
-          overflow: 'auto'
-        }}
-      >
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems:'flex-start' }}>
-            <p>Adicionar música</p>
-            <Button onClick={handleClose} sx={{ mt: 3, color: 'purple'}}>X</Button>
-          </div>
-        </Typography>
-        {likedUsers.length === 0 ?
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              Ninguém curtiu essa playlist ainda.
-            </div>
-          </Typography> :
-          <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px' }}>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: 'white' }}>#</TableCell>
-                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {likedUsers.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
-                    {user.name}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody >
-          </Table>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+                Curtidas
+            </Typography>
+            <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleModal} />
+        </Box>
+        
+        {likedUsers.length === 0 ? 
+            <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
+                Ninguém curtiu essa playlist ainda.
+            </Typography> : 
+            <Table sx={{backgroundColor: '#1F2232', borderRadius: '8px', mt: 2}}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell sx={{ color: 'white' }}>#</TableCell>
+                        <TableCell sx={{color: 'white',}}>Nome</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {likedUsers.map((user, index) => (
+                        <TableRow key={user.id}>
+                            <TableCell sx={{ width: '40px', color: 'white', borderBottom:'none' }}>
+                                {index + 1}
+                            </TableCell>
+                            <TableCell sx={{ color: 'white', borderBottom:'none' }}>
+                                {user.name}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody >
+            </Table>
         }
-      </Box>
-    </Modal>
+    </Box>
+</Modal>
 
-    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-      <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Curtidas
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          {likedUsers.length === 0 ? "Ninguém curtiu essa playlist ainda." :
-            <>
-              <strong>Usuários que curtiram:</strong>
-              <ul>
-                {likedUsers.map(user => <li key={user.id}>{user.name}</li>)}
-              </ul>
-            </>
-          }
-        </Typography>
-        <Button onClick={handleModal} sx={{ mt: 3 }}>Fechar</Button>
-      </Box>
-    </Modal>
   </div>
   )
 }
