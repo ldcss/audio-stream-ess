@@ -10,6 +10,6 @@ export const ContainerPlaylist = styled.div`
 
 export const DividerFilter = styled.div`
   margin-top: 10px;
-  border: 2px solid #1F2232;
+  border: 1px solid #1F2232;
   border-radius: 5px;
 `;

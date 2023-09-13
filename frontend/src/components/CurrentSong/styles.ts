@@ -29,6 +29,9 @@ export const Wrapper = styled.div`
         object-fit: cover;
         border-radius: 4px;
         width: 5rem;
+        height: 5rem;
+        margin-top: 0.5rem;
+        margin-left: -1rem;
       }
 
       .info {
@@ -36,7 +39,7 @@ export const Wrapper = styled.div`
         flex-direction: column;
         margin: 0.5rem 0.5rem 0.5rem 0.5rem !important;
         * {
-          font-size: 0.75rem;
+          font-size: 0.85rem;
           float: left;
           align-self: flex-start;
           color: #fff5f5 !important;
@@ -46,12 +49,16 @@ export const Wrapper = styled.div`
           margin-top: 1rem !important;
           width: 6rem;
         }
+        h5 {
+          margin-top: -0.75rem;
+          font-size: 0.75rem;
+        }
       }
     }
 
     .center {
       margin: auto !important;
-      margin-top: 1rem !important;
+      margin-top: 1.7rem !important;
       color: #fff5f5 !important;
 
       * {
@@ -79,9 +86,12 @@ export const Wrapper = styled.div`
       }
 
       hr {
-        margin-top: 2.5rem !important;
-        margin-left: -3.5rem !important;
+        margin-top: 3.3rem !important;
+        margin-left: -6rem !important;
         width: 6rem;
+      }
+      svg { 
+        margin-top:2.6rem!important;
       }
     }
   }
