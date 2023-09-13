@@ -86,11 +86,11 @@ class PlaylistRepository {
     return playlistModel;
   }
 
-  public async getPlaylistById(idPlaylist: number): Promise<PlaylistModel[] | null> {
+  public async getPlaylistById(idPlaylist: number): Promise<PlaylistModel[] | null | any> {
     const playlist = await this.db.playlist.findMany({
-      include: { music: { include: { music: true } } },
       where: { id: idPlaylist },
-    });
+      include: { music: { include: { music: { include: { album: true } } } }
+    }});
 
     if (!playlist) {
       return null;
@@ -102,7 +102,7 @@ class PlaylistRepository {
         musics.push(music.music);
         totalDuration += music.music.duration.getTime();
       });
-      return { ...playlist, music: musics, duration: totalDuration };
+      return musics;
     });
     return playlistWithMusic;
   }

@@ -38,7 +38,8 @@ export class PlaylistService {
   }
   static async getPlaylistById(idPlaylist: number): Promise<AxiosResponse<PlaylistDto>> {
     const response = await api.get(`/playlist/${idPlaylist}`, {validateStatus: (status => [200].includes(status))});
-    return response.data;
+    console.log('surreal', response.data.data)
+    return response.data.data;
   }
 
 
