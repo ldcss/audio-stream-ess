@@ -29,6 +29,7 @@ export const Wrapper = styled.div`
         object-fit: cover;
         border-radius: 4px;
         width: 5rem;
+        height: 5rem;
       }
 
       .info {
@@ -40,6 +41,7 @@ export const Wrapper = styled.div`
           float: left;
           align-self: flex-start;
           color: #fff5f5 !important;
+          margin: 0;
         }
 
         hr {
