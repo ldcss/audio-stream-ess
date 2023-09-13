@@ -65,20 +65,35 @@ function Playlist() {
   const { idUser, idPlaylist } = useParams();
   console.log(idUser, idPlaylist);
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
+  const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   useEffect(() => {
     async function getPlaylist(id: number, idPlaylist: number) {
-      PlaylistService.getPlaylistFromUser(id, idPlaylist).then((response) => {
+      PlaylistService.getPlaylistFromUser(id, idPlaylist).then((response) => {        
         setPlaylist(response.data);
         console.log('deu certo!');
       }).catch((e) => console.log('erro: ' + e));
     }
+
+    async function getPlaylistById(idPlaylist: number) {
+      PlaylistService.getPlaylistById(idPlaylist).then((response) => {        
+        setPlaylistById(response.data);
+        console.log('deu certo!');
+      }).catch((e) => console.log('erro: ' + e));
+    }
+
+
     if (idUser && idPlaylist)
       getPlaylist(+idUser, +idPlaylist);
+    if(idPlaylist){
+      getPlaylistById(+idPlaylist)
+      console.log('KKKKKKKKKKKKKKKKKKKKKK',playlistById)
+    }
+
   }, []);
 
-  return (<div style={{width:'99.2vw', height:'100%'}}>
+  return (<div style={{width:'100vw', height:'100%', minHeight:'100vh'}}>
 
-    <Box style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+    <Box style={{ display: 'flex', flexDirection: 'row', height: '100%',  minHeight:'100vh' }}>
       <Sidemenu />
       <ContainerPlaylist>
         {playlist ? (<Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -103,7 +118,7 @@ function Playlist() {
               </Box>
               <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
               <img src={musicIcon} alt='music' />
-              <p>Musicas</p>
+              <p>Músicas</p>
               </Box>
               <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
               <img src={timeIcon} alt='time' />
@@ -128,15 +143,15 @@ function Playlist() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {playlistById!.musics.map((row) => (
                     <TableRow
                     key={row.name}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row" align="center" sx={{color: 'white'}}>{row.calories}</TableCell>
-                      <TableCell align="center" sx={{color: 'white'}}>{row.fat}</TableCell>
-                      <TableCell align="center" sx={{color: 'white'}}>{row.protein}</TableCell>
-                      <TableCell align="center" sx={{color: 'white'}}>{row.carbs}</TableCell>
+                      <TableCell component="th" scope="row" align="center" sx={{color: 'white'}}>{row.name}</TableCell>
+                      <TableCell align="center" sx={{color: 'white'}}></TableCell>
+                      <TableCell align="center" sx={{color: 'white'}}></TableCell>
+                      <TableCell align="center" sx={{color: 'white'}}></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
