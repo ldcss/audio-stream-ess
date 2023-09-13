@@ -8,38 +8,38 @@ When eu faço uma requisição GET "/api/playlist/1/curtidas" com o corpo
 """
 [
     {
-        "id": "1",
+        "id": 1,
         "name": "melhores do grime",
         "genre": "grime",
         "description": "",
-        "idUser": 0,
+        "ownerId": 2,
+        "duration": 0,
         "likes": [
             {"name": "lucas"},
             {"name": "marcelo"}
-        ],
-        "createdBy": "marcelo"
+        ]
     },
     {
-        "id": "2",
+        "id": 2,
         "name": "melhores do mpb",
         "genre": "mpb",
         "description": "",
-        "idUser": 0,
+        "ownerId": 2,
+        "duration": 0,
         "likes": [
             {"name": "lucas"},
             {"name": "enderson"},
             {"name": "pedro"}
-        ],
-        "createdBy": "lucas"
+        ]
     },
     {
-        "id": "3",
+        "id": 3,
         "name": "UK Drill",
         "genre": "drill",
         "description": "",
-        "idUser": 0,
-        "likes": [],
-        "createdBy": "enderson"
+        "ownerId": 2,
+        "duration": 0,
+        "likes": []
     }
 ]
 """
@@ -59,43 +59,43 @@ When eu faço uma requisição GET "/api/playlist/1/createdBy" com o corpo
 """
 [
     {
-        "id": "1",
+        "id": 1,
         "name": "melhores do grime",
         "genre": "grime",
         "description": "",
-        "idUser": 0,
+        "ownerId": 2,
+        "duration": 0,
         "likes": [
             {"name": "lucas"},
             {"name": "marcelo"}
-        ],
-        "createdBy": "marcelo"
+        ]
     },
     {
-        "id": "2",
+        "id": 2,
         "name": "melhores do mpb",
         "genre": "mpb",
         "description": "",
-        "idUser": 0,
+        "ownerId": 2,
+        "duration": 0,
         "likes": [
             {"name": "lucas"},
             {"name": "enderson"},
             {"name": "pedro"}
-        ],
-        "createdBy": "lucas"
+        ]
     },
     {
-        "id": "3",
+        "id": 3,
         "name": "UK Drill",
         "genre": "drill",
         "description": "",
-        "idUser": 0,
-        "likes": [],
-        "createdBy": "enderson"
+        "ownerId": 2,
+        "duration": 0,
+        "likes": []
     }
 ]
 
 """
-Then é retornado um JSON com corpo "marcelo"
+Then é retornado um JSON com corpo "2"
 And é retornado um status "200" OK
 
 
@@ -105,38 +105,38 @@ When eu faço uma requisição GET "/api/playlist/1/curtidas" com o corpo
 """
 [
     {
-        "id": "1",
+        "id": 1,
         "name": "melhores do grime",
         "genre": "grime",
         "description": "",
-        "idUser": 0,
+        "ownerId": 2,
+        "duration": 0,
         "likes": [
             {"name": "lucas"},
             {"name": "marcelo"}
-        ],
-        "createdBy": "marcelo"
+        ]
     },
     {
-        "id": "2",
+        "id": 2,
         "name": "melhores do mpb",
         "genre": "mpb",
         "description": "",
-        "idUser": 0,
+        "ownerId": 2,
+        "duration": 0,
         "likes": [
             {"name": "lucas"},
             {"name": "enderson"},
             {"name": "pedro"}
-        ],
-        "createdBy": "lucas"
+        ]
     },
     {
-        "id": "3",
+        "id": 3,
         "name": "UK Drill",
         "genre": "drill",
         "description": "",
-        "idUser": 0,
-        "likes": [],
-        "createdBy": "enderson"
+        "ownerId": 2,
+        "duration": 0,
+        "likes": []
     }
 ]
 """
