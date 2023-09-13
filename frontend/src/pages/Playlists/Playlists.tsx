@@ -12,7 +12,7 @@ import {
 import Navbar from '../../components/Navbar/Navbar';
 import Sidemenu from '../../components/Sidemenu/Sidemenu';
 import { ContainerPlaylist, DividerFilter } from './styles';
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlaylistService } from '../../services/PlaylistService';
 import { PlaylistDto } from '../../types/playlistTypes';
 import { Link } from 'react-router-dom';
