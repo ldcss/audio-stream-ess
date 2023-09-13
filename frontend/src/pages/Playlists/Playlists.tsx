@@ -4,8 +4,10 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  ScopedCssBaseline,
   Select,
   SelectChangeEvent,
+  Typography,
 } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar';
 import Sidemenu from '../../components/Sidemenu/Sidemenu';
@@ -95,10 +97,12 @@ function Playlists(): JSX.Element {
             {playlists.map(playlist => {
               return (
               <Link to={`/user/${playlist.ownerId}/playlist/${playlist.id}`}>
-                <Box sx={{height: '200px', width: '160px'}}>
-                  <Box sx={{height: '160px', width: '160px', backgroundColor: '#1F2232'}} />
-                  <span>{playlist.name}</span>
+                <ScopedCssBaseline>
+                <Box sx={{height: '200px', width: '160px', backgroundColor: '#BC9EC1'}}>
+                  <Box sx={{height: '160px', width: '160px', backgroundColor: '#1F2232', borderRadius: '35px'}} />
+                  <Typography>{playlist.name}</Typography>
                 </Box>
+                </ScopedCssBaseline>
               </Link>
               )
             })}
