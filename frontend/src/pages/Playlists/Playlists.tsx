@@ -1,6 +1,4 @@
 import {
-  Box,
-  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -30,20 +28,15 @@ function Playlists(): JSX.Element {
   useEffect(() => {
     PlaylistService.getAllPlaylistsWithMusics(genre, duration).then((response) => {
       setPlaylists(response.data);
-    }).catch((e) => console.log('error', e));
+    }).catch((e) => alert(`error:${e} when load playlists`));
   },[]);
 
   useEffect(() => {
     console.log(genre, duration);
     PlaylistService.getAllPlaylistsWithMusics(genre, duration).then((response) => {
-      console.log('responsedata', response.data)
       setPlaylists(response.data);
-    }).catch((e) => console.log('error', e));
+    }).catch((e) => alert(`error:${e} when load playlists`));
   }, [duration, genre]);
-
-  useEffect(() => {
-    console.log('playlists', playlists);
-  }, [])
 
   return (
     <Container>
