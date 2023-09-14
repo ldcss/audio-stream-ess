@@ -1,6 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { Result, SuccessResult } from '../utils/result';
 import MusicService from '../services/music.service';
+import MusicEntity from '../entities/artist.entity';
+import MusicRepository from '../repositories/music.repository';
+import MusicModel from '../models/music.model';
 
 class MusicController {
   private prefix = '/music';

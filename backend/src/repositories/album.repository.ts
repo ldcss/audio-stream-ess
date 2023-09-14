@@ -11,7 +11,6 @@ class AlbumRepository{
   }
 
   async getAlbuns(): Promise<Album[]>{
-    console.log("chegou")
     return this.db.album.findMany()
   }
 
