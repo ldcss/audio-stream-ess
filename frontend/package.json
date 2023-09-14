@@ -27,6 +27,7 @@
     "mui-datatables": "^4.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.46.1",
     "react-router-dom": "^6.15.0",
     "styled-components": "^6.0.7"
   },
@@ -41,7 +42,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "cypress": "^12.15.0",
-    "esbuild": "^0.18.8",		
+    "esbuild": "^0.18.8",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",

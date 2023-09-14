@@ -7,6 +7,7 @@ import radioIcon from '../../assets/radio.svg'
 import libraryIcon from '../../assets/library.svg'
 import AlbumTest from '../../assets/AlbumTest.svg'
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface SidemenuLinks {
   iconUrl?: string;
@@ -18,6 +19,9 @@ interface SidemenuLinks {
 function Sidemenu() {
   const {idUser, idPlaylist} = useParams();
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
+
+  const navigate = useNavigate()
+
   const sidemenuLinks: SidemenuLinks[]= [{
     iconUrl: homeIcon,
     title: 'Home',
@@ -32,7 +36,13 @@ function Sidemenu() {
     iconUrl: libraryIcon,
     title: 'Biblioteca',
     href: '/library',
-  },]
+  },
+  {
+    iconUrl: libraryIcon,
+    title: 'Albuns',
+    href: '/albuns',
+  },
+]
   playlists.map(playlist => {
     sidemenuLinks.push({iconUrl: AlbumTest, title: playlist.name, href: `/user/1/playlist/${playlist.id}`})
     return playlist;
@@ -69,6 +79,18 @@ function Sidemenu() {
             <img src={element.iconUrl} alt={`${element.title}` }/> 
             <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
           </Box>
+          </>)
+        }
+        if(element.title === 'Albuns') {
+          return (<>
+          <Box sx={{borderTop: 'none', borderRadius: '5px',paddingBottom:'0px', cursor: 'pointer'}} />
+          <div onClick={()=> navigate('/albuns')} >
+            <Box
+            sx={{display: 'flex', flexDirection: 'row', columnGap: '25px', rowGap: '200px', padding: '10px !important',paddingBottom:'15px !important'}}> 
+              <img src={element.iconUrl} alt={`${element.title}` }/> 
+              <Typography sx={{fontSize: '0.8rem'}} color={"whitesmoke"}>{element.title}</Typography>
+            </Box>
+          </div>
           </>)
         }
 

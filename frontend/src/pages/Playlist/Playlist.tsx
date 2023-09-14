@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Table, Modal, Typography, Button, Popover } from "@mui/material";
+import { Box, CircularProgress, Table, Modal, Typography, Popover } from "@mui/material";
 import Sidemenu from "../../components/Sidemenu/Sidemenu";
 import { BoxLikes, ContainerPlaylist, CustomTableCell, ImgDiv, IndexTableCell, NameTableCell, StyledBox, StyledImg, StyledModal, StyledTable, StyledTypography, WhiteTableCell } from "./styles";
 import { useParams } from "react-router-dom";
@@ -25,16 +25,6 @@ import api from '../../services/api';
 import React from "react";
 
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
 function Playlist() {
   const { idUser, idPlaylist } = useParams();
   const [artist, setArtist] = useState<string>();
@@ -47,6 +37,7 @@ function Playlist() {
   const [allMusics, setAllMusics] = useState<Array<{ id: number; name: string; }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  type LikeAction = "add" | "remove" | "fetch";
 
   function msToHMS(ms: number) {
     let seconds = ms / 1000;
@@ -64,46 +55,36 @@ function Playlist() {
   const handleModal = () => {
     if (!openModal) {
 
-      fetchLikedUsers();
+      manageLikes("fetch");
     }
     setOpenModal(!openModal);
   };
 
-
-  const fetchLikedUsers = async () => {
-
-    if (!idPlaylist || !idUser) {
-      console.error("Playlist or User ID is missing.");
-      return;
-    }
+  async function manageLikes(action: LikeAction) {
     try {
-      const response = await api.get(`playlist/${idPlaylist}/likes`);
-      const likedUsers = response.data.data.users;
-      const currentUserHasLiked = likedUsers.some((user: { id: number; }) => user.id === +idUser);
-      setLikedUsers(likedUsers);
-      setUserHasLiked(currentUserHasLiked);
-
+      switch (action) {
+        case "add":
+          await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
+          setUserHasLiked(true);
+          break;
+        case "remove":
+          await api.delete(`playlist/${idPlaylist}/likes/${idUser}`);
+          setUserHasLiked(false);
+          break;
+        case "fetch":
+          if (!idPlaylist || !idUser) {
+            console.error("Playlist or User ID is missing.");
+            return;
+          }
+          const response = await api.get(`playlist/${idPlaylist}/likes`);
+          const likedUsers = response.data.data.users;
+          const currentUserHasLiked = likedUsers.some((user: { id: number; }) => user.id === +idUser);
+          setLikedUsers(likedUsers);
+          setUserHasLiked(currentUserHasLiked);
+          break;
+      }
     } catch (error) {
-      console.error("Erro ao buscar usuários que curtiram a playlist:", error);
-    }
-  }
-
-
-  const addLike = async (idPlaylist: any, idUser: any) => {
-    try {
-      await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
-      setUserHasLiked(true);
-    } catch (error) {
-      console.error("Erro ao adicionar like à playlist:", error);
-    }
-  }
-  const removeLike = async (idPlaylist: any, idUser: any) => {
-    try {
-      await api.delete(`playlist/${idPlaylist}/likes/${idUser}`);
-      setUserHasLiked(false);
-      console.log(`Like removido da playlist ${idPlaylist} pelo usuário ${idUser}`);
-    } catch (error) {
-      console.error("Erro ao remover like da playlist:", error);
+      console.error("Erro na gestão dos likes:", error);
     }
   }
 
@@ -139,7 +120,7 @@ function Playlist() {
     async function getPlaylist(id: number, idPlaylist: number) {
       PlaylistService.getPlaylistFromUser(id, idPlaylist).then((response) => {
         setPlaylist(response.data);
-        fetchLikedUsers();
+        manageLikes("fetch");
       }).catch((e) => console.log('erro: ' + e));
     }
 
@@ -257,11 +238,10 @@ function Playlist() {
               paddingBottom: '20px'
             }}>
               <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-                <img
+                <StyledImg
                   src={userHasLiked ? likeIcon : deslikeIcon}
-                  onClick={() => userHasLiked ? removeLike(idPlaylist, idUser) : addLike(idPlaylist, idUser)}
+                  onClick={() => manageLikes(userHasLiked ? "remove" : "add")}
                   alt='like'
-                  style={{ cursor: 'pointer' }}
                 />
                 <p onClick={handleModal} style={{ cursor: 'pointer' }}>Curtidas</p>
               </Box>
