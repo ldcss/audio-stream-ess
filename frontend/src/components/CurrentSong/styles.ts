@@ -41,11 +41,11 @@ export const Wrapper = styled.div`
           float: left;
           align-self: flex-start;
           color: #fff5f5 !important;
-          margin: 0;
+          margin-bottom: 0.5rem;
         }
 
         hr {
-          margin-top: 1rem !important;
+          margin-top: 0 !important;
           width: 6rem;
         }
         h5 {
