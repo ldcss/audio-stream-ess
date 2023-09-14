@@ -1,11 +1,12 @@
-import { Box, CircularProgress, Table, Modal, Typography, Button, Popover } from "@mui/material";
+import { Box, CircularProgress, Table, Modal, Typography, Popover } from "@mui/material";
 import Sidemenu from "../../components/Sidemenu/Sidemenu";
-import { ContainerPlaylist, ImgDiv } from "./styles";
+import { BoxLikes, ContainerPlaylist, CustomTableCell, ImgDiv, IndexTableCell, NameTableCell, StyledBox, StyledImg, StyledModal, StyledTable, StyledTypography, WhiteTableCell } from "./styles";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlaylistService } from "../../services/PlaylistService";
 import { PlaylistDto } from "../../types/playlistTypes";
 import creatorIcon from "../../assets/creatorIcon.svg"
+import trashIcon from "../../assets/trash.svg"
 import dateIcon from "../../assets/dateIcon.svg"
 import likeIcon from "../../assets/likeIcon.svg"
 import deslikeIcon from "../../assets/deslikeIcon.svg"
@@ -24,52 +25,18 @@ import api from '../../services/api';
 import React from "react";
 
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-];
-
 function Playlist() {
   const { idUser, idPlaylist } = useParams();
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
-
+  const [musicModel, setMusicModel] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string }>>([])
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
+  const [musicas, SetMusicas] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string; }>>([]);
+  const [allMusics, setAllMusics] = useState<Array<{ id: number; name: string; }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  type LikeAction = "add" | "remove" | "fetch";
 
   function msToHMS(ms: number) {
     let seconds = ms / 1000;
@@ -87,48 +54,59 @@ function Playlist() {
   const handleModal = () => {
     if (!openModal) {
 
-      fetchLikedUsers();
+      manageLikes("fetch");
     }
     setOpenModal(!openModal);
   };
 
-
-  const fetchLikedUsers = async () => {
-
-    if (!idPlaylist || !idUser) {
-      console.error("Playlist or User ID is missing.");
-      return;
-    }
+  async function manageLikes(action: LikeAction) {
     try {
-      const response = await api.get(`playlist/${idPlaylist}/likes`);
-      console.log("API Response PEGA PF:", response.data.data.users);
-      const likedUsers = response.data.data.users;
-      const currentUserHasLiked = likedUsers.some((user: { id: number; }) => user.id === +idUser);
-      setLikedUsers(likedUsers);
-      setUserHasLiked(currentUserHasLiked);
-
+      switch (action) {
+        case "add":
+          await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
+          setUserHasLiked(true);
+          break;
+        case "remove":
+          await api.delete(`playlist/${idPlaylist}/likes/${idUser}`);
+          setUserHasLiked(false);
+          break;
+        case "fetch":
+          if (!idPlaylist || !idUser) {
+            console.error("Playlist or User ID is missing.");
+            return;
+          }
+          const response = await api.get(`playlist/${idPlaylist}/likes`);
+          const likedUsers = response.data.data.users;
+          const currentUserHasLiked = likedUsers.some((user: { id: number; }) => user.id === +idUser);
+          setLikedUsers(likedUsers);
+          setUserHasLiked(currentUserHasLiked);
+          break;
+      }
     } catch (error) {
-      console.error("Erro ao buscar usuários que curtiram a playlist:", error);
+      console.error("Erro na gestão dos likes:", error);
     }
   }
-  const addLike = async (idPlaylist: any, idUser: any) => {
+
+  const removeMusicFromPlaylist = async (idMusica: any) => {
     try {
-      await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
-      setUserHasLiked(true);
-      console.log(`Like adicionado à playlist ${idPlaylist} pelo usuário ${idUser}`);
-    } catch (error) {
-      console.error("Erro ao adicionar like à playlist:", error);
-    }
-  }
-  const removeLike = async (idPlaylist: any, idUser: any) => {
-    try {
-      await api.delete(`playlist/${idPlaylist}/likes/${idUser}`);
+      await api.delete(`playlist/${idPlaylist}/musica/${idMusica}`);
       setUserHasLiked(false);
-      console.log(`Like removido da playlist ${idPlaylist} pelo usuário ${idUser}`);
+      window.location.reload();
     } catch (error) {
-      console.error("Erro ao remover like da playlist:", error);
+      console.error("Erro ao remover música da playlist:", error);
     }
   }
+
+  const addMusicToPlaylist = async (idMusica: any) => {
+    try {
+      await api.post(`playlist/${idPlaylist}/musica/${idMusica}`);
+      setUserHasLiked(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao remover música da playlist:", error);
+    }
+  }
+  
   const [openOther, setOpenOther] = React.useState(false);
   const handleOpen = () => {
     setOpenOther(true);
@@ -141,24 +119,83 @@ function Playlist() {
     async function getPlaylist(id: number, idPlaylist: number) {
       PlaylistService.getPlaylistFromUser(id, idPlaylist).then((response) => {
         setPlaylist(response.data);
-        fetchLikedUsers();
-        console.log('deu certo!');
+        manageLikes("fetch");
       }).catch((e) => console.log('erro: ' + e));
     }
 
     async function getPlaylistById(idPlaylist: number) {
+      try {
+        const respostaFinal: { id: number; name: string; artist: number; album: string; duration: string; }[] = [];
+        const result = await api.get(`playlist/${idPlaylist}`);
+        const res = result.data.data[0];
+
+        res.forEach((element: {
+          id: number,
+          name: string,
+          description: string,
+          duration: string,
+          albumId: number,
+          createdAt: string,
+          album: {
+            id: number,
+            name: string,
+            description: string,
+            createdAt: string,
+            artistId: number,
+            released: boolean
+          }
+        }): any => {
+          respostaFinal.push({
+            id: element.id,
+            name: element.name,
+            artist: element.album.artistId,
+            album: element.album.name,
+            duration: element.duration
+          })
+
+          SetMusicas(respostaFinal)
+        });
+      } catch (error) {
+        console.error("Erro ao dar fetch músicas da playlist", error);
+      }
+
       PlaylistService.getPlaylistById(idPlaylist).then((response) => {
         setPlaylistById(response.data);
         console.log('deu certo!');
       }).catch((e) => console.log('erro: ' + e));
     }
 
+    async function fetchMusic() {
+
+      try {
+        const respostaFinal: { id: number; name: string; }[] = [];
+        const response = await api.get(`music`);
+        const res = response.data.data;
+        res.forEach((element: {
+          id: number,
+          name: string,
+          description: string,
+          duration: string,
+          albumId: number,
+          createdAt: string
+        }): any => {
+          respostaFinal.push({
+            id: element.id,
+            name: element.name
+          })
+        });
+        setAllMusics(respostaFinal)
+
+      } catch (error) {
+        console.error("Erro solicitar músicas.", error);
+      }
+    }
 
     if (idUser && idPlaylist)
       getPlaylist(+idUser, +idPlaylist);
     if (idPlaylist) {
       getPlaylistById(+idPlaylist)
-      console.log('KKKKKKKKKKKKKKKKKKKKKK', playlistById)
+      fetchMusic()
     }
 
   }, []);
@@ -187,11 +224,10 @@ function Playlist() {
               paddingBottom: '20px'
             }}>
               <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-                <img
+                <StyledImg
                   src={userHasLiked ? likeIcon : deslikeIcon}
-                  onClick={() => userHasLiked ? removeLike(idPlaylist, idUser) : addLike(idPlaylist, idUser)}
+                  onClick={() => manageLikes(userHasLiked ? "remove" : "add")}
                   alt='like'
-                  style={{ cursor: 'pointer' }}
                 />
                 <p onClick={handleModal} style={{ cursor: 'pointer' }}>Curtidas</p>
               </Box>
@@ -227,7 +263,7 @@ function Playlist() {
             </Box>}
 
 
-            <TableContainer component={Paper} sx={{ backgroundColor: "#BC9EC1", paddingBottom: "100px", width: '100%', overflowY:'scroll', height:'500px' }}>
+            <TableContainer component={Paper} sx={{ backgroundColor: "#BC9EC1", paddingBottom: "100px", width: '100%', overflowY: 'scroll', height: '500px' }}>
               <Table sx={{ minWidth: 200, backgroundColor: '#1E1E1E', marginLeft: '20px', width: '97%', borderRadius: '15px' }} aria-label="simple table">
                 <TableHead>
                   <TableRow sx={{ marginLeft: '10px' }}>
@@ -235,18 +271,20 @@ function Playlist() {
                     <TableCell align="center" sx={{ color: 'white' }}>Artista</TableCell>
                     <TableCell align="center" sx={{ color: 'white' }}>Álbum</TableCell>
                     <TableCell align="center" sx={{ color: 'white' }}>Duração</TableCell>
+                    <TableCell align="center" sx={{ color: 'white' }}>Remover</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {playlistById?.musics.map((row) => (
+                  {musicas.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.artist}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.album}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.duration}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}><a role="button" style={{ cursor: "pointer" }} onClick={() => removeMusicFromPlaylist(row.id)}><img src={trashIcon} style={{ height: "30px" }} alt='like' /></a></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -288,26 +326,20 @@ function Playlist() {
           <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleClose} />
         </Box>
 
-        {likedUsers.length === 0 ?
-          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
-            Ninguém curtiu essa playlist ainda.
-          </Typography> :
+        {
           <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: 'white' }}>#</TableCell>
-                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
+                <TableCell align="center" sx={{ color: 'white' }}>------ Lista de músicas ------</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {likedUsers.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
-                    {user.name}
-                  </TableCell>
+              {allMusics.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}><a role="button" style={{ cursor: "pointer" }} onClick={() => addMusicToPlaylist(row.id)}>{row.name}</a></TableCell>
                 </TableRow>
               ))}
             </TableBody >
@@ -317,60 +349,39 @@ function Playlist() {
     </Modal>
 
 
-    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{
-      border: '2px solid #BC9EC1'
-    }}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          bgcolor: '#BC9EC1',
-          border: '2px solid #BC9EC1',
-          boxShadow: 24,
-          borderRadius: 5,
-          p: 4,
-          overflow: 'auto'
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <StyledModal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+      <StyledBox>
+        <BoxLikes>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Curtidas
           </Typography>
-          <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleModal} />
-        </Box>
-
+          <StyledImg src={xIcon} alt="Fechar"  onClick={handleModal} />
+        </BoxLikes>
         {likedUsers.length === 0 ?
-          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
-            Ninguém curtiu essa playlist ainda.
-          </Typography> :
-          <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
+          <StyledTypography id="modal-modal-description">
+          Ninguém curtiu essa playlist ainda.
+          </StyledTypography>:
+          <StyledTable >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: 'white' }}>#</TableCell>
-                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
+              <WhiteTableCell>#</WhiteTableCell>
+              <CustomTableCell>Nome</CustomTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {likedUsers.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
-                    {user.name}
-                  </TableCell>
-                </TableRow>
+               <TableRow key={user.id}>
+               <IndexTableCell>{index + 1}</IndexTableCell>
+               <NameTableCell>{user.name}</NameTableCell>
+           </TableRow>          
               ))}
-            </TableBody >
-          </Table>
+            </TableBody>
+          </StyledTable>
         }
-      </Box>
-    </Modal>
+      </StyledBox>
+    </StyledModal>
 
-  </div>
+  </div >
   )
 }
 
