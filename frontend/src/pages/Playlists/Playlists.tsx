@@ -38,6 +38,19 @@ function Playlists(): JSX.Element {
     }).catch((e) => alert(`error:${e} when load playlists`));
   }, [duration, genre]);
 
+  const AllPlaylists = playlists.map(playlist => {
+    return (
+    <Link to={`/user/${playlist.ownerId}/playlist/${playlist.id}`}>
+      <ScopedCssBaseline>
+      <BoxPlaylist>
+        <ImgPlaylistDiv />
+        <Typography>{playlist.name}</Typography>
+      </BoxPlaylist>
+      </ScopedCssBaseline>
+    </Link>
+    )
+  })
+
   return (
     <Container>
       <Navbar />
@@ -68,18 +81,7 @@ function Playlists(): JSX.Element {
           </FlexRowSelects>
           <DividerFilter />
           <Grid display={'flex'} flexDirection={'row'} flexWrap={'wrap'} item lg={4} md={4} mt={'20px'} gap={'35px'}>
-            {playlists.map(playlist => {
-              return (
-              <Link to={`/user/${playlist.ownerId}/playlist/${playlist.id}`}>
-                <ScopedCssBaseline>
-                <BoxPlaylist>
-                  <ImgPlaylistDiv />
-                  <Typography>{playlist.name}</Typography>
-                </BoxPlaylist>
-                </ScopedCssBaseline>
-              </Link>
-              )
-            })}
+            {AllPlaylists}
           </Grid>
         </ContainerPlaylist>
       </Wrapper>
