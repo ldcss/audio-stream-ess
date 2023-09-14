@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable max-len */
 import { loadFeature, defineFeature } from 'jest-cucumber';
 import ArtistRepository from '../../src/repositories/artist.repository';
 import ArtistEntity from '../../src/entities/artist.entity';
@@ -23,12 +25,13 @@ defineFeature(feature, test => {
 
   beforeEach(async () => {
     mockArtist = {
-      id: '',
+      id: 0,
       name: '',
       description: '',
       genre: '',
-      login: 'mocklogin',
-      pass: 'mockpassword',
+      email: 'mocklogin',
+      password: 'mockpassword',
+      type: 1,
     };
   });
 
