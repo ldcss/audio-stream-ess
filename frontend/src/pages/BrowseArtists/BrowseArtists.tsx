@@ -157,8 +157,7 @@ const BrowseArtists = () => {
               <TableRow className='headRow'>
                 <TableCell className='cell'>Nome do artista</TableCell>
                 <TableCell className='cell'>Descrição do artista</TableCell>
-                <TableCell className='cell'>Álbuns</TableCell>
-                <TableCell className='cell'>Músicas</TableCell>
+                <TableCell className='cell'>Gênero</TableCell>
                 <TableCell className='cell'></TableCell>
                 <TableCell className='cell'></TableCell>
               </TableRow>
@@ -183,8 +182,7 @@ const BrowseArtists = () => {
                     {row.name}
                   </TableCell>
                   <TableCell className='cell'>{formatDescription(row.description)}</TableCell>
-                  <TableCell className='cell'>{row.albuns ?? 5}</TableCell>
-                  <TableCell className='cell'>{row.songs ?? 47} </TableCell>
+                  <TableCell className='cell'>{row.genre}</TableCell>
                   <TableCell className='cell'>
                     <div onClick={() => editArtist(index)}>
                       <Settings
