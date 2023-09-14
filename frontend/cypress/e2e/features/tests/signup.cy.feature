@@ -1,7 +1,7 @@
-describe('template spec', () => {
+describe('Usuário adicionando música e deletando', () => {
   it('Tenta se cadastrar', () => {
     
-    cy.visit('http://127.0.0.1:5173/signup');
+    cy.visit('localhost:5173/user/3/playlist/4');
     
     cy.get("#email_input_field").type("someone2@example.com");
     
@@ -18,3 +18,4 @@ describe('template spec', () => {
     cy.contains('Sucesso! Artista criado!')
   });
 });
+

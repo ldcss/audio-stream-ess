@@ -12,6 +12,7 @@ const request = supertest(app);
 
 defineFeature(feature, test => {
   let mockPlaylists: PlaylistEntity;
+  let mockPlaylists1: PlaylistEntity;
 
   const mockGetPlaylist = jest.fn();
   mockGetPlaylist.mockResolvedValue(true);
@@ -27,14 +28,75 @@ defineFeature(feature, test => {
   // Antes de cada test ser rodado, ele reseta o mockRepository
   beforeEach(async () => {
     mockPlaylists = {
-      id: '1',
-      name: 'melhores do grime',
-      genre: 'grime',
-      description: '',
-      idUser: 0,
-      duration: 28,
-      qtdMusicas: 3,
-      id_musica: [1, 2, 3],
+      id: 1,
+      name: 'Melhores do grimes',
+      genre: 'grimes',
+      description: 'loucura',
+      ownerId: 1,
+      createdAt: '2019-01-16 22:03:12',
+      updatedAt: '2019-01-16 22:03:12',
+      music: [
+        {
+          id: 2,
+          name: 'Amo meu curso',
+          description: 'Música #2 do álbum Lucas Daniel EP',
+          duration: 370000,
+          albumId: 1,
+          createdAt: '2023-09-14T05:39:44.436Z',
+          album: {
+            id: '1',
+            name: 'Lucas Daniel EP',
+            description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+            createdAt: '2023-09-14T05:39:44.426Z',
+            artistId: 7,
+            released: true,
+          },
+        },
+      ],
+    };
+
+    mockPlaylists1 = {
+      id: 1,
+      name: 'Melhores do grimes',
+      genre: 'grimes',
+      description: 'loucura',
+      ownerId: 1,
+      createdAt: '2019-01-16 22:03:12',
+      updatedAt: '2019-01-16 22:03:12',
+      music: [
+        {
+          id: 2,
+          name: 'Amo meu curso',
+          description: 'Música #2 do álbum Lucas Daniel EP',
+          duration: 3000,
+          albumId: 1,
+          createdAt: '2023-09-14T05:39:44.436Z',
+          album: {
+            id: '1',
+            name: 'Lucas Daniel EP',
+            description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+            createdAt: '2023-09-14T05:39:44.426Z',
+            artistId: 7,
+            released: true,
+          },
+        },
+        {
+          id: 3,
+          name: 'Odeio meu curso',
+          description: 'Música #2 do álbum João EP',
+          duration: 3000,
+          albumId: 1,
+          createdAt: '2023-09-14T05:39:44.436Z',
+          album: {
+            id: '2',
+            name: 'João EP',
+            description: 'Álbum feito com coração pelo aluno João',
+            createdAt: '2023-09-14T05:39:44.426Z',
+            artistId: 7,
+            released: true,
+          },
+        },
+      ],
     };
   });
 
@@ -46,51 +108,86 @@ defineFeature(feature, test => {
     });
 
     and(
-      /^o sistema tem uma playlist com o id "(.*)", duracao "(.*)", músicas "(.*)" e quantidade de músicas "(.*)"$/,
+      /^o sistema tem uma playlist com o id "(.*)", duração "(.*)", música de id "(.*)"$/,
       (arg0, arg1, arg2, arg3) => {
         mockGetPlaylist.mockReturnValueOnce({
-          id: arg1,
-          name: 'melhores do grime',
-          genre: 'grime',
-          description: '',
-          idUser: 0,
-          duration: arg0,
-          qtdMusicas: arg3,
-          id_musica: arg2,
+          id: arg0,
+          name: 'Melhores do grimes',
+          genre: 'grimes',
+          description: 'loucura',
+          ownerId: 1,
+          duration: 30000,
+          createdAt: '2019-01-16 22:03:12',
+          updatedAt: '2019-01-16 22:03:12',
+          music: [
+            {
+              id: arg2,
+              name: 'Amo meu curso',
+              description: 'Música #2 do álbum Lucas Daniel EP',
+              duration: arg1,
+              albumId: 1,
+              createdAt: '2023-09-14T05:39:44.436Z',
+              album: {
+                id: '1',
+                name: 'Lucas Daniel EP',
+                description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+                createdAt: '2023-09-14T05:39:44.426Z',
+                artistId: 7,
+                released: true,
+              },
+            },
+          ],
         });
 
-        expect(PlaylistRepository.prototype.getPlaylist(arg1)).toEqual({
-          id: arg1,
-          name: 'melhores do grime',
-          genre: 'grime',
-          description: '',
-          idUser: 0,
-          duration: arg0,
-          qtdMusicas: arg3,
-          id_musica: arg2,
+        expect(PlaylistRepository.prototype.getPlaylist(arg0, arg3)).toEqual({
+          id: arg0,
+          name: 'Melhores do grimes',
+          genre: 'grimes',
+          description: 'loucura',
+          ownerId: 1,
+          duration: 30000,
+          createdAt: '2019-01-16 22:03:12',
+          updatedAt: '2019-01-16 22:03:12',
+          music: [
+            {
+              id: arg2,
+              name: 'Amo meu curso',
+              description: 'Música #2 do álbum Lucas Daniel EP',
+              duration: arg1,
+              albumId: 1,
+              createdAt: '2023-09-14T05:39:44.436Z',
+              album: {
+                id: '1',
+                name: 'Lucas Daniel EP',
+                description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+                createdAt: '2023-09-14T05:39:44.426Z',
+                artistId: 7,
+                released: true,
+              },
+            },
+          ],
         });
       },
     );
 
-    when(/^uma requisição PUT for enviada para "(.*)", eu atualizo a duração para "(.*)"$/, (arg0,arg1) => {
-      mockPlaylists.duration = arg1;
-    });
+    when(
+      /^uma requisição POST for enviada para a url "(.*)", eu atualizo a duração da playlist para "(.*)"$/,
+      (arg0, arg1) => {
+        mockPlaylists.duration = arg1;
+      },
+    );
 
-    and(/^eu atualizo a lista de músicas para para "(.*)"$/, arg0 => {
-      mockPlaylists.id_musica = arg0;
-    });
-
-    and(/^eu atualizo a quantidade de músicas para "(.*)"$/, arg0 => {
-      mockPlaylists.qtdMusicas = arg0;
+    and(/^eu atualizo a lista de músicas para$/, arg0 => {
+      mockPlaylists.music = arg0;
     });
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
-      let response = JSON.parse(responseTest);
-      expect(response).toMatchObject(mockPlaylists);
+      const response = JSON.parse(responseTest);
+      expect(response).toMatchObject(mockPlaylists1);
     });
 
-    and(/^é retornado um status "(.*)" como adicionado com sucesso$/, responseStatusCode => {
-      let statusCode: number = 0;
+    and(/^é retornado um status "(.*)" como música adicionada com sucesso$/, responseStatusCode => {
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });
@@ -98,60 +195,92 @@ defineFeature(feature, test => {
 
   test('Excluir música da playlist como usuário logado', ({ given, and, when, then }) => {
     given(/^que eu sou um usuário logado no sistema com o id (.*)$/, id => {
-      if (id === '1') {
+      if (id === 1) {
         mockGetPlaylist.mockReturnValue(mockPlaylists);
       }
     });
 
     and(
-      /^o sistema tem uma playlist com o id "(.*)", duracao "(.*)", músicas "(.*)" e quantidade de músicas "(.*)"$/,
+      /^o sistema tem uma playlist com o id "(.*)", duração "(.*)", música de id "(.*)" e user de id "(.*)"$/,
       (arg0, arg1, arg2, arg3) => {
         mockGetPlaylist.mockReturnValueOnce({
-          id: arg1,
-          name: 'melhores do grime',
-          genre: 'grime',
-          description: '',
-          idUser: 0,
-          duration: arg0,
-          qtdMusicas: arg3,
-          id_musica: arg2,
+          id: arg0,
+          name: 'Melhores do grimes',
+          genre: 'grimes',
+          description: 'loucura',
+          ownerId: 1,
+          duration: 30000,
+          createdAt: '2019-01-16 22:03:12',
+          updatedAt: '2019-01-16 22:03:12',
+          music: [
+            {
+              id: 2,
+              name: 'Amo meu curso',
+              description: 'Música #2 do álbum Lucas Daniel EP',
+              duration: arg1,
+              albumId: 1,
+              createdAt: '2023-09-14T05:39:44.436Z',
+              album: {
+                id: '1',
+                name: 'Lucas Daniel EP',
+                description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+                createdAt: '2023-09-14T05:39:44.426Z',
+                artistId: 7,
+                released: true,
+              },
+            },
+          ],
         });
 
-        expect(PlaylistRepository.prototype.getPlaylist(arg1)).toEqual({
-          id: arg1,
-          name: 'melhores do grime',
-          genre: 'grime',
-          description: '',
-          idUser: 0,
-          duration: arg0,
-          qtdMusicas: arg3,
-          id_musica: arg2,
+        expect(PlaylistRepository.prototype.getPlaylist(arg0, arg3)).toEqual({
+          id: arg0,
+          name: 'Melhores do grimes',
+          genre: 'grimes',
+          description: 'loucura',
+          ownerId: 1,
+          duration: 30000,
+          createdAt: '2019-01-16 22:03:12',
+          updatedAt: '2019-01-16 22:03:12',
+          music: [
+            {
+              id: 2,
+              name: 'Amo meu curso',
+              description: 'Música #2 do álbum Lucas Daniel EP',
+              duration: arg1,
+              albumId: 1,
+              createdAt: '2023-09-14T05:39:44.436Z',
+              album: {
+                id: arg2,
+                name: 'Lucas Daniel EP',
+                description: 'Álbum feito com coração pelo aluno Lucas Daniel',
+                createdAt: '2023-09-14T05:39:44.426Z',
+                artistId: 7,
+                released: true,
+              },
+            },
+          ],
         });
       },
     );
 
     when(
-      /^eu desejo remover a música de id "(.*)", eu atualizo a duração para "(.*)"$/,
-      (arg0, arg1) => {
-        mockPlaylists.duration = arg1;
+      /^eu faço uma requisição DELETE para a url "(.*)", pegando a música de id "(.*)", eu atualizo a duração para "(.*)"$/,
+      (arg0, arg1, arg2) => {
+        mockPlaylists.duration = arg2;
       },
     );
 
     and(/^eu atualizo a lista de músicas para para "(.*)"$/, arg0 => {
-      mockPlaylists.id_musica = arg0;
-    });
-
-    and(/^eu atualizo a quantidade de músicas para "(.*)"$/, arg0 => {
-      mockPlaylists.qtdMusicas = arg0;
+      mockPlaylists.music = arg0;
     });
 
     then('o sistema retorna um JSON com o corpo', responseTest => {
-      let response = JSON.parse(responseTest);
+      const response = JSON.parse(responseTest);
       expect(response).toMatchObject(mockPlaylists);
     });
 
-    and(/^é retornado um status "(.*)" como adicionado com sucesso$/, responseStatusCode => {
-      let statusCode: number = 0;
+    and(/^é retornado um status "(.*)" como deletado com sucesso$/, responseStatusCode => {
+      let statusCode = 0;
       if (mockGetPlaylist()) statusCode = 200;
       expect(+responseStatusCode).toBe(statusCode);
     });

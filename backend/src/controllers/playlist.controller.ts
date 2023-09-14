@@ -44,7 +44,7 @@ class PlaylistController {
     this.router.get(`${this.prefix}/likes`, (req: Request, res: Response) =>
       this.getLikesForAllPlaylists(req, res),
     );
-    
+
     this.router.post(`${this.prefix}/:id/musica/:idMusica`, (req: Request, res: Response) =>
       this.addMusicToPlaylist(req, res),
     );
@@ -271,7 +271,6 @@ class PlaylistController {
       const playlist = await this.playlistService.addMusicToPlaylist(
         +req.params.id,
         +req.params.idMusica,
-        // req.body
       );
       return new SuccessResult({
         msg: 'pegou',
