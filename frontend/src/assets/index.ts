@@ -7,6 +7,7 @@ import KingCrimson from './KingCrimson.png';
 import Mastodon from './Mastodon.png';
 import Olivia from './Olivia.png';
 import HarrysHouse from './HarrysHouse.jpg';
+import Blob from './blob.png';
 
 export {
   Notes,
@@ -18,4 +19,5 @@ export {
   Mastodon,
   Olivia,
   HarrysHouse,
+  Blob,
 };
