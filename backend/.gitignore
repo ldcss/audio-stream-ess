@@ -22,6 +22,8 @@ dist/
 
 #ENVs
 .env
+.env.dev
+.env.test
 
 #jest and tests
 coverage

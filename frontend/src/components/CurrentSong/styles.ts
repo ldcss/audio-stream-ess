@@ -30,8 +30,6 @@ export const Wrapper = styled.div`
         border-radius: 4px;
         width: 5rem;
         height: 5rem;
-        margin-top: 0.5rem;
-        margin-left: -1rem;
       }
 
       .info {
@@ -43,10 +41,11 @@ export const Wrapper = styled.div`
           float: left;
           align-self: flex-start;
           color: #fff5f5 !important;
+          margin-bottom: 0.5rem;
         }
 
         hr {
-          margin-top: 1rem !important;
+          margin-top: 0 !important;
           width: 6rem;
         }
         h5 {
@@ -90,8 +89,8 @@ export const Wrapper = styled.div`
         margin-left: -6rem !important;
         width: 6rem;
       }
-      svg { 
-        margin-top:2.6rem!important;
+      svg {
+        margin-top: 2.6rem !important;
       }
     }
   }

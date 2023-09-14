@@ -53,10 +53,13 @@ export const Wrapper = styled.div`
       font-weight: 800 !important;
       border-collapse: separate;
       border-spacing: 0px 0.5rem;
+      border-collapse: collapse;
 
       .head {
         padding: 20rem 1rem !important;
         background: #fde8e9;
+        position: sticky;
+        top: 0 !important;
 
         .headRow {
           padding: 20rem 1rem !important;
@@ -64,6 +67,7 @@ export const Wrapper = styled.div`
       }
 
       .body {
+        overflow-y: scroll !important;
         .bodyRow {
           border-radius: 2rem !important;
           background: #fff5f5;
@@ -77,6 +81,9 @@ export const Wrapper = styled.div`
       margin-left: 0.25rem;
       color: #37294f;
     }
+  }
+  .MuiPaper-elevation1 {
+    padding: 0 !important;
   }
 `;
 
@@ -140,10 +147,6 @@ export const EditPopup = styled.div`
       width: 0.3rem !important;
       background-color: #fff5f5;
       border-radius: 0 2rem 2rem 0;
-    }
-
-    textarea::-webkit-scrollbar-track {
-      //-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     }
 
     textarea::-webkit-scrollbar-thumb {
