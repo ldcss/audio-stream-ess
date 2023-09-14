@@ -3,6 +3,7 @@ import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import LoginIcon from '@mui/icons-material/Login';
 import AlignVerticalCenterIcon from '@mui/icons-material/AlignVerticalCenter';
+import AlbumIcon from '@mui/icons-material/Album';
 import { Blob } from '../../assets';
 import { Notes } from '../../assets';
 
@@ -33,6 +34,13 @@ const BrowseArtists = () => {
             <h4>Playlist</h4>
             <p>Visualize, curta e compartilhe playlists de seus artistas favoritos</p>
             <LibraryMusicIcon />
+          </DirectionCard>
+        </a>
+        <a href='http://127.0.0.1:5173/albuns'>
+          <DirectionCard>
+            <h4>Álbuns</h4>
+            <p>Ouça os lançamentos mais recentes de seus artistas favoritos</p>
+            <AlbumIcon />
           </DirectionCard>
         </a>
         <a href='http://127.0.0.1:5173/artists'>
