@@ -50,10 +50,12 @@ function Playlist() {
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
+
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
+  const open = Boolean(anchorEl);
 
   const handleModal = () => {
     if (!openModal) {
@@ -62,6 +64,7 @@ function Playlist() {
     }
     setOpenModal(!openModal);
   };
+
 
   const fetchLikedUsers = async () => {
 
@@ -99,14 +102,13 @@ function Playlist() {
       console.error("Erro ao remover like da playlist:", error);
     }
   }
-  const [open, setOpen] = React.useState(false);
+  const [openOther, setOpenOther] = React.useState(false);
   const handleOpen = () => {
-    setOpen(true);
+    setOpenOther(true);
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpenOther(false);
   };
-
 
   useEffect(() => {
     async function getPlaylist(id: number, idPlaylist: number) {
@@ -174,25 +176,25 @@ function Playlist() {
                 <img src={timeIcon} alt='time' />
                 <p>Minutos</p>
               </Box>
-              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': {cursor: 'pointer'}}} 
+              <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': { cursor: 'pointer' } }}
                 onClick={(event) => {
                   navigator.clipboard.writeText(window.location.href);
                   setAnchorEl(event.currentTarget);
                   setTimeout(() => setAnchorEl(null), 2000);
-                  }}>
-                  <Popover
-                    open={open}
-                    onClose={() => setAnchorEl(null)}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
+                }}>
+                <Popover
+                  open={open}
+                  onClose={() => setAnchorEl(null)}
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',
-                    }}
-                  >
-                    <Typography sx={{ p: 2 }}>Link copiado para clipboard!</Typography>
-                  </Popover>
-              <img src={shareIcon} alt='share' />
-              <p>Compartilhe</p>
+                  }}
+                >
+                  <Typography sx={{ p: 2 }}>Link copiado para clipboard!</Typography>
+                </Popover>
+                <img src={shareIcon} alt='share' />
+                <p>Compartilhe</p>
               </Box>
               <Box flex={1} sx={{ backgroundColor: '#FDE8E9', borderRadius: '35px', border: '0.5px solid pink' }}></Box>
             </Box>}
@@ -233,58 +235,113 @@ function Playlist() {
         </Box>) : (<CircularProgress sx={{ margin: 'auto' }} />)}
       </ContainerPlaylist>
     </Box>
+
+    <Modal open={openOther} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{
+      border: '2px solid #BC9EC1'
+    }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '600px',
+          bgcolor: '#BC9EC1',
+          border: '2px solid #BC9EC1',
+          boxShadow: 24,
+          borderRadius: 5,
+          p: 4,
+          overflow: 'auto'
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Adicionar música
+          </Typography>
+          <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleClose} />
+        </Box>
+
+        {likedUsers.length === 0 ?
+          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
+            Ninguém curtiu essa playlist ainda.
+          </Typography> :
+          <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ color: 'white' }}>#</TableCell>
+                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {likedUsers.map((user, index) => (
+                <TableRow key={user.id}>
+                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
+                    {index + 1}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
+                    {user.name}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody >
+          </Table>
+        }
+      </Box>
+    </Modal>
+
+
     <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{
       border: '2px solid #BC9EC1'
     }}>
-    <Box 
-    sx={{ 
-        position: 'absolute', 
-        top: '50%', 
-        left: '50%', 
-        transform: 'translate(-50%, -50%)', 
-        width: '600px',
-        bgcolor: '#BC9EC1', 
-        border: '2px solid #BC9EC1', 
-        boxShadow: 24,
-        borderRadius: 5, 
-        p: 4,
-        overflow: 'auto'
-    }}
-    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '600px',
+          bgcolor: '#BC9EC1',
+          border: '2px solid #BC9EC1',
+          boxShadow: 24,
+          borderRadius: 5,
+          p: 4,
+          overflow: 'auto'
+        }}
+      >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-                Curtidas
-            </Typography>
-            <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleModal} />
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Curtidas
+          </Typography>
+          <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleModal} />
         </Box>
-        
-        {likedUsers.length === 0 ? 
-            <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
-                Ninguém curtiu essa playlist ainda.
-            </Typography> : 
-            <Table sx={{backgroundColor: '#1F2232', borderRadius: '8px', mt: 2}}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell sx={{ color: 'white' }}>#</TableCell>
-                        <TableCell sx={{color: 'white',}}>Nome</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {likedUsers.map((user, index) => (
-                        <TableRow key={user.id}>
-                            <TableCell sx={{ width: '40px', color: 'white', borderBottom:'none' }}>
-                                {index + 1}
-                            </TableCell>
-                            <TableCell sx={{ color: 'white', borderBottom:'none' }}>
-                                {user.name}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody >
-            </Table>
+
+        {likedUsers.length === 0 ?
+          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
+            Ninguém curtiu essa playlist ainda.
+          </Typography> :
+          <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ color: 'white' }}>#</TableCell>
+                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {likedUsers.map((user, index) => (
+                <TableRow key={user.id}>
+                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
+                    {index + 1}
+                  </TableCell>
+                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
+                    {user.name}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody >
+          </Table>
         }
-    </Box>
-</Modal>
+      </Box>
+    </Modal>
 
   </div>
   )
