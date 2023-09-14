@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "testing": "vite --mode testing",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cy:open-e2e": "cypress open open --e2e --browser electron",
+    "cy:e2e-interactive": "start-server-and-test testing http-get://localhost:5173 cy:open-e2e"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -28,16 +31,23 @@
     "styled-components": "^6.0.7"
   },
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^18.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "@cucumber/cucumber": "^9.2.0",
+    "@cypress/code-coverage": "^3.10.7",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "cypress": "^12.15.0",
+    "esbuild": "^0.18.8",		
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "start-server-and-test": "^2.0.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }
