@@ -66,8 +66,9 @@ function Playlist() {
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
-
+  const [musicModel, setMusicModel] = useState<Array<{id: number; name: string; artist: number; album: string; duration: string }>>([])
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
+  const [musicas, SetMusicas] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string; }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
@@ -100,6 +101,7 @@ function Playlist() {
       console.error("Erro ao buscar usuários que curtiram a playlist:", error);
     }
   }
+
   const addLike = async (idPlaylist: any, idUser: any) => {
     try {
       await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
@@ -136,18 +138,52 @@ function Playlist() {
     }
 
     async function getPlaylistById(idPlaylist: number) {
+      try {
+        const respostaFinal: { id: number; name: string; artist: number; album: string; duration: string; }[] = [];
+        const result = await api.get(`playlist/${idPlaylist}`);
+        console.log('TAMANHO',result.data.data[0].length)
+        const res = result.data.data[0];
+        
+        res.forEach((element: {
+          id: number,
+          name: string,
+          description: string,
+          duration: string,
+          albumId: number,
+          createdAt: string,
+          album: {
+              id: number,
+              name: string,
+              description: string,
+              createdAt: string,
+              artistId: number,
+              released: boolean
+        }}):any => {
+          respostaFinal.push({
+            id: element.id,
+            name: element.name,
+            artist: element.album.artistId,
+            album: element.album.name,
+            duration: element.duration
+          })
+
+          SetMusicas(respostaFinal)
+        });
+        console.log(`Músicas da playlist ${idPlaylist} do usuário ${idUser}`);
+      } catch (error) {
+        console.error("Erro ao dar fetch músicas da playlist", error);
+      }
+
       PlaylistService.getPlaylistById(idPlaylist).then((response) => {
         setPlaylistById(response.data);
         console.log('deu certo!');
       }).catch((e) => console.log('erro: ' + e));
     }
 
-
     if (idUser && idPlaylist)
       getPlaylist(+idUser, +idPlaylist);
     if (idPlaylist) {
       getPlaylistById(+idPlaylist)
-      console.log('KKKKKKKKKKKKKKKKKKKKKK', playlistById)
     }
 
   }, []);
@@ -227,15 +263,15 @@ function Playlist() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {playlistById?.musics.map((row) => (
+                  {musicas.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.artist}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.album}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.duration}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -277,10 +313,7 @@ function Playlist() {
           <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleClose} />
         </Box>
 
-        {likedUsers.length === 0 ?
-          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
-            Ninguém curtiu essa playlist ainda.
-          </Typography> :
+        {
           <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
             <TableHead>
               <TableRow>
@@ -289,15 +322,17 @@ function Playlist() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {likedUsers.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
-                    {user.name}
-                  </TableCell>
-                </TableRow>
+              {rows.map((row) => (
+                <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
+                <TableCell align="center" sx={{ color: 'white' }}>{row.artista}</TableCell>
+                <TableCell align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
+                <TableCell align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
+                <TableCell align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
+              </TableRow>
               ))}
             </TableBody >
           </Table>
@@ -359,7 +394,7 @@ function Playlist() {
       </Box>
     </Modal>
 
-  </div>
+  </div >
   )
 }
 
