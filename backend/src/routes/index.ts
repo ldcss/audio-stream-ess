@@ -8,6 +8,8 @@ import ArtistService from '../services/artist.service';
 import PlaylistController from '../controllers/playlist.controller';
 import PlaylistService from '../services/playlist.service';
 import AlbumService from '../services/album.service';
+import MusicController from '../controllers/music.controller';
+import MusicService from '../services/music.service';
 
 const router = Router();
 const prefix = '/api';
@@ -19,5 +21,6 @@ export default (app: Express) => {
     new AlbumController(router, di.getService(AlbumService)).router,
     new ArtistController(router, di.getService(ArtistService)).router,
     new PlaylistController(router, di.getService(PlaylistService)).router,
+    new MusicController(router, di.getService(MusicService)).router,
   );
 };

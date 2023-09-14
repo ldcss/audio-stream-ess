@@ -1,5 +1,6 @@
 import MusicEntity from '../entities/music.entity';
 import { PrismaClient, Music } from '@prisma/client';
+import MusicModel from '../models/music.model';
 
 class MusicRepository {
   private db: PrismaClient;

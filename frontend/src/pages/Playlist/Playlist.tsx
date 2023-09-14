@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { PlaylistService } from "../../services/PlaylistService";
 import { PlaylistDto } from "../../types/playlistTypes";
 import creatorIcon from "../../assets/creatorIcon.svg"
+import trashIcon from "../../assets/trash.svg"
 import dateIcon from "../../assets/dateIcon.svg"
 import likeIcon from "../../assets/likeIcon.svg"
 import deslikeIcon from "../../assets/deslikeIcon.svg"
@@ -42,23 +43,6 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
 ];
 
 function Playlist() {
@@ -66,8 +50,10 @@ function Playlist() {
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
-
+  const [musicModel, setMusicModel] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string }>>([])
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
+  const [musicas, SetMusicas] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string; }>>([]);
+  const [allMusics, setAllMusics] = useState<Array<{ id: number; name: string; }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
@@ -111,11 +97,12 @@ function Playlist() {
       console.error("Erro ao buscar usuários que curtiram a playlist:", error);
     }
   }
+
+
   const addLike = async (idPlaylist: any, idUser: any) => {
     try {
       await api.post(`playlist/${idPlaylist}/likes/${idUser}`);
       setUserHasLiked(true);
-      console.log(`Like adicionado à playlist ${idPlaylist} pelo usuário ${idUser}`);
     } catch (error) {
       console.error("Erro ao adicionar like à playlist:", error);
     }
@@ -129,6 +116,27 @@ function Playlist() {
       console.error("Erro ao remover like da playlist:", error);
     }
   }
+
+  const removeMusicFromPlaylist = async (idMusica: any) => {
+    try {
+      await api.delete(`playlist/${idPlaylist}/musica/${idMusica}`);
+      setUserHasLiked(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao remover música da playlist:", error);
+    }
+  }
+
+  const addMusicToPlaylist = async (idMusica: any) => {
+    try {
+      await api.post(`playlist/${idPlaylist}/musica/${idMusica}`);
+      setUserHasLiked(false);
+      window.location.reload();
+    } catch (error) {
+      console.error("Erro ao remover música da playlist:", error);
+    }
+  }
+  
   const [openOther, setOpenOther] = React.useState(false);
   const handleOpen = () => {
     setOpenOther(true);
@@ -142,23 +150,82 @@ function Playlist() {
       PlaylistService.getPlaylistFromUser(id, idPlaylist).then((response) => {
         setPlaylist(response.data);
         fetchLikedUsers();
-        console.log('deu certo!');
       }).catch((e) => console.log('erro: ' + e));
     }
 
     async function getPlaylistById(idPlaylist: number) {
+      try {
+        const respostaFinal: { id: number; name: string; artist: number; album: string; duration: string; }[] = [];
+        const result = await api.get(`playlist/${idPlaylist}`);
+        const res = result.data.data[0];
+
+        res.forEach((element: {
+          id: number,
+          name: string,
+          description: string,
+          duration: string,
+          albumId: number,
+          createdAt: string,
+          album: {
+            id: number,
+            name: string,
+            description: string,
+            createdAt: string,
+            artistId: number,
+            released: boolean
+          }
+        }): any => {
+          respostaFinal.push({
+            id: element.id,
+            name: element.name,
+            artist: element.album.artistId,
+            album: element.album.name,
+            duration: element.duration
+          })
+
+          SetMusicas(respostaFinal)
+        });
+      } catch (error) {
+        console.error("Erro ao dar fetch músicas da playlist", error);
+      }
+
       PlaylistService.getPlaylistById(idPlaylist).then((response) => {
         setPlaylistById(response.data);
         console.log('deu certo!');
       }).catch((e) => console.log('erro: ' + e));
     }
 
+    async function fetchMusic() {
+
+      try {
+        const respostaFinal: { id: number; name: string; }[] = [];
+        const response = await api.get(`music`);
+        const res = response.data.data;
+        res.forEach((element: {
+          id: number,
+          name: string,
+          description: string,
+          duration: string,
+          albumId: number,
+          createdAt: string
+        }): any => {
+          respostaFinal.push({
+            id: element.id,
+            name: element.name
+          })
+        });
+        setAllMusics(respostaFinal)
+
+      } catch (error) {
+        console.error("Erro solicitar músicas.", error);
+      }
+    }
 
     if (idUser && idPlaylist)
       getPlaylist(+idUser, +idPlaylist);
     if (idPlaylist) {
       getPlaylistById(+idPlaylist)
-      console.log('KKKKKKKKKKKKKKKKKKKKKK', playlistById)
+      fetchMusic()
     }
 
   }, []);
@@ -227,7 +294,7 @@ function Playlist() {
             </Box>}
 
 
-            <TableContainer component={Paper} sx={{ backgroundColor: "#BC9EC1", paddingBottom: "100px", width: '100%', overflowY:'scroll', height:'500px' }}>
+            <TableContainer component={Paper} sx={{ backgroundColor: "#BC9EC1", paddingBottom: "100px", width: '100%', overflowY: 'scroll', height: '500px' }}>
               <Table sx={{ minWidth: 200, backgroundColor: '#1E1E1E', marginLeft: '20px', width: '97%', borderRadius: '15px' }} aria-label="simple table">
                 <TableHead>
                   <TableRow sx={{ marginLeft: '10px' }}>
@@ -235,18 +302,20 @@ function Playlist() {
                     <TableCell align="center" sx={{ color: 'white' }}>Artista</TableCell>
                     <TableCell align="center" sx={{ color: 'white' }}>Álbum</TableCell>
                     <TableCell align="center" sx={{ color: 'white' }}>Duração</TableCell>
+                    <TableCell align="center" sx={{ color: 'white' }}>Remover</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {playlistById?.musics.map((row) => (
+                  {musicas.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row.id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}></TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.artist}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.album}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}>{row.duration}</TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}><a role="button" style={{ cursor: "pointer" }} onClick={() => removeMusicFromPlaylist(row.id)}><img src={trashIcon} style={{ height: "30px" }} alt='like' /></a></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -288,26 +357,20 @@ function Playlist() {
           <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleClose} />
         </Box>
 
-        {likedUsers.length === 0 ?
-          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
-            Ninguém curtiu essa playlist ainda.
-          </Typography> :
+        {
           <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: 'white' }}>#</TableCell>
-                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
+                <TableCell align="center" sx={{ color: 'white' }}>------ Lista de músicas ------</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {likedUsers.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
-                    {user.name}
-                  </TableCell>
+              {allMusics.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}><a role="button" style={{ cursor: "pointer" }} onClick={() => addMusicToPlaylist(row.id)}>{row.name}</a></TableCell>
                 </TableRow>
               ))}
             </TableBody >
@@ -349,7 +412,7 @@ function Playlist() {
       </StyledBox>
     </StyledModal>
 
-  </div>
+  </div >
   )
 }
 
