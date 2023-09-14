@@ -5,7 +5,6 @@ import { Playlist, PlaylistDto, PlaylistLikesDetail } from '../types/playlistTyp
 export class PlaylistService {
   static async getPlaylistsFromUser(id: number): Promise<AxiosResponse<Playlist[]>> {
     const response = await api.get(`/user/${id}/playlist`, {validateStatus: (status) => [200].includes(status)});
-    console.log('response do get', response);
     return response.data;
   }
   static async getPlaylistsWithMusicsFromUser(idUser: number, genre?: string, duration?: number): Promise<AxiosResponse<PlaylistDto[]>> {
@@ -35,6 +34,11 @@ export class PlaylistService {
         validateStatus: (status: number) => [200].includes(status)
     });
     return response;
+  }
+  static async getPlaylistById(idPlaylist: number): Promise<AxiosResponse<PlaylistDto>> {
+    const response = await api.get(`/playlist/${idPlaylist}`, {validateStatus: (status => [200].includes(status))});
+    console.log('surreal', response.data.data)
+    return response.data.data;
   }
 
 
