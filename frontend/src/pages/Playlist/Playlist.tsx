@@ -164,7 +164,7 @@ function Playlist() {
             name: element.name,
             artist: nome,
             album: element.album.name,
-            duration: msToHMS(element.duration)
+            duration: msToHMS(new Date(element.duration).getTime())
           })
 
           SetMusicas(respostaFinal)
