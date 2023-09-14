@@ -42,7 +42,23 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0)
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
 ];
 
 function Playlist() {
@@ -136,7 +152,7 @@ function Playlist() {
 
   }, []);
 
-  return (<div style={{ width: '99.2vw', height: '100%', minHeight: '100vh' }}>
+  return (<div style={{ width: '100vw', height: '100%', minHeight: '100vh' }}>
 
     <Box style={{ display: 'flex', flexDirection: 'row', height: '100%', minHeight: '100vh' }}>
       <Sidemenu />
@@ -200,7 +216,7 @@ function Playlist() {
             </Box>}
 
 
-            <TableContainer component={Paper} sx={{ backgroundColor: "#BC9EC1", paddingBottom: "100px", width: '100%' }}>
+            <TableContainer component={Paper} sx={{ backgroundColor: "#BC9EC1", paddingBottom: "100px", width: '100%', overflowY:'scroll', height:'500px' }}>
               <Table sx={{ minWidth: 200, backgroundColor: '#1E1E1E', marginLeft: '20px', width: '97%', borderRadius: '15px' }} aria-label="simple table">
                 <TableHead>
                   <TableRow sx={{ marginLeft: '10px' }}>

@@ -18,10 +18,10 @@ class MusicController {
   }
 
   private async getMusics(req: Request, res: Response) {
-    const albuns = await this.musicService.getMusics();
+    const music = await this.musicService.getMusics();
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
-      data: albuns,
+      data: music,
     }).handle(res);
   }
 
