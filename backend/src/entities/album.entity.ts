@@ -14,7 +14,7 @@ import BaseEntity from "./base.entity";
 class AlbumEntity extends BaseEntity{
   name: string;
   description: string;
-  createdAt: Date;
+  createdAt: Date | string;
   released: Boolean;
   artist: {name: string}
   artistId: Number;

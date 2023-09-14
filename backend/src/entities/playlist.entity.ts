@@ -1,11 +1,14 @@
+import MusicEntity from './music.entity';
 export default class PlaylistEntity {
   id: number;
   name: string;
   genre: string;
   description: string;
   ownerId: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  duration?: any;
+  music?: MusicEntity[];
 
   constructor(data: PlaylistEntity) {
     this.id = data.id;

@@ -35,35 +35,26 @@ function createData(
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-];
-
 function Playlist() {
   const { idUser, idPlaylist } = useParams();
+  const [artist, setArtist] = useState<string>();
   const [playlist, setPlaylist] = useState<PlaylistDto | null>(null);
   const [playlistById, setPlaylistById] = useState<PlaylistDto | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [musicModel, setMusicModel] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string }>>([])
   const [likedUsers, setLikedUsers] = useState<Array<{ id: number; name: string }>>([]);
-  const [musicas, SetMusicas] = useState<Array<{ id: number; name: string; artist: number; album: string; duration: string; }>>([]);
+  const [musicas, SetMusicas] = useState<Array<{ id: number; name: string; artist: string; album: string; duration: string; }>>([]);
   const [allMusics, setAllMusics] = useState<Array<{ id: number; name: string; }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
   function msToHMS(ms: number) {
     let seconds = ms / 1000;
-    const hours = Math.trunc(seconds/3600);
+    const hours = Math.trunc(seconds / 3600);
     seconds = seconds % 3600;
-    const minutes = Math.trunc(seconds/60);
+    const minutes = Math.trunc(seconds / 60);
     seconds = seconds % 60;
-    if(hours>0)
+    if (hours > 0)
       return `${hours}h ${minutes}min ${seconds}s`;
     return `${minutes}min ${seconds}s`;
   }
@@ -87,7 +78,6 @@ function Playlist() {
     }
     try {
       const response = await api.get(`playlist/${idPlaylist}/likes`);
-      console.log("API Response PEGA PF:", response.data.data.users);
       const likedUsers = response.data.data.users;
       const currentUserHasLiked = likedUsers.some((user: { id: number; }) => user.id === +idUser);
       setLikedUsers(likedUsers);
@@ -121,7 +111,7 @@ function Playlist() {
     try {
       await api.delete(`playlist/${idPlaylist}/musica/${idMusica}`);
       setUserHasLiked(false);
-      window.location.reload();
+      window.location.reload()
     } catch (error) {
       console.error("Erro ao remover música da playlist:", error);
     }
@@ -131,12 +121,12 @@ function Playlist() {
     try {
       await api.post(`playlist/${idPlaylist}/musica/${idMusica}`);
       setUserHasLiked(false);
-      window.location.reload();
+      window.location.reload()
     } catch (error) {
       console.error("Erro ao remover música da playlist:", error);
     }
   }
-  
+
   const [openOther, setOpenOther] = React.useState(false);
   const handleOpen = () => {
     setOpenOther(true);
@@ -153,17 +143,28 @@ function Playlist() {
       }).catch((e) => console.log('erro: ' + e));
     }
 
+    async function getArtistName(id: number) {
+      try{
+        const result = await api.get(`artist/${id}`);
+        return result.data.data.name
+      }
+      catch(e) {
+        alert(e)
+      }
+    }
+
     async function getPlaylistById(idPlaylist: number) {
       try {
-        const respostaFinal: { id: number; name: string; artist: number; album: string; duration: string; }[] = [];
+        const respostaFinal: { id: number; name: string; artist: any; album: string; duration: string; }[] = [];
         const result = await api.get(`playlist/${idPlaylist}`);
+    
         const res = result.data.data[0];
 
-        res.forEach((element: {
+        res.forEach(async (element: {
           id: number,
           name: string,
           description: string,
-          duration: string,
+          duration: number,
           albumId: number,
           createdAt: string,
           album: {
@@ -174,13 +175,15 @@ function Playlist() {
             artistId: number,
             released: boolean
           }
-        }): any => {
+        }) => {
+          const nome = await getArtistName(element.album.artistId)
+          // alert(nome)
           respostaFinal.push({
             id: element.id,
             name: element.name,
-            artist: element.album.artistId,
+            artist: nome,
             album: element.album.name,
-            duration: element.duration
+            duration: msToHMS(element.duration)
           })
 
           SetMusicas(respostaFinal)
@@ -266,9 +269,9 @@ function Playlist() {
                 <img src={musicIcon} alt='music' />
                 <p>Músicas</p>
               </Box>
-              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-              <img src={timeIcon} alt='time' />
-              <p>Duração: {playlist && msToHMS(playlist.duration)}</p>
+              <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
+                <img src={timeIcon} alt='time' />
+                <p>Duração: {playlist && msToHMS(playlist.duration)}</p>
               </Box>
               <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': { cursor: 'pointer' } }}
                 onClick={(event) => {
@@ -386,25 +389,25 @@ function Playlist() {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Curtidas
           </Typography>
-          <StyledImg src={xIcon} alt="Fechar"  onClick={handleModal} />
+          <StyledImg src={xIcon} alt="Fechar" onClick={handleModal} />
         </BoxLikes>
         {likedUsers.length === 0 ?
           <StyledTypography id="modal-modal-description">
-          Ninguém curtiu essa playlist ainda.
-          </StyledTypography>:
+            Ninguém curtiu essa playlist ainda.
+          </StyledTypography> :
           <StyledTable >
             <TableHead>
               <TableRow>
-              <WhiteTableCell>#</WhiteTableCell>
-              <CustomTableCell>Nome</CustomTableCell>
+                <WhiteTableCell>#</WhiteTableCell>
+                <CustomTableCell>Nome</CustomTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {likedUsers.map((user, index) => (
-               <TableRow key={user.id}>
-               <IndexTableCell>{index + 1}</IndexTableCell>
-               <NameTableCell>{user.name}</NameTableCell>
-           </TableRow>          
+                <TableRow key={user.id}>
+                  <IndexTableCell>{index + 1}</IndexTableCell>
+                  <NameTableCell>{user.name}</NameTableCell>
+                </TableRow>
               ))}
             </TableBody>
           </StyledTable>
