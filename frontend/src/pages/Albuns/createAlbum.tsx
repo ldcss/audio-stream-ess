@@ -1,10 +1,5 @@
-import {
-  Grid,
-  ScopedCssBaseline,
-  Typography,
-} from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from "../../components/Navbar/Navbar"
 import Sidemenu from "../../components/Sidemenu/Sidemenu"
@@ -28,7 +23,22 @@ type Inputs = {
 
 
 export const CreateAlbum = () => {
+
+  const [album, setAlbum] = useState<Album>()
+
   const navigate = useNavigate()
+  const { id } = useParams()
+
+  async function fecthData(id: string){
+    try{
+      const data = await AlbumService.getAlbumById(id);
+      setAlbum(data.data);
+    }
+    catch{
+      alert('Não foi possível carregar dados do album')
+      navigate('/albuns')
+    }
+  }
 
   const {
     register,
@@ -39,17 +49,34 @@ export const CreateAlbum = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { genre, ...res} = data
 
-    AlbumService.createAlbum({...res, artistId:1}).then((res)=>{
-      console.log(res.code)
-      if(res.code == 200){
-        console.log(res.status)
-        alert("Album criado com sucesso")
-        navigate('/albuns')
-      }
-    }).catch(()=>{
-      alert("Não foi possível cadastrar o album");
-    })
+    if(id){
+      AlbumService.updateAlbum({...res, released: true ? res.released === "true": false}, id).then((res)=>{
+        console.log(res.code)
+        if(res.code == 200){
+          alert("Album editado com sucesso")
+          navigate('/albuns')
+        }
+      }).catch((e)=>{
+        alert("Não foi possível editar o album");
+        console.log(e)
+      })
+    }else {
+      AlbumService.createAlbum({...res, artistId:1}).then((res)=>{
+        console.log(res.code)
+        if(res.code == 200){
+          console.log(res.status)
+          alert("Album criado com sucesso")
+          navigate('/albuns')
+        }
+      }).catch(()=>{
+        alert("Não foi possível cadastrar o album");
+      })
+    }
   }
+
+  useEffect(()=>{
+    if(id) fecthData(id);
+  },[])
 
   return(
     <Container>
@@ -58,12 +85,9 @@ export const CreateAlbum = () => {
         <Sidemenu />
         <ContainerPlaylist>
           <DivFlex>
-            <Title>Criar Album</Title>
-            <TitleAlignLeft> 
-              <ButtonPlus onClick={()=>navigate('/criarAlbum')} >
-              + Criar Album
-              </ButtonPlus>
-            </TitleAlignLeft>
+            <Title>
+              {id ? 'Editar Album' : 'Criar Album'}
+            </Title>
           </DivFlex>
           <div style={{
             display: 'grid',
@@ -76,22 +100,22 @@ export const CreateAlbum = () => {
             }}>
               <div style={{gridArea: '1 / 2 / 2 / 3'}} >
                 Nome:
-                <Input defaultValue="" {...register("name", { required: true })} />
+                <Input defaultValue={album?.name} {...register("name", { required: true })} />
                 {errors.name && <span style={{gridArea: '2 / 2 / 3 / 3', color:'red'}} >Campo obrigatório</span>}
               </div>
               <div style={{gridArea: '1 / 4 / 2 / 5'}}>
                 Descrição:
-                <Input defaultValue="" {...register("description", { required: true })} />
+                <Input defaultValue={album?.description} {...register("description", { required: true })} />
                 {errors.description && <span style={{gridArea: '2 / 4 / 3 / 5', color:'red'}} >Campo obrigatório</span>}
               </div>
               <div style={{gridArea: '3 / 2 / 4 / 3'}}>
                 Gênero:
-                <Input defaultValue="" {...register("genre", { required: true })} />
+                <Input defaultValue={album?.artistId} {...register("genre", { required: true })} />
                 {errors.genre && <span style={{gridArea: '4 / 4 / 5 / 5', color:'red'}} >Campo obrigatório</span>}
               </div>
               <div style={{gridArea: '3 / 4 / 4 / 5'}} >
                 Lancado ou não?
-                <Input type="checkbox" defaultValue="" {...register("released", { required: true })} />
+                <Input type="checkbox" defaultValue={album?.released} {...register("released", { required: true })} />
                 {errors.released && <span style={{gridArea: '4 / 2 / 5 / 3', color:'red'}} >Campo obrigatório</span>}
               </div>
               <Input style={{gridArea: '5 / 2 / 6 / 5'}} type="submit" />

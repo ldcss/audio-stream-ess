@@ -22,22 +22,22 @@ import {
 
 export const ViewAlbuns = () => {
 
-  const [playlists, setPlaylists] = useState<Album[]>([]);
+  const [albuns, setAlbuns] = useState<Album[]>([]);
   const navigate = useNavigate()
 
   useEffect(() => {
     AlbumService.getAlbuns().then((response) => {
-      setPlaylists(response.data);
+      setAlbuns(response.data);
     }).catch((e) => alert(`error:${e} when load playlists`));
   },[]);
 
-  const AllPlaylists = playlists.map(playlist => {
+  const AllPlaylists = albuns.map(album => {
     return (
-    <Link to={`/`}>
+    <Link to={`/editarAlbum/${album.id}`}>
       <ScopedCssBaseline>
       <BoxPlaylist>
         <ImgPlaylistDiv />
-        <Typography>{playlist.name}</Typography>
+        <Typography>{album.name}</Typography>
       </BoxPlaylist>
       </ScopedCssBaseline>
     </Link>

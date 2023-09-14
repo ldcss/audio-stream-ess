@@ -18,6 +18,7 @@ const Routing = () => {
         <Route path='/user/:idUser/playlist/:idPlaylist' element={<Playlist />} />
         <Route path='/albuns' element={<ViewAlbuns />} />
         <Route path='/criarAlbum' element={<CreateAlbum />} />
+        <Route path='/editarAlbum/:id' element={<CreateAlbum />} />
         <Route path='/pagina-teste' element={<PaginaTeste />} />
       </Routes>
       <CurrentSong />
