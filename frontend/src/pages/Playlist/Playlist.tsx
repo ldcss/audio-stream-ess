@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Table, Modal, Typography, Button, Popover } from "@mui/material";
 import Sidemenu from "../../components/Sidemenu/Sidemenu";
-import { ContainerPlaylist, ImgDiv } from "./styles";
+import { BoxLikes, ContainerPlaylist, CustomTableCell, ImgDiv, IndexTableCell, NameTableCell, StyledBox, StyledImg, StyledModal, StyledTable, StyledTypography, WhiteTableCell } from "./styles";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { PlaylistService } from "../../services/PlaylistService";
@@ -56,6 +56,17 @@ function Playlist() {
   const [allMusics, setAllMusics] = useState<Array<{ id: number; name: string; }>>([]);
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+
+  function msToHMS(ms: number) {
+    let seconds = ms / 1000;
+    const hours = Math.trunc(seconds/3600);
+    seconds = seconds % 3600;
+    const minutes = Math.trunc(seconds/60);
+    seconds = seconds % 60;
+    if(hours>0)
+      return `${hours}h ${minutes}min ${seconds}s`;
+    return `${minutes}min ${seconds}s`;
+  }
 
   const open = Boolean(anchorEl);
 
@@ -255,9 +266,9 @@ function Playlist() {
                 <img src={musicIcon} alt='music' />
                 <p>Músicas</p>
               </Box>
-              <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-                <img src={timeIcon} alt='time' />
-                <p>Minutos</p>
+              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
+              <img src={timeIcon} alt='time' />
+              <p>Duração: {playlist && msToHMS(playlist.duration)}</p>
               </Box>
               <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': { cursor: 'pointer' } }}
                 onClick={(event) => {
@@ -369,58 +380,37 @@ function Playlist() {
     </Modal>
 
 
-    <Modal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{
-      border: '2px solid #BC9EC1'
-    }}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '600px',
-          bgcolor: '#BC9EC1',
-          border: '2px solid #BC9EC1',
-          boxShadow: 24,
-          borderRadius: 5,
-          p: 4,
-          overflow: 'auto'
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <StyledModal open={openModal} onClose={handleModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" >
+      <StyledBox>
+        <BoxLikes>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Curtidas
           </Typography>
-          <img src={xIcon} alt="Fechar" style={{ cursor: 'pointer' }} onClick={handleModal} />
-        </Box>
-
+          <StyledImg src={xIcon} alt="Fechar"  onClick={handleModal} />
+        </BoxLikes>
         {likedUsers.length === 0 ?
-          <Typography id="modal-modal-description" sx={{ mt: 2, paddingBottom: 2 }}>
-            Ninguém curtiu essa playlist ainda.
-          </Typography> :
-          <Table sx={{ backgroundColor: '#1F2232', borderRadius: '8px', mt: 2 }}>
+          <StyledTypography id="modal-modal-description">
+          Ninguém curtiu essa playlist ainda.
+          </StyledTypography>:
+          <StyledTable >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ color: 'white' }}>#</TableCell>
-                <TableCell sx={{ color: 'white', }}>Nome</TableCell>
+              <WhiteTableCell>#</WhiteTableCell>
+              <CustomTableCell>Nome</CustomTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {likedUsers.map((user, index) => (
-                <TableRow key={user.id}>
-                  <TableCell sx={{ width: '40px', color: 'white', borderBottom: 'none' }}>
-                    {index + 1}
-                  </TableCell>
-                  <TableCell sx={{ color: 'white', borderBottom: 'none' }}>
-                    {user.name}
-                  </TableCell>
-                </TableRow>
+               <TableRow key={user.id}>
+               <IndexTableCell>{index + 1}</IndexTableCell>
+               <NameTableCell>{user.name}</NameTableCell>
+           </TableRow>          
               ))}
-            </TableBody >
-          </Table>
+            </TableBody>
+          </StyledTable>
         }
-      </Box>
-    </Modal>
+      </StyledBox>
+    </StyledModal>
 
   </div >
   )
