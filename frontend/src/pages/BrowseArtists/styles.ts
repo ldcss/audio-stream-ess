@@ -194,7 +194,7 @@ export const DeletePopup = styled.div`
 
   z-index: 1000 !important;
   width: 20rem;
-  height: 8rem;
+  height: 10rem;
 
   margin: auto !important;
   padding: 1rem !important;
