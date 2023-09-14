@@ -15,6 +15,7 @@ class PlaylistController {
 
   private initRoutes() {
     this.router.get(this.prefix, (req: Request, res: Response) => this.getPlaylists(req, res));
+    this.router.get(`${this.prefix}/:idPlaylist`, (req: Request, res: Response) => this.getPlaylistById(req, res));
     this.router.get(`/user/:idUser${this.prefix}/:idPlaylist`, (req: Request, res: Response) =>
       this.getPlaylist(req, res),
     );
@@ -43,7 +44,7 @@ class PlaylistController {
     this.router.get(`${this.prefix}/likes`, (req: Request, res: Response) =>
       this.getLikesForAllPlaylists(req, res),
     );
-
+    
     this.router.post(`${this.prefix}/:id/musica/:idMusica`, (req: Request, res: Response) =>
       this.addMusicToPlaylist(req, res),
     );
@@ -110,6 +111,25 @@ class PlaylistController {
       }).handle(res);
     }
   }
+
+  private async getPlaylistById(req: Request, res: Response) {
+    try {
+      const playlist = await this.playlistService.getPlaylistById(
+        +req.params.idPlaylist
+      );
+      return new SuccessResult({
+        msg: Result.transformRequestOnMsg(req),
+        data: playlist,
+      }).handle(res);
+    } catch {
+      return new FailureResult({
+        msg: Result.transformRequestOnMsg(req),
+        code: 404,
+        msgCode: 'failure',
+      }).handle(res);
+    }
+  }
+
   private async deletePlaylist(req: Request, res: Response) {
     try {
       await this.playlistService.deletePlaylist(+req.params.id);
