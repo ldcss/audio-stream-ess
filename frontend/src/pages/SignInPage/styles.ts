@@ -63,7 +63,7 @@ export const Wrapper = styled.div`
           margin-bottom: 1.25rem !important;
         }
 
-        #desc {
+        #desc_input_field {
           border-radius: 8px;
           width: 100%;
           border: none;

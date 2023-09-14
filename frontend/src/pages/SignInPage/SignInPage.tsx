@@ -43,7 +43,7 @@ const SignInPage = () => {
     <>
       {showCompletion && (
         <ConclusionPopup>
-          <p>{success ? 'Sucesso! Artista criado!' : 'Erro! Tente novamente'}</p>
+          <p id='result'>{success ? 'Sucesso! Artista criado!' : 'Erro! Tente novamente'}</p>
           <button onClick={() => setShowCompletion(false)}>Concluído</button>
         </ConclusionPopup>
       )}
@@ -63,16 +63,16 @@ const SignInPage = () => {
             <h2 className='title'>Compartilhe a sua música com o mundo</h2>
             <form onSubmit={handleSubmit}>
               <label>Email</label>
-              <input type='email' name='email' id='email' />
+              <input type='email' name='email' id='email_input_field' />
               <label>Senha</label>
-              <input type='password' name='password' id='password' />
+              <input type='password' name='password' id='password_input_field' />
               <label>Nome</label>
-              <input type='text' name='nome' id='nome' />
+              <input type='text' name='nome' id='nome_input_field' />
               <label>Gênero</label>
-              <input type='text' name='genero' id='genero' />
+              <input type='text' name='genero' id='genero_input_field' />
               <label>Descrição</label>
-              <textarea name='desc' id='desc' />
-              <input type='submit' value='Cadastrar Artista' className='submit' />
+              <textarea name='desc' id='desc_input_field' />
+              <input type='submit' value='Cadastrar Artista' className='submit' id='submit' />
             </form>
           </div>
         </div>
