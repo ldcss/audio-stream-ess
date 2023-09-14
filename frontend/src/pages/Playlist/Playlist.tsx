@@ -22,7 +22,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import addCircle from "../../assets/addCircle.svg"
 import api from '../../services/api';
-import React from "react";
 
 
 function Playlist() {
@@ -107,7 +106,7 @@ function Playlist() {
     }
   }
   
-  const [openOther, setOpenOther] = React.useState(false);
+  const [openOther, setOpenOther] = useState(false);
   const handleOpen = () => {
     setOpenOther(true);
   };
@@ -239,11 +238,13 @@ function Playlist() {
               <img src={timeIcon} alt='time' />
               <p>Duração: {playlist && msToHMS(playlist.duration)}</p>
               </Box>
-              <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': { cursor: 'pointer' } }}
+              <Box id="share_link_button" flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': { cursor: 'pointer' } }}
                 onClick={(event) => {
-                  navigator.clipboard.writeText(window.location.href);
                   setAnchorEl(event.currentTarget);
-                  setTimeout(() => setAnchorEl(null), 2000);
+                  setTimeout(() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    setAnchorEl(null);
+                  }, 1000);
                 }}>
                 <Popover
                   open={open}

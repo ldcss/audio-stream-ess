@@ -38,9 +38,9 @@ function Playlists(): JSX.Element {
     }).catch((e) => alert(`error:${e} when load playlists`));
   }, [duration, genre]);
 
-  const AllPlaylists = playlists.map(playlist => {
+  const AllPlaylists = playlists.map((playlist, i) => {
     return (
-    <Link to={`/user/${playlist.ownerId}/playlist/${playlist.id}`}>
+    <Link id={`${i}`} to={`/user/${playlist.ownerId}/playlist/${playlist.id}`}>
       <ScopedCssBaseline>
       <BoxPlaylist>
         <ImgPlaylistDiv />
@@ -61,22 +61,24 @@ function Playlists(): JSX.Element {
             <Title>Biblioteca</Title>
             <FormControlFilter>
               <InputLabel>Gênero</InputLabel>
-              <Select value={genre} label='Gênero' onChange={handleChangeGenre} >
-                <MenuItem value={'mpb'}>MPB</MenuItem>
-                <MenuItem value={'rock'}>Rock</MenuItem>
-                <MenuItem value={'rap'}>Rap</MenuItem>
-                <MenuItem value={'pop'}>Pop</MenuItem>
-                <MenuItem value={'grime'}>Grime</MenuItem>
-                <MenuItem value={'drill'}>Drill</MenuItem>
+              <Select id={'select_genre'} value={genre} label='Gênero' onChange={handleChangeGenre} >
+                <MenuItem id={'mpb'} value={'mpb'}>MPB</MenuItem>
+                <MenuItem id={'rock'} value={'rock'}>Rock</MenuItem>
+                <MenuItem id={'rap'} value={'rap'}>Rap</MenuItem>
+                <MenuItem id={'pop'} value={'pop'}>Pop</MenuItem>
+                <MenuItem id={'grime'} value={'grime'}>Grime</MenuItem>
+                <MenuItem id={'drill'} value={'drill'}>Drill</MenuItem>
+                <MenuItem id={'forro'} value={'forro'}>Forró</MenuItem>
               </Select>
             </FormControlFilter>
             <FormControlFilter>
               <InputLabel>Duração</InputLabel>
-              <Select value={duration} label='Duração' onChange={handleChangeDuration} >
-                <MenuItem value={'1800000'}>{'< 30m'}</MenuItem>
-                <MenuItem value={'3600000'}>{'< 1h'}</MenuItem>
-                <MenuItem value={'7200000'}>{'< 2h'}</MenuItem>
-              </Select>
+              <Select id={'select_duration'} value={duration} label='Duração' onChange={handleChangeDuration} >
+                <MenuItem id={'d0'} value={'0'}>{'Nenhuma duração'}</MenuItem>
+                <MenuItem id={'d1'} value={'1800000'}>{'< 30m'}</MenuItem>
+                <MenuItem id={'d2'} value={'3600000'}>{'< 1h'}</MenuItem>
+                <MenuItem id={'d3'} value={'7200000'}>{'< 2h'}</MenuItem>
+               </Select>
             </FormControlFilter>
           </FlexRowSelects>
           <DividerFilter />
