@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { SignInPage, BrowseArtists, LoginPage } from './pages';
+import { SignInPage, BrowseArtists, LoginPage, Home } from './pages';
 import { CurrentSong } from './components';
 import Playlists from './pages/Playlists/Playlists';
 import Playlist from './pages/Playlist/Playlist';
@@ -11,6 +11,7 @@ const Routing = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<Home />}></Route>
         <Route path='/signup' element={<SignInPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/artists' element={<BrowseArtists />} />

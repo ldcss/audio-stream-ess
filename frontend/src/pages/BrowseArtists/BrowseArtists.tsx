@@ -195,6 +195,7 @@ const BrowseArtists = () => {
                     <div onClick={() => deleteArtist(index)}>
                       <Delete
                         className='settings'
+                        id={`delete-${index}`}
                         sx={{ display: 'block !important', zIndex: 100 }}
                       />{' '}
                     </div>
