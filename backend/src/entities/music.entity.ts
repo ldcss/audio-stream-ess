@@ -11,6 +11,7 @@ export default class MusicEntity {
 
   constructor(data: MusicEntity) {
     this.id = data.id;
+    this.name = data.name;
     this.description = data.description;
     this.duration = data.duration;
     this.albumId = data.albumId;
