@@ -27,6 +27,11 @@ class PlaylistService {
     return playlists;
   }
 
+  public async getPlaylistById(idPlaylist: number): Promise<PlaylistModel[] | null> {
+    const playlists = await this.playlistRepository.getPlaylistById(idPlaylist);
+    return playlists;
+  }
+
   public async getAllPlaylists(idUser?: number): Promise<Playlist[]> {
     const playlists = await this.playlistRepository.getAllPlaylists(idUser);
     return playlists;

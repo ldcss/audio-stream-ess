@@ -86,15 +86,25 @@ class PlaylistRepository {
     return playlistModel;
   }
 
-  public async getPlaylistById(id: number): Promise<Playlist | null> {
-    const playlist = await this.db.playlist.findUnique({
-      where: { id: id },
-    });
+  public async getPlaylistById(idPlaylist: number): Promise<PlaylistModel[] | null | any> {
+    const playlist = await this.db.playlist.findMany({
+      where: { id: idPlaylist },
+      include: { music: { include: { music: { include: { album: true } } } }
+    }});
 
     if (!playlist) {
       return null;
     }
-    return playlist;
+    const playlistWithMusic = playlist.map(playlist => {
+      const musics: Music[] = [];
+      let totalDuration = 0;
+      playlist.music.forEach(music => {
+        musics.push(music.music);
+        totalDuration += music.music.duration.getTime();
+      });
+      return musics;
+    });
+    return playlistWithMusic;
   }
 
   //na tela das playlists
