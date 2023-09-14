@@ -71,6 +71,17 @@ function Playlist() {
   const [userHasLiked, setUserHasLiked] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
 
+  function msToHMS(ms: number) {
+    let seconds = ms / 1000;
+    const hours = Math.trunc(seconds/3600);
+    seconds = seconds % 3600;
+    const minutes = Math.trunc(seconds/60);
+    seconds = seconds % 60;
+    if(hours>0)
+      return `${hours}h ${minutes}min ${seconds}s`;
+    return `${minutes}min ${seconds}s`;
+  }
+
   const open = Boolean(anchorEl);
 
   const handleModal = () => {
@@ -188,9 +199,9 @@ function Playlist() {
                 <img src={musicIcon} alt='music' />
                 <p>Músicas</p>
               </Box>
-              <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
-                <img src={timeIcon} alt='time' />
-                <p>Minutos</p>
+              <Box flex={1} sx={{  display: 'flex', flexDirection: 'row', columnGap: '15px' }}>
+              <img src={timeIcon} alt='time' />
+              <p>Duração: {playlist && msToHMS(playlist.duration)}</p>
               </Box>
               <Box flex={1} sx={{ display: 'flex', flexDirection: 'row', columnGap: '15px', ':hover': { cursor: 'pointer' } }}
                 onClick={(event) => {
