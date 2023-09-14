@@ -291,20 +291,20 @@ function Playlist() {
                 <TableBody>
                   {musicas.map((row) => (
                     <TableRow
-                      key={row.id}
+                      key={row.name}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}>{row.name}</TableCell>
                       <TableCell align="center" sx={{ color: 'white' }}>{row.artist}</TableCell>
                       <TableCell align="center" sx={{ color: 'white' }}>{row.album}</TableCell>
                       <TableCell align="center" sx={{ color: 'white' }}>{row.duration}</TableCell>
-                      <TableCell align="center" sx={{ color: 'white' }}><a role="button" style={{ cursor: "pointer" }} onClick={() => removeMusicFromPlaylist(row.id)}><img src={trashIcon} style={{ height: "30px" }} alt='like' /></a></TableCell>
+                      <TableCell align="center" sx={{ color: 'white' }}><a role="button" id={`${row.id}`} style={{ cursor: "pointer" }} onClick={() => removeMusicFromPlaylist(row.id)}><img src={trashIcon} style={{ height: "30px" }} alt='like' /></a></TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '15px' }}>
-                <button onClick={handleOpen} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1E1E1E', width: '15%', height: '100%', borderRadius: '200px' }}>
+                <button id="addMusicButton" onClick={handleOpen} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1E1E1E', width: '15%', height: '100%', borderRadius: '200px' }}>
                   <img src={addCircle} alt='like' style={{ height: '30px', width: '30px' }} />   Adicionar música
                 </button>
               </div>
@@ -350,10 +350,10 @@ function Playlist() {
             <TableBody>
               {allMusics.map((row) => (
                 <TableRow
-                  key={row.name}
+                  key={row.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}><a role="button" style={{ cursor: "pointer" }} onClick={() => addMusicToPlaylist(row.id)}>{row.name}</a></TableCell>
+                  <TableCell component="th" scope="row" align="center" sx={{ color: 'white' }}><a role="button" id={`${row.name}`} style={{ cursor: "pointer" }} onClick={() => addMusicToPlaylist(row.id)}>{row.name}</a></TableCell>
                 </TableRow>
               ))}
             </TableBody >

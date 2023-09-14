@@ -1,3 +1,8 @@
+Feature: Adicionar e remover músicas de playlists como usuário
+  As a usuário dono da playlist de id 1
+  I want adicionar ou remover músicas da playlist
+  so that eu posso ter uma tabela com as músicas atualizadas
+
 Scenario:
     Given que sou um usuário na página "user/1/playlist/1"
     When eu clico no botão de adicionar música
